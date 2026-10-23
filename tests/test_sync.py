@@ -1,7 +1,7 @@
 """Tests for src/sync/writer.py: sync_alog and native field writing."""
 
 import ast
-import tempfile
+import shutil
 from pathlib import Path
 
 import pytest
@@ -51,8 +51,10 @@ class TestSyncAlog:
         
         # Result should indicate dry run
         assert result.dry_run is True
-        # With empty radar values, cuppingnotes should still be written as ""
-        # but that matches the fixture, so no change
+        # Empty radar values are not written at all (they would erase the
+        # fixture's radar); only the stale fixture hash would be recomputed,
+        # and a dry run writes nothing
+        assert "flavors" not in result.fields_written
         assert result.backup_path is None  # No backup created in dry run
 
     def test_dry_run_no_backup(self, tmp_path):
@@ -398,8 +400,10 @@ class TestSyncAlog:
         # Sync should not raise
         result = sync_alog(alog_path, record, backup=False)
         
-        # Verify flavors was written (from empty defaults)
-        assert "flavors" in result.fields_written
+        # The fresh record has empty radar values (flavors is not written,
+        # so the profile's radar survives) but its default labels are
+        assert "flavors" not in result.fields_written
+        assert "flavorlabels" in result.fields_written
 
     def test_sync_accepts_oversampling_pre42(self, tmp_path):
         """Sync should accept pre-4.2 profiles with oversampling key."""
@@ -487,6 +491,160 @@ class TestSyncAlog:
         written_data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
         assert verify_profile_hash(written_data) is True
 
+    def test_empty_radar_values_preserve_flavors(self, tmp_path):
+        """A record with empty radar values must not erase the profile's flavors."""
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        
+        # Fresh record: radar.values is [] (never edited)
+        record = new_record("test_uuid")
+        assert record["radar"]["values"] == []
+        
+        result = sync_alog(alog_path, record, backup=False)
+        
+        data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
+        # The fixture's radar survives untouched
+        assert data["flavors"] == [5.0] * 9
+        assert "flavors" not in result.fields_written
+        # The recomputed hash still verifies
+        assert verify_profile_hash(data) is True
 
-# Helper import for shutil
-import shutil
+    def test_empty_radar_labels_preserve_flavorlabels(self, tmp_path):
+        """A record with empty radar labels must not erase the profile's labels."""
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        
+        record = new_record("test_uuid")
+        record["radar"]["labels"] = []
+        record["radar"]["values"] = [8.0, 7.0, 9.0, 8.0, 7.5, 8.5, 9.0, 8.5, 8.0]
+        
+        result = sync_alog(alog_path, record, backup=False)
+        
+        data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
+        # Labels survive; values are written
+        assert data["flavorlabels"] == list(DEFAULT_RADAR_LABELS)
+        assert "flavorlabels" not in result.fields_written
+        assert data["flavors"] == [8.0, 7.0, 9.0, 8.0, 7.5, 8.5, 9.0, 8.5, 8.0]
+        assert "flavors" in result.fields_written
+
+    def test_nonascii_cupping_note_roundtrip(self, tmp_path):
+        """Non-ASCII notes round-trip byte-identically through parse->repr->parse."""
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        
+        note = "Café crème — ü, ñandú, 日本"
+        record = new_record("test_uuid")
+        record["cuppings"] = [{"date": "2024-01-01", "notes": note}]
+        
+        sync_alog(alog_path, record, backup=False)
+        
+        raw = alog_path.read_bytes()
+        data = ast.literal_eval(raw.decode("utf-8"))
+        assert data["cuppingnotes"] == note
+        # repr() keeps printable non-ASCII literal; the file is UTF-8 and
+        # re-serializes byte-identically
+        assert note.encode("utf-8") in raw
+        assert repr(data).encode("utf-8") == raw
+        # The hash escapes non-ASCII (ensure_ascii=True) and still verifies
+        assert verify_profile_hash(data) is True
+
+    def test_invalid_radar_values_refused(self, tmp_path):
+        """Non-numeric radar values are refused; the file stays untouched."""
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        original_bytes = alog_path.read_bytes()
+        
+        record = new_record("test_uuid")
+        record["radar"]["values"] = [8.5, "oops"]
+        
+        with pytest.raises(SyncError) as exc_info:
+            sync_alog(alog_path, record)
+        assert "values'][1]" in str(exc_info.value)
+        assert alog_path.read_bytes() == original_bytes
+        assert not (tmp_path / "test.alog.bak").exists()
+
+    def test_invalid_radar_labels_refused(self, tmp_path):
+        """A non-list radar labels section is refused (no string -> chars)."""
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        original_bytes = alog_path.read_bytes()
+        
+        record = new_record("test_uuid")
+        record["radar"]["labels"] = "Acidity"  # would be list()-ed into chars
+        
+        with pytest.raises(SyncError) as exc_info:
+            sync_alog(alog_path, record)
+        assert "labels" in str(exc_info.value)
+        assert alog_path.read_bytes() == original_bytes
+
+    def test_unknown_defect_key_refused(self, tmp_path):
+        """Unknown defect keys are refused (they would land in the profile)."""
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        original_bytes = alog_path.read_bytes()
+        
+        record = new_record("test_uuid")
+        record["defects_observed"]["tiping"] = True  # typo of "tipping"
+        
+        with pytest.raises(SyncError) as exc_info:
+            sync_alog(alog_path, record)
+        assert "tiping" in str(exc_info.value)
+        assert alog_path.read_bytes() == original_bytes
+        assert not (tmp_path / "test.alog.bak").exists()
+
+    def test_record_not_a_dict_refused(self, tmp_path):
+        """A non-dict record is refused before the file is touched."""
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        original_bytes = alog_path.read_bytes()
+        
+        with pytest.raises(SyncError):
+            sync_alog(alog_path, ["not", "a", "record"])
+        assert alog_path.read_bytes() == original_bytes
+
+    def test_pre42_signature_only_gets_no_hash(self, tmp_path):
+        """A pre-4.2 file with a signature but no hash must not gain a hash."""
+        fixture_src = Path("tests/fixtures/alogs/v2.10.4_2024-08-03.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        
+        data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
+        data["signature"] = "ab" * 64
+        alog_path.write_text(repr(data), encoding="utf-8")
+        
+        record = new_record("test_uuid")
+        record["radar"]["values"] = [8.0, 7.0, 9.0, 8.0, 7.5, 8.5, 9.0, 8.5, 8.0]
+        
+        result = sync_alog(alog_path, record, backup=False)
+        
+        data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
+        assert "hash" not in data
+        assert data["signature"] == "ab" * 64
+        assert result.new_hash is None
+
+    def test_profile_bad_field_type_refused(self, tmp_path):
+        """A profile with a wrongly-typed sensory field is refused."""
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        
+        data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
+        data["flavors"] = "not a list"
+        alog_path.write_text(repr(data), encoding="utf-8")
+        original_bytes = alog_path.read_bytes()
+        
+        # Empty radar values: flavors is not overwritten, so the bad
+        # existing value is caught by the post-apply type validation
+        record = new_record("test_uuid")
+        
+        with pytest.raises(SyncError) as exc_info:
+            sync_alog(alog_path, record)
+        assert "flavors" in str(exc_info.value)
+        assert alog_path.read_bytes() == original_bytes

@@ -2,14 +2,23 @@
 
 Writes the following native Artisan fields from a sensory record into the
 corresponding .alog profile:
-  - flavors <- record["radar"]["values"]
-  - flavorlabels <- record["radar"]["labels"]
-  - cuppingnotes <- record["cuppings"][0]["notes"] (first cupping, or "" if none)
-  - defect booleans <- record["defects_observed"]
+  - flavors <- record["radar"]["values"]      (only when non-empty)
+  - flavorlabels <- record["radar"]["labels"]  (only when non-empty)
+  - cuppingnotes <- record["cuppings"][0]["notes"] (first cupping note; an
+    existing profile value is kept when the record has no note data)
+  - defect booleans <- record["defects_observed"] (all ten flags; False is
+    meaningful data — "observed, none present")
+
+Only data the record actually has is written: an empty radar list means
+"never edited", so the profile's existing flavors/flavorlabels are left
+untouched and an opt-in sync of a fresh record cannot erase a roast's
+radar. Defect flags are the exception — a record always carries a complete
+defects_observed section, so all ten flags are written on every sync.
 
 For v4.2+ profiles, keeps the original signature untouched and recomputes
 the hash field so Artisan loads the file without integrity warnings.
-Pre-v4.2 profiles have no hash/signature, so fields are written directly.
+Pre-v4.2 profiles get the sensory fields only; hash/signature are never
+added to them.
 
 A .bak backup is created (once) before the first modification.
 """
@@ -41,6 +50,13 @@ NATIVE_FIELDS: dict[str, str] = {
         "oily", "uneven", "tipping", "scorching", "divots",
     )},
 }
+
+# The ten native Artisan defect flags (destinations of the
+# ``defects_observed.*`` entries in NATIVE_FIELDS).
+DEFECT_KEYS: tuple[str, ...] = tuple(
+    dest for src, dest in NATIVE_FIELDS.items()
+    if src.startswith("defects_observed.")
+)
 
 
 class SyncError(Exception):
@@ -138,26 +154,120 @@ def _check_unknown_keys(profile: dict[str, Any]) -> None:
         )
 
 
+def _validate_record(record: dict[str, Any]) -> None:
+    """Validate the types of a sensory record before it is applied.
+
+    Records coming from SensoryStore are already normalized; this guards
+    direct callers of :func:`sync_alog` against incompatible record data
+    (a non-numeric radar value, a non-list radar, an unknown defect key,
+    ...). Writing such data would either crash mid-apply or put keys into
+    the profile that Artisan drops at load, invalidating the recomputed
+    hash.
+
+    Raises SyncError if any section has an incompatible type.
+    """
+    if not isinstance(record, dict):
+        raise SyncError(f"record must be a dict, got {type(record).__name__}")
+
+    if "radar" in record:
+        radar = record["radar"]
+        if not isinstance(radar, dict):
+            raise SyncError(
+                f"record['radar'] must be a dict, got {type(radar).__name__}"
+            )
+        values = radar.get("values")
+        if values is not None:
+            if not isinstance(values, list):
+                raise SyncError("record['radar']['values'] must be a list of numbers")
+            for i, v in enumerate(values):
+                if isinstance(v, bool) or not isinstance(v, (int, float)):
+                    raise SyncError(
+                        f"record['radar']['values'][{i}] must be a number,"
+                        f" got {type(v).__name__}"
+                    )
+        labels = radar.get("labels")
+        if labels is not None:
+            if not isinstance(labels, list):
+                raise SyncError("record['radar']['labels'] must be a list of strings")
+            for i, v in enumerate(labels):
+                if not isinstance(v, str):
+                    raise SyncError(
+                        f"record['radar']['labels'][{i}] must be a string,"
+                        f" got {type(v).__name__}"
+                    )
+
+    if "cuppings" in record:
+        cuppings = record["cuppings"]
+        if not isinstance(cuppings, list):
+            raise SyncError(
+                f"record['cuppings'] must be a list, got {type(cuppings).__name__}"
+            )
+        for i, cupping in enumerate(cuppings):
+            if not isinstance(cupping, dict):
+                raise SyncError(f"record['cuppings'][{i}] must be a dict")
+            notes = cupping.get("notes")
+            if notes is not None and not isinstance(notes, str):
+                raise SyncError(
+                    f"record['cuppings'][{i}]['notes'] must be a string,"
+                    f" got {type(notes).__name__}"
+                )
+
+    if "defects_observed" in record:
+        defects = record["defects_observed"]
+        if not isinstance(defects, dict):
+            raise SyncError(
+                "record['defects_observed'] must be a dict,"
+                f" got {type(defects).__name__}"
+            )
+        unknown = set(defects) - set(DEFECT_KEYS)
+        if unknown:
+            raise SyncError(
+                "record['defects_observed'] contains unknown defect keys: "
+                + ", ".join(sorted(unknown)),
+                invalid_keys=sorted(unknown),
+            )
+        for key, value in defects.items():
+            if not isinstance(value, (bool, int)):
+                raise SyncError(
+                    f"record['defects_observed'][{key!r}] must be a bool,"
+                    f" got {type(value).__name__}"
+                )
+
+
 def _apply_native_fields(profile: dict[str, Any], record: dict[str, Any]) -> list[str]:
     """Apply sensory record fields to the profile dict.
-    
+
+    Only non-empty record data is written. When the record's radar values
+    (or labels) are empty — a fresh, never-edited record — the profile's
+    existing ``flavors`` (or ``flavorlabels``) are left untouched, so a sync
+    cannot erase a roast's radar. ``cuppingnotes`` follows the same rule for
+    existing values, except that a profile without the key gets it
+    initialized to ``""``. Defect flags are always written: a record carries
+    a complete ``defects_observed`` section and ``False`` is meaningful data
+    ("observed, none present").
+
     Returns the list of native keys that were written.
     """
     written = []
     
-    # radar.values -> flavors
-    if "radar" in record and "values" in record["radar"]:
-        profile["flavors"] = [float(v) for v in record["radar"]["values"]]
+    radar = record.get("radar")
+    if not isinstance(radar, dict):
+        radar = {}
+    
+    # radar.values -> flavors (empty list means "never edited": keep existing)
+    if radar.get("values"):
+        profile["flavors"] = [float(v) for v in radar["values"]]
         written.append("flavors")
     
-    # radar.labels -> flavorlabels
-    if "radar" in record and "labels" in record["radar"]:
-        profile["flavorlabels"] = list(record["radar"]["labels"])
+    # radar.labels -> flavorlabels (same empty-means-untouched semantics)
+    if radar.get("labels"):
+        profile["flavorlabels"] = list(radar["labels"])
         written.append("flavorlabels")
     
     # cuppings[0].notes -> cuppingnotes
-    if "cuppings" in record and len(record["cuppings"]) > 0:
-        notes = record["cuppings"][0].get("notes", "")
+    cuppings = record.get("cuppings")
+    if isinstance(cuppings, list) and cuppings and isinstance(cuppings[0], dict):
+        notes = cuppings[0].get("notes", "")
         if notes:
             profile["cuppingnotes"] = notes
             written.append("cuppingnotes")
@@ -173,9 +283,10 @@ def _apply_native_fields(profile: dict[str, Any], record: dict[str, Any]) -> lis
             profile["cuppingnotes"] = ""
             written.append("cuppingnotes")
     
-    # defects_observed -> defect booleans
-    if "defects_observed" in record:
-        for key, value in record["defects_observed"].items():
+    # defects_observed -> defect booleans (always written: False is data)
+    defects = record.get("defects_observed")
+    if isinstance(defects, dict):
+        for key, value in defects.items():
             profile[key] = bool(value)
             written.append(key)
     
@@ -229,6 +340,14 @@ def sync_alog(
 ) -> SyncResult:
     """Sync sensory fields from a sidecar record into an .alog file.
     
+    Only non-empty record data is written: a record whose radar values (or
+    labels) are empty — e.g. a fresh, never-edited record — leaves the
+    profile's existing ``flavors``/``flavorlabels`` untouched, so an opt-in
+    sync cannot erase a roast's radar. ``cuppingnotes`` keeps an existing
+    profile value when the record has no note data (a profile missing the
+    key gets it initialized to ``""``). All ten defect flags are always
+    written; ``False`` is meaningful data ("observed, none present").
+    
     Args:
         alog_path: Path to the .alog file to modify.
         record: The sensory sidecar record containing the data to write.
@@ -242,10 +361,13 @@ def sync_alog(
         SyncResult with details of the operation.
     
     Raises:
-        SyncError: If the profile contains unknown keys, or if field types
-                  are incompatible.
+        SyncError: If the record has incompatible types, if the profile
+                  contains unknown keys, or if field types are incompatible.
     """
     alog_path = Path(alog_path)
+    
+    # Validate the record before touching the file
+    _validate_record(record)
     
     # Load the existing profile
     profile = _load_alog(alog_path)
@@ -271,9 +393,10 @@ def sync_alog(
     new_hash = None
     warnings: list[str] = []
     
-    if is_v42_plus or has_hash or has_signature:
-        # v4.2+: keep signature untouched, recompute hash
-        # Also recompute hash if present in pre-4.2 (shouldn't happen but be safe)
+    if is_v42_plus or has_hash:
+        # v4.2+ (or any file already carrying a hash): keep the signature
+        # untouched and recompute the hash so Artisan loads without warnings.
+        # A pre-4.2 file without a hash never gains one.
         new_hash = compute_profile_hash(profile)
         profile["hash"] = new_hash
         if is_v42_plus and not has_signature:

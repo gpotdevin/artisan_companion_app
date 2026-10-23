@@ -215,7 +215,7 @@ Manual GUI verification was performed on Artisan 4.2.0 (official build, revision
 
 | Test | File | Result |
 |---|---|---|
-| Baseline | Original anonymized v4.2.0 fixture | Loads cleanly, no warning |
+| Baseline | Original anonymized v4.2.0 fixture | The fixture was anonymized, so its stored hash is stale: Artisan 4.2.0 shows "Modified Artisan profile. Load it anyway?" and loads on Yes (this was the user's first manual observation) |
 | Stale hash/signature | Rewritten v4.2.0 (sensory fields changed, stale hash) | "Modified Artisan profile. Load it anyway?" warning; loads on Yes; radar values, custom labels, tipping+scorching visible in cupping dialog; cupping note visible under Roast → Properties → Cupping Notes |
 | No-hash copy | v4.2.0 copy with hash+signature deleted | "Not a genuine Artisan profile. Load it anyway?" warning; loads on Yes; user re-saved it in Artisan; the re-saved file now has fresh `hash` `7857c22798b0025d817ef06ce1b2914535907aa7aa9fe2ad63ce42531f540108` and `signature` `c9cc0985...`; **the fresh hash verifies against the algorithm → heal-on-resave proven** |
 | Pre-4.2 rewritten | Rewritten v2.10.4 copy | Opens **without warning**, notes visible. (An earlier report of "same warning" for this file was a misattribution; the disassembly and the re-test agree: pre-4.2 files skip both checks.) |
@@ -252,6 +252,8 @@ For pre-4.2 profiles: write the sensory fields only; never add `hash`/`signature
 Deleting `hash`/`signature` (previous option in section 3.4) is **REJECTED (inferior)**: it triggers "Not a genuine Artisan profile" on every load.
 
 Caveat: the hash covers the pydantic-reduced profile. Genuine files are schema-conformant (verified). The writer must therefore write sensory values in canonical types (`flavors`: list of floats, `flavorlabels`: list of strings, `cuppingnotes`: string, defect flags: bools) and must refuse to sync a file that contains keys outside the bundled 4.2.0 `ProfileData` schema (Artisan would drop them at load before hashing, invalidating a whole-dict hash).
+
+Write semantics (data safety): only non-empty record data is written. A record with an empty `radar.values` or `radar.labels` — a fresh, never-edited record — leaves the profile's existing `flavors`/`flavorlabels` untouched, so an opt-in sync cannot erase a roast's radar. `cuppingnotes` follows the same leave-existing-alone rule when the record has no note data (a profile missing the key gets it initialized to `""`). The ten defect flags are always written: a record always carries a complete `defects_observed` section and `False` is meaningful data ("observed, none present"). This asymmetry is deliberate — the radar fields have an "empty means never edited" state to preserve, the defect flags do not.
 
 ---
 
