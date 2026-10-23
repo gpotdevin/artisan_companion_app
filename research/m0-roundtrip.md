@@ -177,4 +177,38 @@ Native sync (M4) **MUST** either:
 3. **Restrict** native sync to pre-v4.2 files only
 
 Option 1 requires reverse-engineering Artisan's hash/signature algorithm (not yet done).
-Option 2 is simpler and safer: drop `hash` and `signature` before 
+Option 2 is simpler and safer: drop `hash` and `signature` before writing, letting Artisan recreate them on next save. A no-hash copy has now been prepared for the manual check in section 4.
+
+---
+
+## 4. Manual Check (GUI) — required before M4
+
+Perform the following steps in Artisan to verify behavior with hash/signature fields:
+
+1. **Version check:** Note the installed Artisan version (must be v4.2+ to test the hash/signature path; the corpus contains v4.2.0 files).
+
+2. **Baseline (original file):** Open `C:\Users\guill\AppData\Local\Temp\m0_experiment\v4.2.0_2026-10-04.alog` in Artisan — confirm it loads with no warning. Open the cupping/flavors dialog and note what the radar, labels, notes, and defect flags show (this is the baseline).
+
+3. **Stale hash/signature test:** Open `v4.2.0_2026-10-04_rewritten.alog` (sensory fields changed, STALE hash/signature) — record:
+   - Does it load?
+   - Any integrity/hash/signature warning or refusal?
+   - In the cupping dialog, are the new radar values `[8.5, 7.5, 9.0, 8.0, 8.5, 8.0, 9.0, 8.5, 8.0]`, the custom flavor labels, the note `"Bright citrus, floral jasmine, honey sweetness, clean finish"`, and the tipping/scorching defect flags visible?
+
+4. **Re-save stale hash file:** Re-save the rewritten file from Artisan and re-open it — do the fields survive? Compare the file's hash/signature values before and after the Artisan save (they should be recomputed by Artisan if it maintains them).
+
+5. **No-hash test:** Open `v4.2.0_2026-10-04_nohash.alog` (hash/signature DELETED — the design M4 will use) — does Artisan load it without complaint? Do the sensory fields show? Re-save and confirm Artisan recreates hash/signature.
+
+6. **Pre-4.2 test:** Open `v2.10.4_2024-08-03_rewritten.alog` (pre-4.2, no hash/signature concept) — loads cleanly? fields visible? survive re-save?
+
+7. **Go/No-Go criteria:**
+   - **GO** for M4 if all files load without blocking warnings, fields are visible, and fields survive an Artisan re-save.
+   - If the stale-hash file triggers a blocking warning but the no-hash file is clean, M4 uses the delete-hash/signature design.
+   - If the no-hash file is also blocked, M4 is **NO-GO** for v4.2 files (restrict native sync to pre-4.2, or reverse-engineer the hash algorithm).
+
+---
+
+## 5. Outcome
+
+To be filled in after the manual check.
+
+**Note:** All test files live in `C:\Users\guill\AppData\Local\Temp\m0_experiment\` and can be regenerated with `research/rewrite_native_fields.py` and `research/prepare_nohash_copy.py`.
