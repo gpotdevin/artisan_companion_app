@@ -170,8 +170,11 @@ def upsert_roast(
     """Insert or update a roast in the universe of known roasts."""
     with conn:
         conn.execute(
-            "INSERT OR REPLACE INTO roasts (roast_uuid, source_file, roast_date)"
-            " VALUES (?,?,?)",
+            "INSERT INTO roasts (roast_uuid, source_file, roast_date)"
+            " VALUES (?,?,?)"
+            " ON CONFLICT(roast_uuid) DO UPDATE SET"
+            " source_file = COALESCE(excluded.source_file, roasts.source_file),"
+            " roast_date = COALESCE(excluded.roast_date, roasts.roast_date)",
             (roast_uuid, source_file, roast_date),
         )
 
@@ -261,7 +264,7 @@ def search_records(
     descriptors of any cupping. ``date_from``/``date_to`` bound the roast
     date (inclusive, ISO dates); records without a roast date are excluded
     by any date filter. ``min_score``/``max_score`` bound a record's best
-    cupping total. Invalid dates raise :class:`SensoryStoreError`.
+    cupping total. Invalid dates or scores raise :class:`SensoryStoreError`.
     """
     where: list[str] = []
     params: list[Any] = []
@@ -286,11 +289,19 @@ def search_records(
         where.append("roast_date <= ?")
         params.append(date_to)
     if min_score is not None:
+        if not isinstance(min_score, (int, float)):
+            raise SensoryStoreError(
+                f"min_score: expected a number, got {min_score!r}"
+            )
         where.append("best_total >= ?")
-        params.append(min_score)
+        params.append(float(min_score))
     if max_score is not None:
+        if not isinstance(max_score, (int, float)):
+            raise SensoryStoreError(
+                f"max_score: expected a number, got {max_score!r}"
+            )
         where.append("best_total <= ?")
-        params.append(max_score)
+        params.append(float(max_score))
 
     sql = "SELECT * FROM annotations"
     if where:
