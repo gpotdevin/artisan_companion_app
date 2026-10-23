@@ -6,11 +6,44 @@ build-backend = "setuptools.build_meta"
 name = "artisan-companion"
 version = "0.1.0"
 description = "Offline sensory editor for Artisan .alog roast logs"
+readme = "README.md"
 requires-python = ">=3.11"
+authors = [{ name = "gpotdevin" }]
 license = { text = "MIT" }
+keywords = [
+    "artisan",
+    "coffee",
+    "roasting",
+    "sensory",
+    "cupping",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Repository = "https://github.com/gpotdevin/artisan_companion_app"
+
+[project.scripts]
+artisan-companion = "app.__main__:main"
 
 [project.optional-dependencies]
-app = ["fastapi", "uvicorn"]
+app = [
+    "fastapi>=0.100",
+    "uvicorn>=0.20",
+]
+dev = [
+    "pytest",
+    "httpx",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
