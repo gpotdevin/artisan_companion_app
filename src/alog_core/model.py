@@ -149,38 +149,57 @@ class RoastProfile:
 # Profile construction
 # ---------------------------------------------------------------------------
 
-def _coerced_series(d: dict[str, Any]) -> tuple[list[float], list[float], list[float]]:
-    """Return parallel (times, ET, BT) float lists, dropping bad samples."""
+def _coerced_series(d: dict[str, Any]) -> tuple[list[float], list[float], list[float], list[Optional[int]]]:
+    """Return parallel (times, ET, BT) float lists and raw->coerced index map.
+    
+    Drops samples where time, ET, or BT is non-numeric. The index_map
+    has one entry per raw sample: coerced position (0..len(times)-1)
+    if the sample was kept, or None if it was dropped.
+    """
     times: list[float] = []
     et_c: list[float] = []
     bt_c: list[float] = []
+    index_map: list[Optional[int]] = []
     rows = zip(
         _as_list(d.get("timex")),
         _as_list(d.get("temp1")),
         _as_list(d.get("temp2")),
     )
-    for t, et, bt in rows:
+    for raw_idx, (t, et, bt) in enumerate(rows):
         ft = _as_float(t)
         fet = _as_float(et)
         fbt = _as_float(bt)
         if ft is None or fet is None or fbt is None:
+            index_map.append(None)
             continue
+        coerced_idx = len(times)
         times.append(ft)
         et_c.append(fet)
         bt_c.append(fbt)
-    return times, et_c, bt_c
+        index_map.append(coerced_idx)
+    return times, et_c, bt_c, index_map
 
 
 def _marker_index(
-    timeindex: list[Any], slot: int, n_samples: int
+    timeindex: list[Any], slot: int, n_samples: int, index_map: list[Optional[int]]
 ) -> Optional[int]:
-    """Sample index for a ``timeindex`` slot; 0/-1 mean "not marked"."""
+    """Sample index for a ``timeindex`` slot; 0/-1 mean "not marked".
+    
+    The raw index from timeindex is translated through index_map to get
+    the coerced sample position. Returns None if the slot is invalid,
+    the raw index is out of bounds, or the sample was dropped.
+    """
     if slot >= len(timeindex):
         return None
-    v = _as_int(timeindex[slot])
-    if v is None or v <= 0 or v >= n_samples:
+    raw_idx = _as_int(timeindex[slot])
+    if raw_idx is None or raw_idx <= 0:
         return None
-    return v
+    if raw_idx >= len(index_map):
+        return None
+    coerced_idx = index_map[raw_idx]
+    if coerced_idx is None or coerced_idx >= n_samples:
+        return None
+    return coerced_idx
 
 
 def _build_markers(
@@ -188,11 +207,12 @@ def _build_markers(
     times_s: list[float],
     bt_c: list[float],
     et_c: list[float],
+    index_map: list[Optional[int]],
 ) -> dict[str, Marker]:
     n = len(times_s)
     markers: dict[str, Marker] = {}
     for name, slot in _MARKER_SLOTS.items():
-        i = _marker_index(timeindex, slot, n)
+        i = _marker_index(timeindex, slot, n, index_map)
         if i is None:
             continue
         markers[name] = Marker(
@@ -202,7 +222,7 @@ def _build_markers(
 
 
 def _build_events(
-    d: dict[str, Any], times_s: list[float]
+    d: dict[str, Any], times_s: list[float], index_map: list[Optional[int]]
 ) -> list[RoastEvent]:
     """Build the event list; events with invalid sample indices are dropped."""
     etypes = _as_list(d.get("etypes"))
@@ -214,8 +234,11 @@ def _build_events(
         _as_list(d.get("specialeventsStrings")),
     )
     for raw_index, type_code, slider, label in rows:
-        i = _as_int(raw_index)
-        if i is None or i < 0 or i >= len(times_s):
+        raw_idx = _as_int(raw_index)
+        if raw_idx is None or raw_idx < 0 or raw_idx >= len(index_map):
+            continue
+        coerced_idx = index_map[raw_idx]
+        if coerced_idx is None or coerced_idx >= len(times_s):
             continue
         type_label = None
         code = _as_int(type_code)
@@ -223,8 +246,8 @@ def _build_events(
             type_label = _as_str(etypes[code])
         events.append(
             RoastEvent(
-                time_s=times_s[i],
-                index=i,
+                time_s=times_s[coerced_idx],
+                index=coerced_idx,
                 type_label=type_label,
                 slider_value=_as_float(slider),
                 label=_as_str(label),
@@ -289,23 +312,23 @@ def _build_meta(d: dict[str, Any], computed: Optional[dict[str, Any]]) -> RoastM
 
 def _build_profile(d: dict[str, Any]) -> RoastProfile:
     """Build a RoastProfile from a parsed pydump dict (never mutated)."""
-    times, et_c, bt_c = _coerced_series(d)
+    times, et_c, bt_c, index_map = _coerced_series(d)
     n = len(times)
 
     timeindex = _as_list(d.get("timeindex"))
-    charge_i = _marker_index(timeindex, _MARKER_SLOTS["CHARGE"], n)
+    charge_i = _marker_index(timeindex, _MARKER_SLOTS["CHARGE"], n, index_map)
 
     # Roast-relative time base: CHARGE sample when marked, else recording
     # start (t_rel == timex); the CHARGE marker is absent in that case.
     t0 = times[charge_i] if charge_i is not None else 0.0
     times_s = [t - t0 for t in times]
 
-    markers = _build_markers(timeindex, times_s, bt_c, et_c)
+    markers = _build_markers(timeindex, times_s, bt_c, et_c, index_map)
 
     # TP: BT minimum between CHARGE and DROP when both are marked,
     # else BT minimum over the whole curve.
     if n:
-        drop_i = _marker_index(timeindex, _MARKER_SLOTS["DROP"], n)
+        drop_i = _marker_index(timeindex, _MARKER_SLOTS["DROP"], n, index_map)
         if charge_i is not None and drop_i is not None and charge_i <= drop_i:
             lo, hi = charge_i, drop_i
         else:
@@ -336,7 +359,7 @@ def _build_profile(d: dict[str, Any]) -> RoastProfile:
         et_c=et_c,
         ror_c_per_min=ror(bt_c, times_s),
         markers=markers,
-        events=_build_events(d, times_s),
+        events=_build_events(d, times_s, index_map),
         phases=phases,
         computed=computed,
     )
