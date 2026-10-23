@@ -74,13 +74,10 @@ def verify_profile_hash(profile: dict[str, Any]) -> bool:
     return stored_hash == computed
 
 
-# Artisan 4.2.0 ProfileData TypedDict keys (210 keys total).
-# Source: Artisan v4.2.0 src/atypes.py ProfileData class. The 199 unique
-# keys observed across the test fixture corpus (v2.4.6 - v4.2.0) plus 11
-# additional keys known from the ProfileData schema that are not present
-# in the particular fixture samples: plus_sync_record_hash, BlendList,
-# plus_blend_spec, plus_blend_spec_labels, scheduleID, scheduleDate,
-# and the five bbp_* timing/ror keys. The v4.2.0 fixture itself has 196 keys.
+# 210 keys of Artisan 4.2.0 `ProfileData` (disassembled from the bundled `atypes.pyc`
+# of the user's official artisan.exe build, revision 9334ed7), plus `oversampling`
+# (not in the 4.2.0 schema but present in real v2.4.6 files; kept so pre-4.2 syncs
+# are not falsely refused). The set is used only to refuse files with unknown keys.
 PROFILE_DATA_KEYS: frozenset[str] = frozenset([
     "BlendList",
     "alarmaction",
@@ -105,11 +102,6 @@ PROFILE_DATA_KEYS: frozenset[str] = frozenset([
     "backgroundUUID",
     "backgroundpath",
     "bbp_begin",
-    "bbp_begin_to_bottom_ror",
-    "bbp_begin_to_bottom_time",
-    "bbp_bottom_temp",
-    "bbp_bottom_to_charge_ror",
-    "bbp_bottom_to_charge_time",
     "bbp_drop_to_end",
     "bbp_dropbt",
     "bbp_dropet",
@@ -192,6 +184,7 @@ PROFILE_DATA_KEYS: frozenset[str] = frozenset([
     "ground_color",
     "hash",
     "heavyFC",
+    "legendloc_pos",
     "lightCut",
     "load_etypes",
     "loadevent_hundpcts",
@@ -229,8 +222,13 @@ PROFILE_DATA_KEYS: frozenset[str] = frozenset([
     "pidSchedule1",
     "pidSchedule2",
     "pidSource",
+    "plus_blend_label",
     "plus_blend_spec",
     "plus_blend_spec_labels",
+    "plus_coffee",
+    "plus_coffee_label",
+    "plus_store",
+    "plus_store_label",
     "plus_sync_record_hash",
     "preheatDuration",
     "preheatenergies",

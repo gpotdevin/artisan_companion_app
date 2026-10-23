@@ -128,8 +128,8 @@ class TestVerifyProfileHash:
 class TestProfileDataKeys:
     """Test PROFILE_DATA_KEYS set."""
 
-    def test_has_210_keys(self):
-        assert len(PROFILE_DATA_KEYS) == 210
+    def test_has_211_keys(self):
+        assert len(PROFILE_DATA_KEYS) == 211
 
     def test_contains_v42_fixture_keys(self):
         """All keys in the v4.2.0 fixture must be in PROFILE_DATA_KEYS."""
@@ -142,6 +142,23 @@ class TestProfileDataKeys:
         
         fixture_keys = set(data.keys())
         assert fixture_keys.issubset(PROFILE_DATA_KEYS)
+
+    def test_contains_known_schema_keys(self):
+        """Verify new schema keys from 4.2.0 and corpus are present."""
+        expected_keys = {
+            "legendloc_pos", "plus_blend_label", "plus_coffee",
+            "plus_coffee_label", "plus_store", "plus_store_label", "oversampling",
+        }
+        assert expected_keys.issubset(PROFILE_DATA_KEYS)
+
+    def test_excludes_non_schema_keys(self):
+        """Verify non-schema keys are excluded."""
+        non_schema_keys = {
+            "bbp_begin_to_bottom_ror", "bbp_begin_to_bottom_time",
+            "bbp_bottom_temp", "bbp_bottom_to_charge_ror",
+            "bbp_bottom_to_charge_time",
+        }
+        assert PROFILE_DATA_KEYS.isdisjoint(non_schema_keys)
 
     def test_contains_common_keys(self):
         """Verify some well-known keys are present."""

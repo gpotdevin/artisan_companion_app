@@ -17,7 +17,6 @@ A .bak backup is created (once) before the first modification.
 from __future__ import annotations
 
 import ast
-import reprlib
 import shutil
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -63,6 +62,7 @@ class SyncResult:
     new_hash: Optional[str] = None
     changed: bool = False
     dry_run: bool = False
+    warnings: list[str] = field(default_factory=list)
 
 
 def _parse_version(version_str: str) -> tuple[int, ...]:
@@ -269,12 +269,17 @@ def sync_alog(
     has_signature = "signature" in profile
     
     new_hash = None
+    warnings: list[str] = []
     
     if is_v42_plus or has_hash or has_signature:
         # v4.2+: keep signature untouched, recompute hash
         # Also recompute hash if present in pre-4.2 (shouldn't happen but be safe)
         new_hash = compute_profile_hash(profile)
         profile["hash"] = new_hash
+        if is_v42_plus and not has_signature:
+            warnings.append(
+                "profile has no signature; Artisan will warn 'Not a genuine Artisan profile' on load"
+            )
     
     # Compute changed: compare serialized content
     original_bytes = alog_path.read_bytes()
@@ -297,8 +302,8 @@ def sync_alog(
         if changed:
             _write_alog(alog_path, profile)
     
-    # Update audit trail in store if provided
-    if store is not None:
+    # Update audit trail in store if provided (never on a dry run)
+    if store is not None and not dry_run:
         uuid = store_uuid or record.get("roast_uuid")
         if uuid:
             store.set_native_sync(uuid, fields_written)
@@ -311,4 +316,5 @@ def sync_alog(
         new_hash=new_hash,
         changed=changed,
         dry_run=dry_run,
+        warnings=warnings,
     )

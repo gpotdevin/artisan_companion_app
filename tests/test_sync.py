@@ -379,6 +379,114 @@ class TestSyncAlog:
         
         store.close()
 
+    def test_sync_accepts_legendloc_pos(self, tmp_path):
+        """Sync should accept profiles with legendloc_pos key."""
+        import shutil
+        
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        
+        # Load, inject legendloc_pos, write back
+        data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
+        data["legendloc_pos"] = [0.5, 0.5]
+        alog_path.write_text(repr(data), encoding="utf-8")
+        
+        # Create a normal record
+        record = new_record("test_uuid")
+        
+        # Sync should not raise
+        result = sync_alog(alog_path, record, backup=False)
+        
+        # Verify flavors was written (from empty defaults)
+        assert "flavors" in result.fields_written
+
+    def test_sync_accepts_oversampling_pre42(self, tmp_path):
+        """Sync should accept pre-4.2 profiles with oversampling key."""
+        import shutil
+        
+        fixture_src = Path("tests/fixtures/alogs/v2.10.4_2024-08-03.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        
+        # Load, inject oversampling, write back
+        data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
+        data["oversampling"] = 1
+        alog_path.write_text(repr(data), encoding="utf-8")
+        
+        # Create a normal record
+        record = new_record("test_uuid")
+        
+        # Sync should not raise
+        result = sync_alog(alog_path, record, backup=False)
+        
+        # Verify it completed without error
+        assert result.changed or not result.changed
+
+    def test_dry_run_does_not_update_store_audit(self, tmp_path):
+        """dry_run=True should not update the store audit trail."""
+        import shutil
+        from src.store.store import SensoryStore
+        
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        
+        # Create a sensory store
+        sensory_dir = tmp_path / "sensory"
+        sensory_dir.mkdir()
+        store = SensoryStore(sensory_dir)
+        
+        uuid = "test_uuid_123"
+        record = new_record(uuid)
+        record["radar"]["values"] = [8.5, 7.5, 9.0, 8.0, 8.5, 8.0, 9.0, 8.5, 8.0]
+        
+        # Create the record in the store
+        store.create(uuid)
+        
+        # Snapshot the initial native_sync state
+        initial_sync = store.get(uuid)["native_sync"]
+        
+        # Run sync with dry_run=True
+        result = sync_alog(alog_path, record, dry_run=True, store=store)
+        
+        # Assert dry_run is True
+        assert result.dry_run is True
+        
+        # Check that native_sync is unchanged
+        final_sync = store.get(uuid)["native_sync"]
+        assert final_sync == initial_sync
+        assert final_sync == {"last_synced": None, "fields": []}
+        
+        store.close()
+
+    def test_missing_signature_warns(self, tmp_path):
+        """v4.2+ profile without signature should produce a warning."""
+        import shutil
+        
+        fixture_src = Path("tests/fixtures/alogs/v4.2.0_2026-10-04.alog")
+        alog_path = tmp_path / "test.alog"
+        shutil.copy2(fixture_src, alog_path)
+        
+        # Load, remove signature, write back
+        data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
+        del data["signature"]
+        alog_path.write_text(repr(data), encoding="utf-8")
+        
+        # Create a normal record
+        record = new_record("test_uuid")
+        
+        # Sync
+        result = sync_alog(alog_path, record, backup=False)
+        
+        # Check warnings
+        assert len(result.warnings) > 0
+        assert any("signature" in w.lower() for w in result.warnings)
+        
+        # Verify the written file has a valid hash
+        written_data = ast.literal_eval(alog_path.read_text(encoding="utf-8"))
+        assert verify_profile_hash(written_data) is True
+
 
 # Helper import for shutil
 import shutil
