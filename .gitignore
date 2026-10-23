@@ -9,6 +9,8 @@ build/
 
 # Data (never commit roast logs or sensory stores)
 *.alog
+# except the anonymized test fixtures
+!tests/fixtures/alogs/*.alog
 sensory/
 *.sqlite
 *.db
