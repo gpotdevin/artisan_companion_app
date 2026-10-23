@@ -121,7 +121,7 @@ viewer).
 | M1 | `alog` core library | Loader, profile model, unescape, RoR, phases, event timeline, roast index build | Parses 230/230 corpus files; published as `pip install`-able package skeleton |
 | M2 | Sensory store + editor | Sidecar JSON schema v1, CRUD UI for cupping sessions, radar editor, search/list | Can annotate a roast end-to-end; store survives app restarts; original `.alog` untouched |
 | M3 | Profile viewer | Artisan-style chart with events/phases/RoR, roast list, side-by-side sensory panel | A roast renders visually equivalent to Artisan's graph for the corpus sample |
-| M4 | Native sync (opt-in) | Backup-then-write of `flavors`/`cuppingnotes`/defect flags; sync audit trail | Round-trip verified against Artisan versions available locally; gated on M0 results |
+| M4 | Native sync (opt-in) | Backup-then-write of `flavors`/`flavorlabels`/`cuppingnotes`/defect flags; keep signature + recompute hash for v4.2+ (zero-warning writes); nothing added for pre-4.2; sync audit trail; refusal on unknown schema keys | Round-trip verified against Artisan versions available locally; gated on M0 results |
 | M5 | Public release prep | License, README, CI (pytest + fixture corpus), packaging, sample gallery | First tagged GitHub release |
 
 ## 5. Repository layout (target)

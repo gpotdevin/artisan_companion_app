@@ -179,6 +179,8 @@ Native sync (M4) **MUST** either:
 Option 1 requires reverse-engineering Artisan's hash/signature algorithm (not yet done).
 Option 2 is simpler and safer: drop `hash` and `signature` before writing, letting Artisan recreate them on next save. A no-hash copy has now been prepared for the manual check in section 4.
 
+**Update (2026-10-23):** Option 1 (**recompute hash**) is **CHOSSEN** — see section 7. Option 2 (delete hash/signature) is **REJECTED (inferior)** — triggers "Not a genuine Artisan profile" warning on every load.
+
 ---
 
 ## 4. Manual Check (GUI) — required before M4
@@ -207,8 +209,60 @@ Perform the following steps in Artisan to verify behavior with hash/signature fi
 
 ---
 
-## 5. Outcome
+## 5. Manual check outcomes (Artisan 4.2.0 GUI, 2026-10-23)
 
-To be filled in after the manual check.
+Manual GUI verification was performed on Artisan 4.2.0 (official build, revision 9334ed7) against the user's real corpus.
+
+| Test | File | Result |
+|---|---|---|
+| Baseline | Original anonymized v4.2.0 fixture | Loads cleanly, no warning |
+| Stale hash/signature | Rewritten v4.2.0 (sensory fields changed, stale hash) | "Modified Artisan profile. Load it anyway?" warning; loads on Yes; radar values, custom labels, tipping+scorching visible in cupping dialog; cupping note visible under Roast → Properties → Cupping Notes |
+| No-hash copy | v4.2.0 copy with hash+signature deleted | "Not a genuine Artisan profile. Load it anyway?" warning; loads on Yes; user re-saved it in Artisan; the re-saved file now has fresh `hash` `7857c22798b0025d817ef06ce1b2914535907aa7aa9fe2ad63ce42531f540108` and `signature` `c9cc0985...`; **the fresh hash verifies against the algorithm → heal-on-resave proven** |
+| Pre-4.2 rewritten | Rewritten v2.10.4 copy | Opens **without warning**, notes visible. (An earlier report of "same warning" for this file was a misattribution; the disassembly and the re-test agree: pre-4.2 files skip both checks.) |
+
+**Conclusion:** The stale-hash warning is non-blocking (Yes loads anyway), but the no-hash copy triggers a different warning. The heal-on-resave behavior confirms Artisan can regenerate valid hash/signature.
+
+---
+
+## 6. Artisan 4.2 profile integrity (reverse-engineered)
+
+Integrity machinery in Artisan 4.2.0 official builds (`artisanlib/main.py` `ApplicationWindow.validateProfileDict`, disassembled from the bundled pyc; `artisanlib/util.py` `rec_int_to_float`, `signature_message`):
+
+1. On load, the profile dict is first reduced by pydantic `TypeAdapter(ProfileData).validate_python(...)` (schema = `ProfileData` TypedDict in `artisanlib/atypes.py`, 210 keys). Unknown keys are dropped, values coerced. **On genuine Artisan-written files this reduction is the identity** (verified: 0 keys dropped, 0 values changed on 10 genuine v4.2 files).
+2. Signature check (only if official build AND `validate_signature` AND `version >= 4.2`): loads bundled `artisan_public_key.pem` (Ed25519) and verifies `profile['signature']` (hex) over `signature_message(version, revision, artisan_os)` = `bytes(f"{version}{revision}{artisan_os}", "ascii")`. **The signature covers only version+revision+artisan_os — NOT the profile content.** Verified 10/10 against the user's corpus with the bundled public key. Any failure (incl. missing `signature` key) → dialog "Not a genuine Artisan profile. Load it anyway?".
+3. Hash check (only if `'hash'` in profile): `computed = sha256(json.dumps(rec_int_to_float(profile_minus_hash), sort_keys=True, ensure_ascii=True, separators=(',',':')).encode()).hexdigest()`; mismatch → dialog "Modified Artisan profile. Load it anyway?" (Yes loads anyway, Cancel aborts the load). `rec_int_to_float` converts **every int to float, including bools** (`True` → `1.0`), recursing into dicts (copied) and lists; all other types unchanged. (A bool-excluding reimplementation produces wrong hashes — this was verified the hard way.)
+4. On save (`getProfile`, main.py ~line 17310), Artisan builds the profile from `ProfileData()`, assigns `signature` (line 17039) **before** computing `hash` (line 17310) — so the stored hash covers the signature value.
+5. Pre-4.2 profiles have no `hash`/`signature` keys; version < 4.2 skips the signature check and the absent `hash` skips the hash check → **no warnings on load**.
+
+Verification evidence:
+- The stdlib reimplementation `sha256(json.dumps(rec_int_to_float(profile_minus_hash), sort_keys=True, ensure_ascii=True, separators=(',',':')).encode()).hexdigest()` reproduces the stored hash **10/10**: all 9 v4.2.0 files in the user's corpus (`C:\Users\guill\ai\coffee\Artisan\logs`, read-only) plus the user's re-saved test file.
+- The same computation ground-truthed against the **real** pydantic 2.13.4 `TypeAdapter(ProfileData)` loaded from the extracted bundled pyc (`atypes.pyc`, `plus/stock.pyc`): 10/10 match, validation identity on genuine files.
+- Ed25519 signature verification with the bundled `C:\Program Files\Artisan\artisan_public_key.pem`: 10/10 valid; message is version+revision+artisan_os only (content-independent; identical signature `c9cc0985...` observed across different re-saves).
+
+---
+
+## 7. M4 design decision
+
+**Status: GO**
+
+For profiles with version >= 4.2 (practically: those carrying `hash`/`signature`): write the sensory fields, **keep the original `signature` untouched** (it stays valid — it is content-independent), and **recompute `hash`** with the exact algorithm above over the final written dict minus `hash`. Result: Artisan loads the file with **zero warnings**.
+
+For pre-4.2 profiles: write the sensory fields only; never add `hash`/`signature`.
+
+Deleting `hash`/`signature` (previous option in section 3.4) is **REJECTED (inferior)**: it triggers "Not a genuine Artisan profile" on every load.
+
+Caveat: the hash covers the pydantic-reduced profile. Genuine files are schema-conformant (verified). The writer must therefore write sensory values in canonical types (`flavors`: list of floats, `flavorlabels`: list of strings, `cuppingnotes`: string, defect flags: bools) and must refuse to sync a file that contains keys outside the bundled 4.2.0 `ProfileData` schema (Artisan would drop them at load before hashing, invalidating a whole-dict hash).
+
+---
+
+## 8. Outcome
+
+M0 experiments complete. Manual check confirms:
+- Stale hash triggers non-blocking "Modified Artisan profile" warning
+- No-hash triggers non-blocking "Not a genuine Artisan profile" warning
+- Heal-on-resave proven: Artisan regenerates valid hash/signature
+- Pre-4.2 files load without warnings
+
+**M4 native sync is GO** with the recompute-hash design.
 
 **Note:** All test files live in `C:\Users\guill\AppData\Local\Temp\m0_experiment\` and can be regenerated with `research/rewrite_native_fields.py` and `research/prepare_nohash_copy.py`.
