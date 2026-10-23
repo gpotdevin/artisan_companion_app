@@ -3,11 +3,14 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "alog_core"
+name = "artisan-companion"
 version = "0.1.0"
-description = "Stdlib-only reader and indexer for Artisan .alog coffee roast logs"
+description = "Offline sensory editor for Artisan .alog roast logs"
 requires-python = ">=3.11"
 license = { text = "MIT" }
+
+[project.optional-dependencies]
+app = ["fastapi", "uvicorn"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
