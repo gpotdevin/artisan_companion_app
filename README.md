@@ -5,9 +5,7 @@ coffee roasts as `.alog` files and want to attach **sensory information** (cuppi
 notes, flavor scores, defects) to each roast, and to **review roast profiles**
 (curves, events, phases) without opening Artisan.
 
-> Status: **evaluation phase**. No code yet. This repository currently holds the
-> feasibility evaluation and the implementation plan that will decide whether and
-> how the app gets built.
+> Status: M1 alog_core parser, M2a sensory store, M2b sensory editor web app implemented on branch dev; 167+ tests; CI via GitHub Actions.
 
 ## Goals
 
@@ -52,5 +50,4 @@ that evidence file and in the pre-existing technical descriptions of the corpus.
 
 ## License
 
-Not chosen yet — see the open decisions in the implementation plan. No release
-should be tagged before this is settled.
+MIT (pyproject.toml declares license = { text = "MIT" }).
