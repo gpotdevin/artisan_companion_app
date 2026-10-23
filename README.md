@@ -5,7 +5,7 @@ coffee roasts as `.alog` files and want to attach **sensory information** (cuppi
 notes, flavor scores, defects) to each roast, and to **review roast profiles**
 (curves, events, phases) without opening Artisan.
 
-> Status: M1 alog_core parser, M2a sensory store, M2b sensory editor web app implemented on branch dev; 167+ tests; CI via GitHub Actions.
+> Status: M0–M4 complete; 282 tests passed / 1 skipped; CI green; M5 release prep in progress on branch `dev`.
 
 ## Goals
 
@@ -32,6 +32,54 @@ Artisan only ever re-encounters the data indirectly: when the user opens an
 annotated log in Artisan, the sensory summary written to the native fields is
 visible there like any data entered in Artisan itself.
 
+## Features
+
+- **stdlib-only `.alog` parser** — Pure Python, zero dependencies for parsing and indexing Artisan roast logs; handles all Artisan versions 2.4.6–4.2.0
+- **Sensory store** — JSON sidecar files keyed by `roastUUID` store cupping sessions, flavor radar, defects, and media references; SQLite index for listing/search
+- **Sensory editor web UI** — Form-driven entry of cupping sessions (SCA scores), aroma descriptors, defects, overall rating; renders the native flavor radar
+- **Profile viewer** — Artisan-style chart with BT/ET curves, RoR, event flags, phase shading (DRY/FCs/DROP markers)
+- **Opt-in native sync** — Backup-first write of sensory fields (`flavors`, `flavorlabels`, `cuppingnotes`, defect flags) into `.alog` files; for Artisan 4.2+ the integrity hash is recomputed so files load with zero warnings; a `.bak` backup is always made first
+
+## Install
+
+Development install (from repo root):
+
+```bash
+pip install -e ".[app]"
+```
+
+The `app` extra provides FastAPI + uvicorn for the web UI.
+
+## Run
+
+Start the local web UI:
+
+```bash
+artisan-companion
+```
+
+or
+
+```bash
+python -m app
+```
+
+The app serves on `http://127.0.0.1:8000` by default.
+
+CLI flags:
+- `--logs-dir PATH` — directory containing `.alog` files (default: `./logs` or current directory)
+- `--sensory-dir PATH` — directory for sensory sidecar files (default: `<logs-dir>/../sensory`)
+
+## Try it with sample data
+
+The repository includes 7 anonymized `.alog` fixtures in `tests/fixtures/alogs/`, one per Artisan version 2.4.6–4.2.0. See `docs/sample-gallery.md` for a detailed gallery and how to view them.
+
+To view a fixture roast:
+
+1. Install and run the app (as shown above)
+2. Open `http://127.0.0.1:8000/viewer?uuid=<roast-uuid>` in your browser
+3. Use the UUID from the fixture's `roastUUID` field, or browse from the library page
+
 ## Documentation
 
 | Document | Content |
@@ -39,7 +87,9 @@ visible there like any data entered in Artisan itself.
 | [docs/feasibility-evaluation.md](docs/feasibility-evaluation.md) | What the `.alog` format allows, what survives a round trip through Artisan, and the verdict |
 | [docs/implementation-plan.md](docs/implementation-plan.md) | Architecture, data model, tech stack, milestones, risks |
 | [docs/ui-spec.md](docs/ui-spec.md) | Proposed UI specification: screens, wireframes, states, acceptance criteria |
+| [docs/sample-gallery.md](docs/sample-gallery.md) | Gallery of the 7 fixture roasts with version-specific notes |
 | [research/upstream-findings.md](research/upstream-findings.md) | Evidence collected from the Artisan source code and a 230-file log corpus |
+| [research/m0-roundtrip.md](research/m0-roundtrip.md) | Artisan 4.2 integrity findings and native sync design |
 
 ## Context
 
@@ -50,4 +100,8 @@ that evidence file and in the pre-existing technical descriptions of the corpus.
 
 ## License
 
-MIT (pyproject.toml declares license = { text = "MIT" }).
+MIT — see [LICENSE](LICENSE).
+
+## Affiliation
+
+artisan-companion is an independent project. It is not affiliated with, endorsed by, or sponsored by Artisan (artisan-scope.org). 'Artisan' is a trademark of its respective owners. This project only reads and writes the public `.alog` file format.

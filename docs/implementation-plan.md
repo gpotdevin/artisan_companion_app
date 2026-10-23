@@ -4,6 +4,8 @@ Sequel to [feasibility-evaluation.md](feasibility-evaluation.md). Assumes the
 hybrid storage model decided there: sidecar store keyed by `roastUUID`
 (system of record) plus opt-in sync of native Artisan sensory fields.
 
+> **Milestone status:** M0–M4 complete; M5 in progress; HEAD commit `d6c4538`.
+
 ## 0. Scope and non-goals
 
 The app **complements existing `.alog` files offline, after the fact**. Sensory
@@ -115,21 +117,21 @@ viewer).
 
 ## 4. Milestones
 
-| # | Milestone | Scope | Exit criteria |
-|---|---|---|---|
-| M0 | Pre-flight experiments | R-1 round-trip test (rewrite copy of a v4.2 log with native fields; open in Artisan; check warning/behavior). R-2: confirm unknown-key load tolerance on all 7 corpus versions with file copies | Written findings in research/; go/no-go for native sync |
-| M1 | `alog` core library | Loader, profile model, unescape, RoR, phases, event timeline, roast index build | Parses 230/230 corpus files; published as `pip install`-able package skeleton |
-| M2 | Sensory store + editor | Sidecar JSON schema v1, CRUD UI for cupping sessions, radar editor, search/list | Can annotate a roast end-to-end; store survives app restarts; original `.alog` untouched |
-| M3 | Profile viewer | Artisan-style chart with events/phases/RoR, roast list, side-by-side sensory panel | A roast renders visually equivalent to Artisan's graph for the corpus sample |
-| M4 | Native sync (opt-in) | Backup-then-write of `flavors`/`flavorlabels`/`cuppingnotes`/defect flags; keep signature + recompute hash for v4.2+ (zero-warning writes); nothing added for pre-4.2; sync audit trail; refusal on unknown schema keys | Round-trip verified against Artisan versions available locally; gated on M0 results |
-| M5 | Public release prep | License, README, CI (pytest + fixture corpus), packaging, sample gallery | First tagged GitHub release |
+| # | Milestone | Scope | Exit criteria | Status |
+|---|---|---|---|---|
+| M0 | Pre-flight experiments | R-1 round-trip test (rewrite copy of a v4.2 log with native fields; open in Artisan; check warning/behavior). R-2: confirm unknown-key load tolerance on all 7 corpus versions with file copies | Written findings in research/; go/no-go for native sync | Done |
+| M1 | `alog` core library | Loader, profile model, unescape, RoR, phases, event timeline, roast index build | Parses 230/230 corpus files; published as `pip install`-able package skeleton | Done |
+| M2 | Sensory store + editor | Sidecar JSON schema v1, CRUD UI for cupping sessions, radar editor, search/list | Can annotate a roast end-to-end; store survives app restarts; original `.alog` untouched | Done |
+| M3 | Profile viewer | Artisan-style chart with events/phases/RoR, roast list, side-by-side sensory panel | A roast renders visually equivalent to Artisan's graph for the corpus sample | Done |
+| M4 | Native sync (opt-in) | Backup-then-write of `flavors`/`flavorlabels`/`cuppingnotes`/defect flags; keep signature + recompute hash for v4.2+ (zero-warning writes); nothing added for pre-4.2; sync audit trail; refusal on unknown schema keys | Round-trip verified against Artisan versions available locally; gated on M0 results | Done |
+| M5 | Public release prep | License, README, CI (pytest + fixture corpus), packaging, sample gallery | First tagged GitHub release | In progress |
 
 ## 5. Repository layout (target)
 
 ```
 artisan_companion_app/
 ├── README.md
-├── LICENSE                      # choice pending — see decisions
+├── LICENSE                      # MIT License
 ├── pyproject.toml               # package: alog_core + app
 ├── .gitignore
 ├── docs/                        # feasibility, plan, format notes
@@ -146,12 +148,12 @@ artisan_companion_app/
 
 ## 6. Open decisions
 
-| Decision | Options | Default |
+| Decision | Options | Status |
 |---|---|---|
-| License | MIT vs Apache-2.0 (AGPL-3.0 is *contagious* — Artisan itself is AGPL; we only read its files, which does not force our license) | MIT |
-| Project name | `artisan-companion` (working) vs distinct brand (Artisan trademark caution) | Decide before M5; check trademark policy |
-| Distribution | PyPI + zip binary vs GitHub releases only | GitHub releases first |
-| Viewer tech | Plotly vs D3 vs matplotlib-server-rendered | Decide in M3 spike after chart-quality comparison |
+| License | MIT vs Apache-2.0 (AGPL-3.0 is *contagious* — Artisan itself is AGPL; we only read its files, which does not force our license) | **MIT** — decided; `LICENSE` added |
+| Project name | `artisan-companion` (working) vs distinct brand (Artisan trademark caution) | **Keep `artisan-companion`** — affiliation disclaimer added to README; revisit branding before any public (non-private) release |
+| Distribution | PyPI + zip binary vs GitHub releases only | **GitHub releases first** — decided |
+| Viewer tech | Plotly vs D3 vs matplotlib-server-rendered | **Canvas + SVG (vanilla JS)** — M3 shipped a pure HTML/JS viewer using canvas for BT/ET/RoR charts and SVG for the flavor radar; zero external dependencies |
 
 ## 7. Guardrails
 
