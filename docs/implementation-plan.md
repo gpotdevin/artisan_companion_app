@@ -4,7 +4,7 @@ Sequel to [feasibility-evaluation.md](feasibility-evaluation.md). Assumes the
 hybrid storage model decided there: sidecar store keyed by `roastUUID`
 (system of record) plus opt-in sync of native Artisan sensory fields.
 
-> **Milestone status:** M0–M4 complete; M5 in progress; HEAD commit `d6c4538`.
+> **Milestone status:** M0–M4 complete; M5 (release prep) in progress.
 
 ## 0. Scope and non-goals
 
@@ -107,7 +107,7 @@ booleans. Anything else (cupping history, media, descriptors) stays sidecar-only
 |---|---|---|
 | Language | Python 3.11+ | Same ecosystem as Artisan; proven parser logic already exists; natural for data work |
 | Core library | stdlib only (`ast`, `json`, `sqlite3`, `pathlib`) | The parser must stay dependency-free to be trustworthy and trivially installable |
-| App/UI | Local web app: FastAPI + small frontend (Plotly or lightweight chart lib) | Cross-platform without Qt licensing/size; charts are strong; runs offline at `localhost` |
+| App/UI | Local web app: FastAPI + vanilla-JS frontend (canvas charts, SVG radar; zero frontend dependencies) | Cross-platform without Qt licensing/size; charts are strong; runs offline at `localhost` |
 | Packaging | PyInstaller single binary (later) | For non-Python users; deferred to a late milestone |
 | Tests | pytest with a reduced multi-version fixture corpus | Every Artisan version 2.4.6–4.2.0 represented; golden-file parse tests |
 
@@ -132,7 +132,7 @@ viewer).
 artisan_companion_app/
 ├── README.md
 ├── LICENSE                      # MIT License
-├── pyproject.toml               # package: alog_core + app
+├── pyproject.toml               # packages: alog_core, store, sync, app
 ├── .gitignore
 ├── docs/                        # feasibility, plan, format notes
 ├── research/                    # evidence collected during evaluation

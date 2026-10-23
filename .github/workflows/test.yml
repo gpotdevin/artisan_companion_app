@@ -19,3 +19,19 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: pip install pytest httpx fastapi uvicorn
       - run: python -m pytest tests/ -q
+
+  packaging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install build
+      - run: python -m build --wheel --sdist
+      - run: |
+          python -m zipfile -l dist/*.whl > wheel-contents.txt
+          for f in alog_core/__init__.py store/__init__.py sync/__init__.py app/main.py app/frontend.html app/viewer.html; do
+            grep -q "$f" wheel-contents.txt || { echo "MISSING from wheel: $f"; exit 1; }
+          done
+          echo "wheel contents OK"

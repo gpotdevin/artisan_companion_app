@@ -5,7 +5,7 @@ coffee roasts as `.alog` files and want to attach **sensory information** (cuppi
 notes, flavor scores, defects) to each roast, and to **review roast profiles**
 (curves, events, phases) without opening Artisan.
 
-> Status: M0–M4 complete; 282 tests passed / 1 skipped; CI green; M5 release prep in progress on branch `dev`.
+> Status: M0–M4 complete; 298 tests passed / 1 skipped; CI green; M5 release prep in progress on branch `dev`.
 
 ## Goals
 
@@ -48,7 +48,8 @@ Development install (from repo root):
 pip install -e ".[app]"
 ```
 
-The `app` extra provides FastAPI + uvicorn for the web UI.
+The `app` extra provides FastAPI + uvicorn for the web UI. Add the `dev`
+extra (`pip install -e ".[app,dev]"`) to also run the test suite.
 
 ## Run
 
@@ -74,11 +75,20 @@ CLI flags:
 
 The repository includes 7 anonymized `.alog` fixtures in `tests/fixtures/alogs/`, one per Artisan version 2.4.6–4.2.0. See `docs/sample-gallery.md` for a detailed gallery and how to view them.
 
-To view a fixture roast:
+To view a fixture roast, run the app against the fixtures (from the repo root):
 
-1. Install and run the app (as shown above)
-2. Open `http://127.0.0.1:8000/viewer?uuid=<roast-uuid>` in your browser
-3. Use the UUID from the fixture's `roastUUID` field, or browse from the library page
+```bash
+artisan-companion --logs-dir tests/fixtures/alogs
+```
+
+Then:
+
+1. Open `http://127.0.0.1:8000/viewer?uuid=<roast-uuid>` in your browser
+2. Use the UUID from the fixture's `roastUUID` field, or browse from the library page
+
+The app keeps its sensory store next to the logs directory by default
+(`tests/fixtures/sensory/`, gitignored); pass `--sensory-dir PATH` to put it
+elsewhere.
 
 ## Documentation
 

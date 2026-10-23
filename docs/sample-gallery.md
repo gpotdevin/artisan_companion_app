@@ -10,9 +10,9 @@ all Artisan versions from 2.4.6 to 4.2.0.
 | Fixture | Artisan Version | Roast Date (ISO) | Notable Characteristics |
 |---|---|---|---|
 | `v2.4.6_2021-11-19_multiline.alog` | 2.4.6 | 2021-11-19 | French locale (`etypes` = Air/Tambour/Vanne/Bruleur); pretty-printed multi-line pydump variant; CHARGE/FCs/DROP markers present, DRY not marked; 151 keys |
-| `v2.6.0_2022-09-16.alog` | 2.6.0 | 2022-09-16 | 21 events recorded; standard single-line format; CHARGE/FCs/DROP marked |
+| `v2.6.0_2022-09-16.alog` | 2.6.0 | 2022-09-16 | 21 events recorded; standard single-line format; CHARGE/FCs/DROP marked; first Windows-recorded generation in the corpus |
 | `v2.8.2_2023-04-09.alog` | 2.8.2 | 2023-04-09 | CHARGE/FCs/DROP markers present, DRY not marked |
-| `v2.10.0_2024-04-02.alog` | 2.10.0 | 2024-04-02 | First Windows-recorded generation in the corpus |
+| `v2.10.0_2024-04-02.alog` | 2.10.0 | 2024-04-02 | First 2.10.x generation in the corpus; key set drops `beansize` and adds `default_etypes` vs 2.8.2 |
 | `v2.10.4_2024-08-03.alog` | 2.10.4 | 2024-08-03 | `roastUUID` matches `UUID_A` used in the M2a store tests |
 | `v3.2.0_2026-07-23.alog` | 3.2.0 | 2026-07-23 | Full marker set: CHARGE/DRY/FCs/DROP all marked |
 | `v4.2.0_2026-10-04.alog` | 4.2.0 | 2026-10-04 | v4 key set (`hash`, `signature`, `bbp_*`, PID config keys); full marker set: CHARGE/DRY/FCs/DROP all present; 196 keys |
@@ -37,6 +37,10 @@ Key-set drift across versions: 151 keys (2.4.6) → 196 keys (4.2.0).
 
    To get a fixture's UUID, parse its `roastUUID` field or inspect the library listing.
 
+   Note: the app creates its sensory store next to the logs directory by
+   default (`tests/fixtures/sensory/`, gitignored); pass `--sensory-dir PATH`
+   to keep it elsewhere.
+
 4. The profile viewer shows:
    - BT/ET temperature curves over time
    - Rate of Rise (RoR) curve
@@ -57,6 +61,7 @@ Key-set drift across versions: 151 keys (2.4.6) → 196 keys (4.2.0).
 - **Events**: 21 events recorded — useful for testing event timeline rendering
 - **Format**: Standard single-line pydump
 - **Markers**: CHARGE, FCs, DROP marked
+- **OS**: First Windows-recorded generation in the corpus (all 2.4.6 corpus files are Mac OS X)
 - **Viewer**: All 21 events appear as flags on the ET curve
 - **Native sync**: Fields only; no `hash`/`signature` added; loads without warning
 
@@ -66,7 +71,7 @@ Key-set drift across versions: 151 keys (2.4.6) → 196 keys (4.2.0).
 - **Native sync**: Fields only; no `hash`/`signature` added; loads without warning
 
 ### Artisan 2.10.0
-- **Note**: First Windows-recorded generation in the corpus
+- **Note**: First 2.10.x generation in the corpus; key set drops `beansize` and adds `default_etypes` vs 2.8.2
 - **Markers**: Standard set
 - **Viewer**: Full profile rendering
 - **Native sync**: Fields only; no `hash`/`signature` added; loads without warning
