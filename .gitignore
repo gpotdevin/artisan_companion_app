@@ -27,3 +27,16 @@ htmlcov/
 Thumbs.db
 .idea/
 .vscode/
+
+# Android / Gradle (mobile/android)
+mobile/android/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/android/local.properties
+mobile/android/.idea/
+mobile/android/captures/
+mobile/android/.cxx/
+*.iml
+
+# Termux venv created on-device
+.venv-mobile/

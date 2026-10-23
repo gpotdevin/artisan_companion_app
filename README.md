@@ -90,6 +90,21 @@ The app keeps its sensory store next to the logs directory by default
 (`tests/fixtures/sensory/`, gitignored); pass `--sensory-dir PATH` to put it
 elsewhere.
 
+## Mobile (Android)
+
+The app runs on an Android phone, fully offline, reusing the same Python core
+and the same self-contained web UI (no CDN, no external assets):
+
+- **Termux (fastest, no toolchain):** run the server in Termux and open Chrome
+  at `http://127.0.0.1:8000` — see [`mobile/termux/`](mobile/termux/).
+- **Chaquopy APK (real installable app):** an Android Studio/Gradle project
+  embeds CPython and loads the UI in a WebView — see
+  [`mobile/android/`](mobile/android/).
+
+See [`mobile/README.md`](mobile/README.md) for quick starts and
+[`docs/mobile-port.md`](docs/mobile-port.md) for the full plan, architecture
+and milestones.
+
 ## Documentation
 
 | Document | Content |
@@ -97,6 +112,7 @@ elsewhere.
 | [docs/feasibility-evaluation.md](docs/feasibility-evaluation.md) | What the `.alog` format allows, what survives a round trip through Artisan, and the verdict |
 | [docs/implementation-plan.md](docs/implementation-plan.md) | Architecture, data model, tech stack, milestones, risks |
 | [docs/ui-spec.md](docs/ui-spec.md) | Proposed UI specification: screens, wireframes, states, acceptance criteria |
+| [docs/mobile-port.md](docs/mobile-port.md) | Android port: plan, Termux + Chaquopy APK paths, storage, milestones |
 | [docs/sample-gallery.md](docs/sample-gallery.md) | Gallery of the 7 fixture roasts with version-specific notes |
 | [research/upstream-findings.md](research/upstream-findings.md) | Evidence collected from the Artisan source code and a 230-file log corpus |
 | [research/m0-roundtrip.md](research/m0-roundtrip.md) | Artisan 4.2 integrity findings and native sync design |

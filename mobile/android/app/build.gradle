@@ -1,0 +1,63 @@
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.chaquo.python")
+}
+
+android {
+    namespace = "com.artisancompanion"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.artisancompanion"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "0.1.0"
+    }
+
+    // Single-source the Python code: the app packages live in the repo's src/
+    // (alog_core, store, sync, app). Only the Android entry point (launcher.py)
+    // lives inside the Gradle project.
+    sourceSets {
+        getByName("main") {
+            python.srcDir("src/main/python")
+            python.srcDir("../../../src")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+        }
+    }
+}
+
+chaquopy {
+    defaultConfig {
+        // Embedded CPython version. The exact DSL key has changed across
+        // Chaquopy releases — confirm against https://chaquo.com/chaquopy/
+        // for the pinned plugin version in the root build.gradle.
+        versionName "3.11"
+
+        pip {
+            // Runtime deps of the web app. The core (alog_core/store/sync) is
+            // stdlib-only and needs no install.
+            install("fastapi>=0.100")
+            install("uvicorn>=0.20")
+        }
+    }
+}
+
+dependencies {
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.webkit:webkit:1.11.0")
+}
