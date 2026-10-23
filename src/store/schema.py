@@ -84,6 +84,15 @@ def _as_bool(value: Any) -> bool:
     return bool(value) if isinstance(value, (bool, int)) else False
 
 
+def _as_list(value: Any) -> list[Any]:
+    """Return value as a list, [] for None, raise for other non-list types."""
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    raise SensoryStoreError(f"expected a list, got {value!r}")
+
+
 def _parse_iso_date(value: Any, what: str) -> Optional[date]:
     """Parse an ISO 8601 calendar date (``YYYY-MM-DD``).
 
@@ -126,13 +135,19 @@ def normalize_radar(raw: Any) -> dict[str, list]:
     """Normalize a radar section; non-numeric values are dropped silently."""
     d = raw if isinstance(raw, dict) else {}
     labels = [
-        s for s in (_as_str(v) for v in d.get("labels") or [])
+        s for s in (_as_str(v) for v in _as_list(d.get("labels")))
         if s is not None
     ]
-    values = [
-        v for v in (_as_float(x) for x in d.get("values") or [])
-        if v is not None
-    ]
+    values = []
+    for x in _as_list(d.get("values")):
+        v = _as_float(x)
+        if v is None:
+            continue
+        if not 0.0 <= v <= 10.0:
+            raise SensoryStoreError(
+                f"radar.values: expected a number in 0-10, got {x!r}"
+            )
+        values.append(v)
     return {"labels": labels, "values": values}
 
 
@@ -144,7 +159,7 @@ def normalize_defects(raw: Any) -> dict[str, bool]:
 def normalize_native_sync(raw: Any) -> dict[str, Any]:
     d = raw if isinstance(raw, dict) else {}
     fields = [
-        s for s in (_as_str(v) for v in d.get("fields") or [])
+        s for s in (_as_str(v) for v in _as_list(d.get("fields")))
         if s is not None
     ]
     return {"last_synced": _as_str(d.get("last_synced")), "fields": fields}
@@ -187,7 +202,8 @@ def _normalize_scores(raw: Any) -> dict[str, float]:
         scores["defects"] = v
     attrs = sum(scores.get(k, 0.0) for k in SCORE_KEYS if k in scores)
     if scores:
-        scores["total"] = round(attrs - scores.get("defects", 0.0), 2)
+        total = attrs - scores.get("defects", 0.0)
+        scores["total"] = round(max(0.0, total), 2)
     return scores
 
 
@@ -223,7 +239,7 @@ def normalize_cupping(
         raise SensoryStoreError(f"cupping: expected an object, got {raw!r}")
     cup_date = _parse_iso_date(raw.get("date"), "cupping.date")
     descriptors = [
-        s for s in (_as_str(v) for v in raw.get("descriptors") or [])
+        s for s in (_as_str(v) for v in _as_list(raw.get("descriptors")))
         if s is not None
     ]
     notes = _as_str(raw.get("notes")) or ""
@@ -250,7 +266,7 @@ def normalize_record(raw: Any, roast_uuid: Optional[str] = None) -> dict[str, An
     if not isinstance(raw, dict):
         raise SensoryStoreError(f"record: expected an object, got {raw!r}")
     version = raw.get("schema_version", SCHEMA_VERSION)
-    if version != SCHEMA_VERSION:
+    if not isinstance(version, int) or isinstance(version, bool) or version != SCHEMA_VERSION:
         raise SensoryStoreError(
             f"record: unsupported schema_version {version!r}"
             f" (expected {SCHEMA_VERSION})"
