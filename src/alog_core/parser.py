@@ -26,12 +26,13 @@ def unescape(s: str) -> str:
 
     Artisan writes non-ASCII characters as literal backslash escape sequences.
     A latin-1 encode followed by a unicode_escape decode recovers them;
-    strings that cannot be latin-1 encoded (already clean text) are returned
+    strings that cannot be latin-1 encoded (already clean text) or whose
+    escape sequences are invalid (e.g. literal Windows paths) are returned
     unchanged.
     """
     try:
         return s.encode("latin-1").decode("unicode_escape")
-    except UnicodeEncodeError:
+    except (UnicodeEncodeError, UnicodeDecodeError):
         return s
 
 

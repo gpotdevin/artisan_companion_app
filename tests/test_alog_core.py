@@ -113,6 +113,21 @@ def test_unescape_non_latin1_text_returned_unchanged() -> None:
     assert unescape("€ 400") == "€ 400"
 
 
+def test_unescape_literal_windows_path_returned_unchanged() -> None:
+    # latin-1 encodable, but \U is followed by non-hex -> the escape decode
+    # fails and the whole string is returned unchanged
+    assert unescape("C:\\Users\\gg") == "C:\\Users\\gg"
+
+
+def test_unescape_backslash_n_without_braces_returned_unchanged() -> None:
+    # \N without {NAME} is not a valid escape -> unchanged
+    assert unescape("C:\\Name") == "C:\\Name"
+
+
+def test_unescape_valid_escapes_still_decode() -> None:
+    assert unescape("torr\\xe9faction\\nBr\\xfbleur") == "torréfaction\nBrûleur"
+
+
 # ---------------------------------------------------------------------------
 # parser: load_alog
 # ---------------------------------------------------------------------------
