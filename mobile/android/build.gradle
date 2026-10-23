@@ -1,7 +1,9 @@
-// Top-level build file. Plugin versions are pinned to a known-good set; align
-// them with your Android Studio / Chaquopy version on first open if needed.
+// Top-level build file. Plugin versions are a known-good set; if Android Studio
+// complains about Kotlin/Compose/AGP version checks, align them with your
+// Studio's "New Project" template (see the comment in app/build.gradle).
 plugins {
     id("com.android.application") version "8.5.2" apply false
     id("org.jetbrains.kotlin.android") version "2.0.0" apply false
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0" apply false
     id("com.chaquo.python") version "16.0.0" apply false
 }

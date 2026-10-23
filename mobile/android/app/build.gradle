@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("com.chaquo.python")
 }
 
@@ -16,9 +17,17 @@ android {
         versionName = "0.1.0"
     }
 
-    // Single-source the Python code: the app packages live in the repo's src/
-    // (alog_core, store, sync, app). Only the Android entry point (launcher.py)
-    // lives inside the Gradle project.
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        // Compose Compiler 1.5.14 <-> Kotlin 2.0.0 (official compatibility table).
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+
+    // Single-source the Python core from the repo's src/ (alog_core, store,
+    // sync, app). Only the Android facade (api.py) lives in the Gradle project.
+    // The core is stdlib-only, so Chaquopy needs no pip installs.
     sourceSets {
         getByName("main") {
             python.srcDir("src/main/python")
@@ -41,23 +50,23 @@ android {
     }
 }
 
-chaquopy {
-    defaultConfig {
-        // Embedded CPython version. The exact DSL key has changed across
-        // Chaquopy releases — confirm against https://chaquo.com/chaquopy/
-        // for the pinned plugin version in the root build.gradle.
-        versionName "3.11"
-
-        pip {
-            // Runtime deps of the web app. The core (alog_core/store/sync) is
-            // stdlib-only and needs no install.
-            install("fastapi>=0.100")
-            install("uvicorn>=0.20")
-        }
-    }
-}
-
 dependencies {
+    implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.webkit:webkit:1.11.0")
+    implementation("androidx.activity:activity-compose:1.9.3")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation("androidx.navigation:navigation-compose:2.8.3")
+
+    implementation(platform("androidx.compose:compose-bom:2024.09.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

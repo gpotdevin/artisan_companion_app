@@ -1,57 +1,72 @@
-# Mobile (Android)
+# Mobile (Android) — native Kotlin app
 
-Two ways to run artisan-companion on an Android phone. Both reuse the same
-Python code; neither requires changing the app.
+artisan-companion runs on Android as a **native Kotlin (Jetpack Compose) app**,
+fully offline. The UI is native Material 3; the proven Python core
+(`alog_core`, `store`, `sync`) is embedded via [Chaquopy](https://chaquo.com/chaquopy/)
+and called through a thin JSON facade (`app/src/main/python/api.py`). No Python
+source in `src/` is modified.
 
-| Path | What you get | Toolchain needed | Time |
-|---|---|---|---|
-| [`termux/`](termux/) | App runs in Chrome via the Termux Linux env | None (Termux from F-Droid) | ~15 min |
-| [`android/`](android/) | A real, installable, fully-offline APK (WebView + embedded Python via Chaquopy) | Android Studio + SDK | A few hours to first build |
-
-The full plan, architecture, risks and milestones are in
+Full plan, architecture, storage model, milestones and risks:
 [**docs/mobile-port.md**](../docs/mobile-port.md).
 
-## Path 1 — Termux (fastest, no Android toolchain)
+## Build the APK
 
-Get the repo onto the phone (git clone in Termux, or sync the folder with
-Syncthing/Dropbox/USB), then from inside the checkout:
-
-```bash
-bash mobile/termux/setup.sh
-source .venv-mobile/bin/activate
-artisan-companion --logs-dir ./logs
-```
-
-Open Chrome at `http://127.0.0.1:8000`. Use Chrome's *Add to Home screen* to pin
-it like an app.
-
-## Path 2 — Chaquopy APK (real app)
-
-`android/` is a Gradle project that embeds CPython with
-[Chaquopy](https://chaquo.com/chaquopy/) and loads the existing web UI in a
-WebView. The Python packages (`alog_core`, `store`, `sync`, `app`) are
-**single-sourced** from the repo's `src/` via a Gradle `python.srcDir` — the
-APK and the desktop app share one copy of the code.
-
-> This is a **scaffold**: it is meant to be opened in Android Studio and built
-> there. It has not been compiled in this environment (no Android SDK here).
-> On first open, align the AGP/Kotlin/Chaquopy plugin versions in the root
-> `build.gradle` with your toolchain, create `local.properties` from
-> `local.properties.example`, and run `assembleDebug`.
+`android/` is a Gradle project. It is a **scaffold** — open it in Android Studio
+and build there (it is not compiled in this repo's environment; there is no
+Android SDK here).
 
 ```bash
-# 1. Copy local.properties.example -> local.properties and set sdk.dir
-# 2. Open mobile/android in Android Studio, or from the command line:
 cd mobile/android
+# 1. Create local.properties from the example and set your SDK path:
+cp local.properties.example local.properties   # then edit sdk.dir
+# 2. Build a debug APK:
 ./gradlew assembleDebug        # Linux/macOS
 gradlew.bat assembleDebug      # Windows
-# Install on a connected phone:
+# 3. Install on a connected phone (USB debugging on):
 ./gradlew installDebug
 ```
 
-The app starts the FastAPI server on `127.0.0.1:8000` inside the embedded
-Python (`app/src/main/python/launcher.py`) and the WebView loads it. Storage
-defaults to app-specific external files
-(`Android/data/com.artisancompanion/files/`); see
-[docs/mobile-port.md §3](../docs/mobile-port.md) for wiring a user-picked
-folder via the Storage Access Framework.
+On first open, Android Studio may ask to align AGP/Kotlin/Compose/Chaquopy
+versions — the pinned set in `build.gradle` / `app/build.gradle` is a
+known-good starting point (AGP 8.5.2, Kotlin 2.0.0, Compose BOM 2024.09.00,
+Compose Compiler 1.5.14, Chaquopy 16.0.0).
+
+### How it fits together
+
+- `app/src/main/python/api.py` — facade over the core. Mirrors the FastAPI JSON
+  contract, so the native app and the web app are interchangeable. Validated
+  end-to-end against the real `.alog` fixtures.
+- `data/PythonBridge.kt` — Chaquopy wrapper (`Python.getInstance().getModule("api")`).
+- `data/Repository.kt` — suspend API; every call runs on `Dispatchers.IO`.
+- `data/Models.kt` — `kotlinx.serialization` models matching the JSON contract.
+- `data/FileImport.kt` — copies SAF-picked `.alog` files into app storage.
+- `ui/` — `library`, `viewer` (+ `ProfileChart` Canvas), `editor` (+ `RadarChart`
+  Canvas), `settings`, `theme`.
+
+The Gradle project single-sources the Python core from the repo:
+`sourceSets { main { python.srcDir("../../../src") } }`.
+
+### Using it
+
+1. Launch the app → it indexes `Android/data/com.artisancompanion/files/logs`.
+2. Settings → **Import .alog files** → pick your `.alog` files → they are copied
+   into app storage and the index rebuilds.
+3. Library lists your roasts; tap one for the profile chart; Edit opens the
+   sensory editor (radar, defects, cuppings). Everything is stored in the
+   `sensory/` sidecar folder and is fully offline.
+
+Native write-back into `.alog` files (`sync/`) is disabled on Android for v1 —
+sensory data is sidecar-only and syncs to desktop via the folder.
+
+## Optional: Termux (non-native, no toolchain)
+
+`termux/setup.sh` runs the **web UI** in Termux + Chrome — a quick, no-build way
+to try the data layer on a phone. It is not the native app.
+
+```bash
+# In Termux, from a checkout of this repo:
+bash mobile/termux/setup.sh
+source .venv-mobile/bin/activate
+artisan-companion --logs-dir ./logs
+# then open Chrome at http://127.0.0.1:8000
+```
