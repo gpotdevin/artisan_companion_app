@@ -89,6 +89,8 @@ class RoastMeta:
     flavorlabels: Optional[list[str]] = None
     flavors: Optional[list[float]] = None
     defect_flags: Optional[dict[str, Optional[bool]]] = None
+    backgroundUUID: Optional[str] = None
+    backgroundpath: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -307,6 +309,8 @@ def _build_meta(d: dict[str, Any], computed: Optional[dict[str, Any]]) -> RoastM
             )
             for key in _DEFECT_FLAG_KEYS
         },
+        backgroundUUID=_as_str(d.get("backgroundUUID")),
+        backgroundpath=_as_str(d.get("backgroundpath")),
     )
 
 

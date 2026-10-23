@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisan Companion - Profile Viewer</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #252525;
+            --bg-tertiary: #333333;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent: #0078d4;
+            --accent-hover: #005a9e;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --border: #404040;
+            --bt-color: #ff4444;
+            --et-color: #4488ff;
+            --ror-color: #cccccc;
+            --marker-color: #ffffff;
+            --phase-drying: rgba(255, 200, 100, 0.15);
+            --phase-maillard: rgba(200, 150, 100, 0.20);
+            --phase-development: rgba(150, 100, 100, 0.25);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 320px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        
+        .header {
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .status-bar {
+            background: var(--bg-tertiary);
+            border-top: 1px solid var(--border);
+            padding: 8px 24px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        
+        .nav-link:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .viewer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+        
+        .chart-header h2 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        
+        .chart-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .chart-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .chart-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .chart-toggle input {
+            margin: 0;
+        }
+        
+        .canvas-container {
+            position: relative;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .chart-canvas {
+            display: block;
+            width: 100%;
+            height: 500px;
+            cursor: crosshair;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: var(--bg-primary);
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            pointer-events: none;
+            z-index: 100;
+            display: none;
+        }
+        
+        .tooltip.show {
+            display: block;
+        }
+        
+        .tooltip-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        
+        .tooltip-label {
+            color: var(--text-secondary);
+        }
+        
+        .tooltip-value {
+            font-weight: 500;
+        }
+        
+        .phase-banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 0.8rem;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .phase-indicator {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .phase-indicator span {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+        }
+        
+        .phase-indicator .drying {
+            background: rgba(255, 200, 100, 0.3);
+        }
+        
+        .phase-indicator .maillard {
+            background: rgba(200, 150, 100, 0.3);
+        }
+        
+        .phase-indicator .development {
+            background: rgba(150, 100, 100, 0.3);
+        }
+        
+        .sensory-panel {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .sensory-section {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .sensory-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        
+        .radar-container {
+            width: 100%;
+            height: 300px;
+            margin: 0 auto 20px;
+        }
+        
+        .radar-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .radar-polygon {
+            fill: rgba(0, 120, 212, 0.2);
+            stroke: var(--accent);
+            stroke-width: 2;
+        }
+        
+        .radar-axis line {
+            stroke: var(--text-secondary);
+            stroke-width: 1;
+        }
+        
+        .radar-axis text {
+            fill: var(--text-primary);
+            font-size: 11px;
+        }
+        
+        .radar-grid line {
+            stroke: var(--border);
+            stroke-width: 0.5;
+        }
+        
+        .radar-label {
+            fill: var(--text-secondary);
+            font-size: 10px;
+        }
+        
+        .cupping-list {
+            list-style: none;
+        }
+        
+        .cupping-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .cupping-item .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .cupping-item .date {
+            font-weight: 500;
+        }
+        
+        .cupping-item .score {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .cupping-item .body {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            color: var(--text-secondary);
+            font-style: italic;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .error-message {
+            color: var(--error);
+            padding: 12px;
+            background: rgba(244, 67, 54, 0.1);
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.15s;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+        
+        .marker-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .marker-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
+        
+        .marker-legend-item .color-box {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        
+        .stats-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stats-label {
+            color: var(--text-secondary);
+        }
+        
+        .stats-value {
+            font-weight: 500;
+        }
+        
+        @media (max-width: 1024px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .main-content {
+                padding: 16px;
+            }
+            
+            .sensory-panel {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <h2>Profile Viewer</h2>
+            <div id="sidebarContent">
+                <a href="/" class="nav-link">← Back to Library</a>
+                <div id="roastInfo" class="loading">Loading...</div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="viewer-container">
+                <div id="errorContainer"></div>
+                
+                <div class="chart-header">
+                    <div>
+                        <h2 id="chartTitle">Roast Profile</h2>
+                        <div class="chart-meta" id="chartMeta"></div>
+                    </div>
+                    <div class="chart-controls">
+                        <label class="chart-toggle">
+                            <input type="checkbox" id="showROR" checked onchange="renderChart()">
+                            <span>Show RoR</span>
+                        </label>
+                        <label class="chart-toggle">
+                            <input type="checkbox" id="showET" checked onchange="renderChart()">
+                            <span>Show ET</span>
+                        </label>
+                        <label class="chart-toggle">
+                            <input type="checkbox" id="showBackground" checked onchange="renderChart()">
+                            <span>Show Background</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="canvas-container">
+                    <canvas id="chartCanvas" class="chart-canvas"></canvas>
+                    <div class="tooltip" id="tooltip"></div>
+                    <div class="phase-banner" id="phaseBanner"></div>
+                </div>
+                
+                <div class="marker-legend" id="markerLegend"></div>
+                
+                <div class="sensory-panel">
+                    <div class="sensory-section">
+                        <h3>Sensory Summary</h3>
+                        <div id="sensorySummary">
+                            <p class="loading">Loading sensory data...</p>
+                        </div>
+                    </div>
+                    <div class="sensory-section">
+                        <h3>Flavor Radar</h3>
+                        <div class="radar-container">
+                            <svg class="radar-svg" id="radarSvg" viewBox="-110 -110 220 220"></svg>
+                        </div>
+                        <div id="radarInfo"></div>
+                    </div>
+                </div>
+                
+                <div class="sensory-section" id="cuppingSection" style="display: none;">
+                    <h3>Cupping History</h3>
+                    <ul class="cupping-list" id="cuppingList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // State
+        let profileData = null;
+        let canvas = null;
+        let ctx = null;
+        let tooltip = null;
+        let hoverX = null;
+        
+        // Colors
+        const colors = {
+            bt: '#ff4444',
+            et: '#4488ff',
+            ror: '#cccccc',
+            background: '#666666',
+            grid: '#404040',
+            text: '#e0e0e0',
+            textSecondary: '#a0a0a0',
+            phases: {
+                drying: 'rgba(255, 200, 100, 0.15)',
+                maillard: 'rgba(200, 150, 100, 0.20)',
+                development: 'rgba(150, 100, 100, 0.25)'
+            }
+        };
+        
+        // Phase color mapping
+        const phaseColors = {
+            'drying': colors.phases.drying,
+            'maillard': colors.phases.maillard,
+            'development': colors.phases.development
+        };
+        
+        // Marker colors
+        const markerColors = {
+            'CHARGE': '#4caf50',
+            'DRY': '#ff9800',
+            'FCs': '#2196f3',
+            'DROP': '#f44336',
+            'COOL': '#9c27b0',
+            'TP': '#ffeb3b'
+        };
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            canvas = document.getElementById('chartCanvas');
+            ctx = canvas.getContext('2d');
+            tooltip = document.getElementById('tooltip');
+            
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const uuid = urlParams.get('uuid');
+            
+            if (uuid) {
+                loadProfile(uuid);
+            } else {
+                showError('No roast UUID specified in URL. Use: /viewer?uuid=<roast-uuid>');
+            }
+            
+            // Setup canvas event listeners
+            setupCanvasEvents();
+        });
+        
+        function setupCanvasEvents() {
+            if (!canvas) return;
+            
+            canvas.addEventListener('mousemove', function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                hoverX = x;
+                updateTooltip(x, y);
+            });
+            
+            canvas.addEventListener('mouseleave', function() {
+                hoverX = null;
+                tooltip.classList.remove('show');
+            });
+        }
+        
+        async function loadProfile(uuid) {
+            try {
+                const response = await fetch(`/api/roasts/${uuid}/profile`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                profileData = await response.json();
+                renderPage();
+            } catch (err) {
+                showError('Failed to load profile: ' + err.message);
+                console.error('Profile load error:', err);
+            }
+        }
+        
+        function renderPage() {
+            if (!profileData) return;
+            
+            // Update sidebar info
+            const roastInfo = document.getElementById('roastInfo');
+            roastInfo.innerHTML = `
+                <div style="margin-bottom: 12px;">
+                    <strong>UUID:</strong> ${escapeHtml(profileData.roast_uuid.substring(0, 8))}...<br>
+                    <strong>File:</strong> ${escapeHtml(profileData.source_file)}<br>
+                    <strong>Date:</strong> ${escapeHtml(profileData.roast_date || 'Unknown')}
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Stats:</strong><br>
+                    <span style="font-size: 0.85rem;">
+                        BT drop: ${profileData.drop_bt_c ? profileData.drop_bt_c.toFixed(1) + '°C' : 'N/A'}<br>
+                        Duration: ${profileData.phases?.total_s ? formatTime(profileData.phases.total_s) : 'N/A'}
+                    </span>
+                </div>
+                <a href="/" class="nav-link" style="margin-top: 12px;">← Back to Library</a>
+            `;
+            
+            // Update chart title and meta
+            const title = profileData.title || profileData.source_file || profileData.roast_uuid;
+            document.getElementById('chartTitle').textContent = escapeHtml(title);
+            
+            const metaParts = [];
+            if (profileData.meta.artisan_version) {
+                metaParts.push(`Artisan ${profileData.meta.artisan_version}`);
+            }
+            if (profileData.meta.roastertype) {
+                metaParts.push(profileData.meta.roastertype);
+            }
+            if (profileData.meta.ambient_temp_c) {
+                metaParts.push(`Ambient: ${profileData.meta.ambient_temp_c}°C`);
+            }
+            if (profileData.meta.sampling_interval_s) {
+                metaParts.push(`Sampling: ${profileData.meta.sampling_interval_s}s`);
+            }
+            document.getElementById('chartMeta').textContent = metaParts.join(' | ');
+            
+            // Update phase banner
+            updatePhaseBanner();
+            
+            // Update marker legend
+            updateMarkerLegend();
+            
+            // Render chart
+            renderChart();
+            
+            // Render sensory data
+            renderSensoryData();
+        }
+        
+        function updatePhaseBanner() {
+            const banner = document.getElementById('phaseBanner');
+            if (!profileData || !profileData.phases) {
+                banner.style.display = 'none';
+                return;
+            }
+            
+            const phases = profileData.phases;
+            const parts = [];
+            if (phases.drying_s) {
+                parts.push(`DRY: ${formatTime(phases.drying_s)}`);
+            }
+            if (phases.maillard_s) {
+                parts.push(`MID: ${formatTime(phases.maillard_s)}`);
+            }
+            if (phases.development_s) {
+                parts.push(`FIN: ${formatTime(phases.development_s)}`);
+            }
+            if (phases.total_s) {
+                parts.push(`Total: ${formatTime(phases.total_s)}`);
+            }
+            
+            banner.innerHTML = '<span class="phase-indicator"><span class="drying">Drying</span><span class="maillard">Maillard</span><span class="development">Development</span></span>';
+            banner.style.display = 'flex';
+        }
+        
+        function updateMarkerLegend() {
+            const legend = document.getElementById('markerLegend');
+            if (!profileData || !profileData.markers) {
+                legend.innerHTML = '';
+                return;
+            }
+            
+            const markerNames = ['CHARGE', 'DRY', 'FCs', 'DROP', 'COOL', 'TP'];
+            legend.innerHTML = markerNames.map(name => {
+                const marker = profileData.markers[name];
+                if (!marker) return '';
+                const color = markerColors[name] || colors.text;
+                return `
+                    <div class="marker-legend-item">
+                        <div class="color-box" style="background: ${color};"></div>
+                        <span>${name}</span>
+                        <span style="color: var(--text-secondary);">@ ${formatTime(marker.time_s)}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function renderChart() {
+            if (!profileData || !canvas) return;
+            
+            const times = profileData.times_s;
+            const bt = profileData.bt_c;
+            const et = profileData.et_c;
+            const ror = profileData.ror_c_per_min;
+            const markers = profileData.markers;
+            const events = profileData.events;
+            const phases = profileData.phases;
+            const background = profileData.background;
+            
+            const showROR = document.getElementById('showROR').checked;
+            const showET = document.getElementById('showET').checked;
+            const showBackground = document.getElementById('showBackground').checked && background;
+            
+            // Canvas dimensions
+            const padding = { top: 20, right: 60, bottom: 40, left: 60 };
+            const width = canvas.width;
+            const height = canvas.height;
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            // Clear canvas
+            ctx.fillStyle = colors.grid;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Find data ranges
+            const timeMin = Math.min(...times);
+            const timeMax = Math.max(...times);
+            const btMin = Math.min(...bt);
+            const btMax = Math.max(...bt);
+            const btRange = btMax - btMin;
+            const btPadding = btRange * 0.1;
+            const btBottom = btMin - btPadding;
+            const btTop = btMax + btPadding;
+            
+            // Scale functions
+            const xScale = (t) => padding.left + (t - timeMin) / (timeMax - timeMin) * chartWidth;
+            const yScaleBT = (temp) => padding.top + chartHeight - (temp - btBottom) / (btTop - btBottom) * chartHeight;
+            
+            // Draw phase backgrounds
+            if (phases && markers) {
+                const charge = markers.CHARGE;
+                const dry = markers.DRY;
+                const fcs = markers.FCs;
+                const drop = markers.DROP;
+                
+                if (charge && dry) {
+                    drawPhaseBackground(charge.time_s, dry.time_s, phaseColors.drying);
+                }
+                if (dry && fcs) {
+                    drawPhaseBackground(dry.time_s, fcs.time_s, phaseColors.maillard);
+                }
+                if (fcs && drop) {
+                    drawPhaseBackground(fcs.time_s, drop.time_s, phaseColors.development);
+                }
+            }
+            
+            // Draw grid lines
+            drawGrid(timeMin, timeMax, btBottom, btTop);
+            
+            // Draw background profile if available
+            if (showBackground && background) {
+                drawProfile(background.times_s, background.bt_c, colors.background, 1, true);
+            }
+            
+            // Draw main profiles
+            drawProfile(times, bt, colors.bt, 2, false);
+            if (showET) {
+                drawProfile(times, et, colors.et, 1.5, false);
+            }
+            
+            // Draw RoR on secondary axis
+            if (showROR && ror && ror.some(r => r !== null)) {
+                drawROR(times, ror, btMin, btMax);
+            }
+            
+            // Draw markers
+            drawMarkers(markers);
+            
+            // Draw events
+            drawEvents(events);
+            
+            // Draw axes labels
+            drawAxisLabels(timeMin, timeMax, btBottom, btTop);
+        }
+        
+        function drawPhaseBackground(startTime, endTime, color) {
+            const timeMin = Math.min(...profileData.times_s);
+            const timeMax = Math.max(...profileData.times_s);
+            const btMin = Math.min(...profileData.bt_c);
+            const btMax = Math.max(...profileData.bt_c);
+            const btRange = btMax - btMin;
+            const btPadding = btRange * 0.1;
+            
+            const padding = { top: 20, right: 60, bottom: 40, left: 60 };
+            const width = canvas.width;
+            const height = canvas.height;
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            const btBottom = btMin - btPadding;
+            const btTop = btMax + btPadding;
+            
+            const x1 = padding.left + (startTime - timeMin) / (timeMax - timeMin) * chartWidth;
+            const x2 = padding.left + (endTime - timeMin) / (timeMax - timeMin) * chartWidth;
+            const y1 = padding.top;
+            const y2 = padding.top + chartHeight;
+            
+            ctx.fillStyle = color;
+            ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
+        }
+        
+        function drawGrid(timeMin, timeMax, btBottom, btTop) {
+            const padding = { top: 20, right: 60, bottom: 40, left: 60 };
+            const width = canvas.width;
+            const height = canvas.height;
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            // Horizontal grid lines (temperature)
+            const tempSteps = 10;
+            for (let i = 0; i <= tempSteps; i++) {
+                const temp = btBottom + (btTop - btBottom) * i / tempSteps;
+                const y = padding.top + chartHeight - (temp - btBottom) / (btTop - btBottom) * chartHeight;
+                
+                ctx.strokeStyle = colors.grid;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(width - padding.right, y);
+                ctx.stroke();
+                
+                // Temperature label
+                ctx.fillStyle = colors.textSecondary;
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText(temp.toFixed(0) + '°C', padding.left - 8, y + 3);
+            }
+            
+            // Vertical grid lines (time)
+            const timeSteps = 10;
+            for (let i = 0; i <= timeSteps; i++) {
+                const time = timeMin + (timeMax - timeMin) * i / timeSteps;
+                const x = padding.left + (time - timeMin) / (timeMax - timeMin) * chartWidth;
+                
+                ctx.strokeStyle = colors.grid;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(x, padding.top);
+                ctx.lineTo(x, height - padding.bottom);
+                ctx.stroke();
+                
+                // Time label
+                ctx.fillStyle = colors.textSecondary;
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'center';
+                const timeStr = formatTimeShort(time);
+                ctx.fillText(timeStr, x, height - padding.bottom + 12);
+            }
+        }
+        
+        function drawProfile(times, temps, color, lineWidth, dashed) {
+            const padding = { top: 20, right: 60, bottom: 40, left: 60 };
+            const width = canvas.width;
+            const height = canvas.height;
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            const timeMin = Math.min(...times);
+            const timeMax = Math.max(...times);
+            const btMin = Math.min(...temps);
+            const btMax = Math.max(...temps);
+            const btRange = btMax - btMin;
+            const btPadding = btRange * 0.1;
+            const btBottom = btMin - btPadding;
+            const btTop = btMax + btPadding;
+            
+            if (dashed) {
+                ctx.setLineDash([5, 5]);
+            } else {
+                ctx.setLineDash([]);
+            }
+            
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            
+            for (let i = 0; i < times.length; i++) {
+                const x = padding.left + (times[i] - timeMin) / (timeMax - timeMin) * chartWidth;
+                const y = padding.top + chartHeight - (temps[i] - btBottom) / (btTop - btBottom) * chartHeight;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            
+            ctx.stroke();
+        }
+        
+        function drawROR(times, ror, btMin, btMax) {
+            const padding = { top: 20, right: 60, bottom: 40, left: 60 };
+            const width = canvas.width;
+            const height = canvas.height;
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            const timeMin = Math.min(...times);
+            const timeMax = Math.max(...times);
+            const btRange = btMax - btMin;
+            const btPadding = btRange * 0.1;
+            const btBottom = btMin - btPadding;
+            const btTop = btMax + btPadding;
+            
+            // Find RoR range (excluding null values)
+            const validROR = ror.filter(r => r !== null);
+            if (validROR.length === 0) return;
+            
+            const rorMin = Math.min(...validROR);
+            const rorMax = Math.max(...validROR);
+            const rorRange = rorMax - rorMin;
+            const rorPadding = rorRange * 0.2;
+            
+            // Scale RoR to fit on right axis (use same y scale but offset)
+            ctx.strokeStyle = colors.ror;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+            
+            ctx.beginPath();
+            
+            for (let i = 0; i < times.length; i++) {
+                if (ror[i] === null) continue;
+                
+                const x = padding.left + (times[i] - timeMin) / (timeMax - timeMin) * chartWidth;
+                // Scale RoR to fit in the chart height, offset to right axis
+                const rorScaled = (ror[i] - rorMin) / (rorMax - rorMin);
+                const y = padding.top + chartHeight - rorScaled * chartHeight;
+                
+                if (i === 0 || ror[i-1] === null) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Add RoR axis label on right
+            ctx.fillStyle = colors.ror;
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.save();
+            ctx.translate(width - padding.right + 8, padding.top + chartHeight / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('RoR (°C/min)', 0, 0);
+            ctx.restore();
+        }
+        
+        function drawMarkers(markers) {
+            const padding = { top: 20, right: 60, bottom: 40, left: 60 };
+            const width = canvas.width;
+            const height = canvas.height;
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            const timeMin = Math.min(...profileData.times_s);
+            const timeMax = Math.max(...profileData.times_s);
+            const btMin = Math.min(...profileData.bt_c);
+            const btMax = Math.max(...profileData.bt_c);
+            const btRange = btMax - btMin;
+            const btPadding = btRange * 0.1;
+            const btBottom = btMin - btPadding;
+            const btTop = btMax + btPadding;
+            
+            for (const [name, marker] of Object.entries(markers)) {
+                if (!marker) continue;
+                
+                const color = markerColors[name] || colors.text;
+                const x = padding.left + (marker.time_s - timeMin) / (timeMax - timeMin) * chartWidth;
+                const y = padding.top + chartHeight - (marker.temp_bt_c - btBottom) / (btTop - btBottom) * chartHeight;
+                
+                // Draw vertical line
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, padding.top);
+                ctx.lineTo(x, height - padding.bottom);
+                ctx.stroke();
+                
+                // Draw marker label at top
+                ctx.fillStyle = color;
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(name, x, padding.top - 2);
+                
+                // Draw circle at marker position
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function drawEvents(events) {
+            const padding = { top: 20, right: 60, bottom: 40, left: 60 };
+            const width = canvas.width;
+            const height = canvas.height;
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            const timeMin = Math.min(...profileData.times_s);
+            const timeMax = Math.max(...profileData.times_s);
+            const btMin = Math.min(...profileData.bt_c);
+            const btMax = Math.max(...profileData.bt_c);
+            const btRange = btMax - btMin;
+            const btPadding = btRange * 0.1;
+            const btBottom = btMin - btPadding;
+            const btTop = btMax + btPadding;
+            
+            for (const event of events) {
+                const x = padding.left + (event.time_s - timeMin) / (timeMax - timeMin) * chartWidth;
+                
+                // Find corresponding ET temperature
+                let etTemp = null;
+                for (let i = 0; i < profileData.times_s.length; i++) {
+                    if (profileData.times_s[i] === event.time_s) {
+                        etTemp = profileData.et_c[i];
+                        break;
+                    }
+                }
+                
+                if (etTemp === null) continue;
+                
+                const y = padding.top + chartHeight - (etTemp - btBottom) / (btTop - btBottom) * chartHeight;
+                
+                // Draw event flag (triangle)
+                ctx.fillStyle = colors.et;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x - 4, y - 8);
+                ctx.lineTo(x + 4, y - 8);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+        
+        function drawAxisLabels(timeMin, timeMax, btBottom, btTop) {
+            const padding = { top: 20, right: 60, bottom: 40, left: 60 };
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // X-axis label
+            ctx.fillStyle = colors.text;
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Time from CHARGE (s)', width / 2, height - padding.bottom + 20);
+            
+            // Y-axis label (BT)
+            ctx.save();
+            ctx.translate(padding.left - 20, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.textAlign = 'center';
+            ctx.fillText('Temperature (°C)', 0, 0);
+            ctx.restore();
+        }
+        
+        function updateTooltip(x, y) {
+            if (!profileData || hoverX === null) {
+                tooltip.classList.remove('show');
+                return;
+            }
+            
+            const padding = { top: 20, right: 60, bottom: 40, left: 60 };
+            const width = canvas.width;
+            const height = canvas.height;
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            const timeMin = Math.min(...profileData.times_s);
+            const timeMax = Math.max(...profileData.times_s);
+            const btMin = Math.min(...profileData.bt_c);
+            const btMax = Math.max(...profileData.bt_c);
+            const btRange = btMax - btMin;
+            const btPadding = btRange * 0.1;
+            const btBottom = btMin - btPadding;
+            const btTop = btMax + btPadding;
+            
+            // Convert x to time
+            const time = timeMin + (x - padding.left) / chartWidth * (timeMax - timeMin);
+            
+            // Find nearest data point
+            let nearestIdx = 0;
+            let minDist = Infinity;
+            for (let i = 0; i < profileData.times_s.length; i++) {
+                const dist = Math.abs(profileData.times_s[i] - time);
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearestIdx = i;
+                }
+            }
+            
+            const data = profileData;
+            const t = data.times_s[nearestIdx];
+            const bt = data.bt_c[nearestIdx];
+            const et = data.et_c[nearestIdx];
+            const ror = data.ror_c_per_min[nearestIdx];
+            
+            // Position tooltip
+            const tooltipX = Math.min(x + 10, width - 200);
+            const tooltipY = y - 10;
+            tooltip.style.left = tooltipX + 'px';
+            tooltip.style.top = tooltipY + 'px';
+            
+            // Build tooltip content
+            let html = `
+                <div class="tooltip-row">
+                    <span class="tooltip-label">Time:</span>
+                    <span class="tooltip-value">${formatTime(t)}</span>
+                </div>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">BT:</span>
+                    <span class="tooltip-value">${bt.toFixed(1)}°C</span>
+                </div>
+                <div class="tooltip-row">
+                    <span class="tooltip-label">ET:</span>
+                    <span class="tooltip-value">${et.toFixed(1)}°C</span>
+                </div>
+            `;
+            
+            if (ror !== null) {
+                html += `
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">RoR:</span>
+                        <span class="tooltip-value">${ror.toFixed(1)}°C/min</span>
+                    </div>
+                `;
+            }
+            
+            tooltip.innerHTML = html;
+            tooltip.classList.add('show');
+        }
+        
+        function renderSensoryData() {
+            const summaryEl = document.getElementById('sensorySummary');
+            const cuppingSection = document.getElementById('cuppingSection');
+            const cuppingListEl = document.getElementById('cuppingList');
+            
+            if (!profileData || !profileData.sensory) {
+                summaryEl.innerHTML = '<p class="loading">No sensory data available.</p>';
+                cuppingSection.style.display = 'none';
+                return;
+            }
+            
+            const sensory = profileData.sensory;
+            
+            // Render summary
+            let summaryHtml = '<div class="stats-row"><span class="stats-label">Cupping Sessions:</span><span class="stats-value">';
+            summaryHtml += sensory.n_cuppings || 0;
+            summaryHtml += '</span></div>';
+            
+            if (sensory.best_total) {
+                summaryHtml += '<div class="stats-row"><span class="stats-label">Best Score:</span><span class="stats-value">';
+                summaryHtml += sensory.best_total.toFixed(1) + ' pts';
+                summaryHtml += '</span></div>';
+            }
+            
+            summaryEl.innerHTML = summaryHtml;
+            
+            // Render cupping list
+            if (sensory.cuppings && sensory.cuppings.length > 0) {
+                cuppingSection.style.display = 'block';
+                cuppingListEl.innerHTML = sensory.cuppings.map((cupping, idx) => {
+                    return `
+                        <li class="cupping-item">
+                            <div class="header">
+                                <span class="date">${cupping.date}</span>
+                                <span class="score">${cupping.scores.total.toFixed(1)} pts</span>
+                            </div>
+                            <div class="body">
+                                ${cupping.descriptors && cupping.descriptors.length > 0 ?
+                                    '<strong>Descriptors:</strong> ' + escapeHtml(cupping.descriptors.join(', ')) + '<br>' : ''}
+                                ${cupping.notes ? '<strong>Notes:</strong> ' + escapeHtml(cupping.notes) : ''}
+                            </div>
+                        </li>
+                    `;
+                }).join('');
+            } else {
+                cuppingSection.style.display = 'none';
+            }
+            
+            // Render radar
+            renderRadar();
+        }
+        
+        function renderRadar() {
+            const svg = document.getElementById('radarSvg');
+            if (!svg) return;
+            
+            if (!profileData || !profileData.sensory || !profileData.sensory.radar) {
+                svg.innerHTML = '<text x="0" y="0" text-anchor="middle" fill="var(--text-secondary)">No radar data</text>';
+                return;
+            }
+            
+            const radar = profileData.sensory.radar;
+            const labels = radar.labels || ['Acidity', 'Aftertaste', 'Clean Cup', 'Head', 'Fragrance', 'Sweetness', 'Aroma', 'Balance', 'Body'];
+            const values = radar.values || [];
+            
+            // Ensure we have 9 values
+            const n = Math.min(labels.length, 9);
+            
+            let svgHtml = '';
+            const angleStep = (2 * Math.PI) / n;
+            const maxValue = 10;
+            
+            // Grid circles
+            for (let r = 20; r <= 100; r += 20) {
+                svgHtml += `<circle cx="0" cy="0" r="${r}" fill="none" stroke="var(--border)" stroke-width="0.5"/>`;
+            }
+            
+            // Axes
+            for (let i = 0; i < n; i++) {
+                const angle = (i * angleStep) - (Math.PI / 2);
+                const x2 = Math.cos(angle) * 100;
+                const y2 = Math.sin(angle) * 100;
+                svgHtml += `<line x1="0" y1="0" x2="${x2}" y2="${y2}" stroke="var(--text-secondary)" stroke-width="1"/>`;
+                
+                // Label
+                const labelX = Math.cos(angle) * 110;
+                const labelY = Math.sin(angle) * 110;
+                const textAnchor = Math.cos(angle) > 0.1 ? 'start' : (Math.cos(angle) < -0.1 ? 'end' : 'middle');
+                svgHtml += `<text x="${labelX}" y="${labelY}" text-anchor="${textAnchor}" fill="var(--text-primary)" font-size="10">${escapeHtml(labels[i])}</text>`;
+            }
+            
+            // Polygon
+            let polygonPoints = '';
+            for (let i = 0; i < n; i++) {
+                const angle = (i * angleStep) - (Math.PI / 2);
+                const value = values[i] || 0;
+                const radius = (value / maxValue) * 100;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                polygonPoints += `${x},${y} `;
+            }
+            
+            svgHtml += `<polygon points="${polygonPoints}" fill="rgba(0, 120, 212, 0.2)" stroke="var(--accent)" stroke-width="2"/>`;
+            
+            svg.innerHTML = svgHtml;
+        }
+        
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        function formatTimeShort(seconds) {
+            if (seconds >= 60) {
+                return formatTime(seconds);
+            }
+            return `${Math.floor(seconds)}s`;
+        }
+        
+        function showError(message) {
+            const container = document.getElementById('errorContainer');
+            container.innerHTML = `<div class="error-message">${escapeHtml(message)}</div>`;
+            console.error(message);
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Handle canvas resize
+        window.addEventListener('resize', function() {
+            if (canvas) {
+                // Force canvas to resize
+                const oldWidth = canvas.width;
+                const oldHeight = canvas.height;
+                const parent = canvas.parentElement;
+                if (parent) {
+                    canvas.width = parent.clientWidth;
+                    canvas.height = 500;
+                }
+                if (profileData) {
+                    renderChart();
+                }
+            }
+        });
+        
+        // Initialize canvas size
+        window.addEventListener('load', function() {
+            if (canvas) {
+                const parent = canvas.parentElement;
+                if (parent) {
+                    canvas.width = parent.clientWidth;
+                    canvas.height = 500;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

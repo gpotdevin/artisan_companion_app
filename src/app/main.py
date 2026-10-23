@@ -27,7 +27,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
 # Import from parent package
-from alog_core import build_index, list_roasts as alog_list_roasts
+from alog_core import build_index, list_roasts as alog_list_roasts, load_alog, parse_profile
 from store import (
     DEFAULT_RADAR_LABELS,
     DEFECT_KEYS,
@@ -418,6 +418,166 @@ async def get_defect_keys() -> JSONResponse:
     return JSONResponse(content={"keys": list(DEFECT_KEYS)})
 
 
+@app.get("/api/roasts/{roast_uuid}/profile")
+async def get_roast_profile(roast_uuid: str) -> JSONResponse:
+    """Get the profile data for a specific roast.
+    
+    Returns JSON with:
+    - time axis (seconds from CHARGE)
+    - bt[] and et[] temperature series
+    - ror[] (per-minute RoR for BT)
+    - markers with times (CHARGE/DRY/FCs/DROP)
+    - events with times and labels
+    - phase boundaries (drying/Maillard/development based on DRY/FCs/DROP)
+    - sensory summary (cuppings, radar values) for the side panel
+    - background BT series if backgroundUUID resolves to another file
+    """
+    try:
+        # Check if roast exists in index
+        if roast_uuid not in _ROAST_INDEX:
+            raise HTTPException(status_code=404, detail="Roast not found")
+        
+        index_data = _ROAST_INDEX[roast_uuid]
+        source_file = index_data.get("source_file")
+        
+        # Load the alog file
+        logs_dir = _LOGS_DIR
+        if logs_dir is None:
+            raise HTTPException(status_code=500, detail="Logs directory not initialized")
+        
+        alog_path = logs_dir / source_file
+        if not alog_path.exists():
+            raise HTTPException(status_code=404, detail="Roast file not found")
+        
+        # Parse the profile
+        profile = parse_profile(alog_path)
+        
+        # Build response
+        # Time axis is already roast-relative (from CHARGE) in profile.times_s
+        times_s = profile.times_s
+        bt_c = profile.bt_c
+        et_c = profile.et_c
+        ror_c_per_min = profile.ror_c_per_min
+        
+        # Convert None to null for JSON serialization
+        ror_json = [v if v is not None else None for v in ror_c_per_min]
+        
+        # Markers
+        markers = {}
+        for name, marker in profile.markers.items():
+            markers[name] = {
+                "time_s": marker.time_s,
+                "temp_bt_c": marker.temp_bt_c,
+                "temp_et_c": marker.temp_et_c,
+            }
+        
+        # Events
+        events = []
+        for event in profile.events:
+            events.append({
+                "time_s": event.time_s,
+                "index": event.index,
+                "type_label": event.type_label,
+                "slider_value": event.slider_value,
+                "label": event.label,
+            })
+        
+        # Phases - derive from markers if not in profile
+        phases = {}
+        if profile.phases:
+            phases = {
+                "drying_s": profile.phases.get("dry_s"),
+                "maillard_s": profile.phases.get("mid_s"),
+                "development_s": profile.phases.get("finish_s"),
+                "total_s": profile.phases.get("total_s"),
+            }
+        else:
+            # Derive from markers
+            charge = markers.get("CHARGE")
+            dry = markers.get("DRY")
+            fcs = markers.get("FCs")
+            drop = markers.get("DROP")
+            
+            if charge and dry:
+                phases["drying_s"] = dry["time_s"] - charge["time_s"]
+            if dry and fcs:
+                phases["maillard_s"] = fcs["time_s"] - dry["time_s"]
+            if fcs and drop:
+                phases["development_s"] = drop["time_s"] - fcs["time_s"]
+            if charge and drop:
+                phases["total_s"] = drop["time_s"] - charge["time_s"]
+        
+        # Get sensory data
+        store = _get_store()
+        sensory_record = store.get(roast_uuid)
+        sensory_data = None
+        if sensory_record:
+            sensory_data = {
+                "cuppings": sensory_record.get("cuppings", []),
+                "radar": sensory_record.get("radar", {}),
+                "defects_observed": sensory_record.get("defects_observed", {}),
+                "best_total": sensory_record.get("best_total"),
+                "n_cuppings": len(sensory_record.get("cuppings", [])),
+            }
+        
+        # Check for background profile
+        background_bt = None
+        background_uuid = profile.meta.backgroundUUID
+        if background_uuid and background_uuid in _ROAST_INDEX:
+            bg_index_data = _ROAST_INDEX[background_uuid]
+            bg_source_file = bg_index_data.get("source_file")
+            bg_alog_path = logs_dir / bg_source_file
+            if bg_alog_path.exists():
+                try:
+                    bg_profile = parse_profile(bg_alog_path)
+                    # Find CHARGE time for background
+                    bg_charge_time = 0.0
+                    if bg_profile.markers and "CHARGE" in bg_profile.markers:
+                        bg_charge_time = bg_profile.markers["CHARGE"].time_s
+                    # Align background times to CHARGE
+                    bg_times_aligned = [t - bg_charge_time for t in bg_profile.times_s]
+                    background_bt = {
+                        "times_s": bg_times_aligned,
+                        "bt_c": bg_profile.bt_c,
+                    }
+                except Exception:
+                    # If background fails to load, just skip it
+                    pass
+        
+        response_data = {
+            "roast_uuid": roast_uuid,
+            "source_file": source_file,
+            "title": index_data.get("title"),
+            "beans": index_data.get("beans"),
+            "roast_date": index_data.get("roast_isodate"),
+            "green_weight_g": index_data.get("green_weight_g"),
+            "roasted_weight_g": index_data.get("roasted_weight_g"),
+            "drop_bt_c": index_data.get("drop_bt_c"),
+            "times_s": times_s,
+            "bt_c": bt_c,
+            "et_c": et_c,
+            "ror_c_per_min": ror_json,
+            "markers": markers,
+            "events": events,
+            "phases": phases,
+            "sensory": sensory_data,
+            "background": background_bt,
+            "meta": {
+                "artisan_version": profile.meta.artisan_version,
+                "roastertype": profile.meta.roastertype,
+                "ambient_temp_c": profile.meta.ambient_temp_c,
+                "sampling_interval_s": profile.meta.sampling_interval_s,
+            },
+        }
+        
+        return JSONResponse(content=response_data)
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # -----------------------------------------------------------
 # Frontend - Single page app
 # -----------------------------------------------------------
@@ -431,6 +591,17 @@ async def read_root() -> HTMLResponse:
     else:
         content = "<html><body><h1>Frontend not found</h1></body></html>"
     return HTMLResponse(content=content)
+
+
+@app.get("/viewer")
+async def viewer_page(request: Request) -> HTMLResponse:
+    """Serve the profile viewer page."""
+    viewer_path = Path(__file__).parent / "viewer.html"
+    if viewer_path.exists():
+        content = viewer_path.read_text(encoding="utf-8")
+        return HTMLResponse(content=content)
+    else:
+        return HTMLResponse(content="<html><body><h1>Viewer not found</h1></body></html>", status_code=404)
 
 
 @app.get("/favicon.ico", include_in_schema=False)
