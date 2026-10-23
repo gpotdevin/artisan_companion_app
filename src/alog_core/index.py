@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from .model import parse_profile
-from .parser import PathLike
+from .parser import AlogParseError, PathLike
 
 _SCHEMA = """
 CREATE TABLE roasts (
@@ -50,6 +50,10 @@ def build_index(logs_dir: PathLike, db_path: PathLike) -> int:
     making rebuilds idempotent. Returns the number of files scanned.
     """
     logs = Path(logs_dir)
+    if not logs.exists():
+        raise AlogParseError(f"{logs}: logs directory does not exist")
+    if not logs.is_dir():
+        raise AlogParseError(f"{logs}: not a directory")
     db = Path(db_path)
     if db.parent and not db.parent.exists():
         db.parent.mkdir(parents=True, exist_ok=True)

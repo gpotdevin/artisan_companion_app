@@ -91,3 +91,5 @@ def delete_record(sensory_dir: PathLike, roast_uuid: str) -> bool:
         return True
     except FileNotFoundError:
         return False
+    except OSError as exc:
+        raise SensoryStoreError(f"{path}: cannot delete sidecar ({exc})") from exc
