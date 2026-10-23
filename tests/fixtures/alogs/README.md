@@ -10,9 +10,9 @@ modified). One file was chosen per Artisan version present in the corpus.
 | Fixture | Artisan version | Roast date (ISO) | Notes |
 |---|---|---|---|
 | `v2.4.6_2021-11-19_multiline.alog` | 2.4.6 | 2021-11-19 | French locale (`etypes` = Air/Tambour/Vanne/Bruleur); pretty-printed multi-line pydump variant; CHARGE/FCs/DROP marked, DRY not marked |
-| `v2.6.0_2022-09-16.alog` | 2.6.0 | 2022-09-16 | 21 events |
+| `v2.6.0_2022-09-16.alog` | 2.6.0 | 2022-09-16 | 21 events; first Windows-recorded generation in the corpus |
 | `v2.8.2_2023-04-09.alog` | 2.8.2 | 2023-04-09 | CHARGE/FCs/DROP marked, DRY not marked |
-| `v2.10.0_2024-04-02.alog` | 2.10.0 | 2024-04-02 | first Windows-recorded generation |
+| `v2.10.0_2024-04-02.alog` | 2.10.0 | 2024-04-02 | first 2.10.x generation in the corpus |
 | `v2.10.4_2024-08-03.alog` | 2.10.4 | 2024-08-03 | `roastUUID` matches `UUID_A` used in the M2a store tests |
 | `v3.2.0_2026-07-23.alog` | 3.2.0 | 2026-07-23 | CHARGE/DRY/FCs/DROP all marked |
 | `v4.2.0_2026-10-04.alog` | 4.2.0 | 2026-10-04 | v4 key set (`hash`, `signature`, `bbp_*`, PID config); CHARGE/DRY/FCs/DROP all marked |
