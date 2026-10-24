@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Artisan Companion</string>
+
+    <!-- Common -->
+    <string name="common_back">Retour</string>
+    <string name="common_cancel">Annuler</string>
+    <string name="common_delete">Supprimer</string>
+    <string name="common_save">Enregistrer</string>
+    <string name="common_dismiss">Ignorer</string>
+    <string name="common_retry">Réessayer</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add">Ajouter</string>
+    <string name="common_error">Erreur</string>
+    <string name="common_error_format">Erreur : %1$s</string>
+    <string name="common_collapse">Replier</string>
+    <string name="common_expand">Déplier</string>
+    <string name="common_state_on">Activé</string>
+    <string name="common_state_off">Désactivé</string>
+
+    <!-- Init error screen -->
+    <string name="init_error_title">Impossible de démarrer Artisan Companion</string>
+    <string name="init_error_message">Le stockage de l\'application n\'a pas pu être initialisé. Vérifiez l\'espace disponible sur l\'appareil, puis réessayez.</string>
+
+    <!-- Library -->
+    <string name="library_title">Torréfactions</string>
+    <string name="library_search_hint">Rechercher des torréfactions…</string>
+    <string name="library_no_match">Aucune torréfaction ne correspond à « %1$s »</string>
+    <string name="library_unknown_month">Inconnu</string>
+    <string name="library_unparsable_title">Journal de torréfaction illisible</string>
+    <string name="library_unknown_error">Erreur d’analyse inconnue</string>
+    <string name="library_empty_subtitle">Consultez vos journaux de torréfaction Artisan et enregistrez vos dégustations</string>
+    <string name="onboarding_step_import">Importer des fichiers .alog</string>
+    <string name="onboarding_step_browse">Parcourir vos torréfactions</string>
+    <string name="onboarding_step_cupping">Enregistrer des dégustations</string>
+    <string name="import_logs">Importer des fichiers .alog</string>
+    <string name="import_result_format">%1$d fichier(s) importé(s)</string>
+    <string name="status_unparsable">Illisible</string>
+    <string name="status_cupped">Dégustée</string>
+    <string name="status_cupped_score">Dégustée %1$.1f</string>
+    <string name="status_uncupped">Non dégustée</string>
+    <string name="library_detail_both">%1$dg → %2$dg</string>
+    <string name="library_detail_green">%1$dg vert</string>
+    <string name="library_detail_roasted">%1$dg torréfié</string>
+    <string name="library_detail_drop">Drop %1$d°C</string>
+    <string name="cd_unparsable">Illisible</string>
+
+    <!-- Viewer -->
+    <string name="viewer_default_title">Torréfaction</string>
+    <string name="tab_profile">Profil</string>
+    <string name="tab_sensory">Sensoriel</string>
+    <string name="legend_bt">BT</string>
+    <string name="legend_et">ET</string>
+    <string name="legend_ror">RoR /min</string>
+    <string name="chart_axis_temp">Temp</string>
+    <string name="chart_axis_min">min</string>
+    <string name="chart_axis_ror">RoR</string>
+    <string name="chart_marker_tp">TP</string>
+    <string name="card_phases">Phases</string>
+    <string name="card_markers">Marqueurs</string>
+    <string name="card_roast">Torréfaction</string>
+    <string name="phase_dry">Séchage</string>
+    <string name="phase_mid">MID (Maillard)</string>
+    <string name="phase_dev">Dév</string>
+    <string name="phase_total">Total</string>
+    <string name="phase_ror_peak">Pic de RoR</string>
+    <string name="markers_none">Aucun marqueur</string>
+    <string name="markers_time">Temps</string>
+    <string name="markers_bt">BT</string>
+    <string name="roast_green">Vert</string>
+    <string name="roast_roasted">Torréfié</string>
+    <string name="roast_loss">Perte</string>
+    <string name="roast_ambient">Ambiant</string>
+    <string name="roast_sampling">Échantillonnage</string>
+    <string name="roast_machine">Machine</string>
+    <string name="roast_artisan">Artisan</string>
+    <string name="events_title_format">Événements (%1$d)</string>
+    <string name="events_none">Aucun événement enregistré</string>
+    <string name="event_slider_format">curseur : %.0f</string>
+
+    <!-- Number formats -->
+    <string name="fmt_one_decimal">%.1f</string>
+    <string name="fmt_two_decimals">%.2f</string>
+    <string name="fmt_temp_short">%.0f°C</string>
+    <string name="fmt_grams">%.0f g</string>
+    <string name="fmt_percent">%.1f %%</string>
+    <string name="fmt_celsius">%.1f °C</string>
+    <string name="fmt_seconds">%.0f s</string>
+    <string name="fmt_ror">%.1f °C/min</string>
+
+    <!-- Sensory tab -->
+    <string name="dialog_delete_cupping_title">Supprimer la dégustation ?</string>
+    <string name="dialog_delete_cupping_message">Supprimer la dégustation du %1$s ? Cette action est irréversible.</string>
+    <string name="dialog_delete_cupping_message_nodate">Supprimer la dégustation ? Cette action est irréversible.</string>
+    <string name="dialog_delete_cupping_simple">Cette dégustation sera définitivement supprimée. Cette action est irréversible.</string>
+    <string name="dialog_delete_record_title">Supprimer les données sensorielles ?</string>
+    <string name="dialog_delete_record_message">Toutes les dégustations, les scores du radar et les défauts de cette torréfaction seront définitivement supprimés. Cette action est irréversible.</string>
+    <string name="msg_cupping_deleted">Dégustation supprimée</string>
+    <string name="msg_sensory_deleted">Données sensorielles supprimées</string>
+    <string name="cd_record_cupping">Enregistrer une dégustation</string>
+    <string name="action_record_cupping">Enregistrer une dégustation</string>
+    <string name="action_delete_sensory">Supprimer toutes les données sensorielles</string>
+    <string name="radar_title">Radar des arômes</string>
+    <string name="action_edit_radar">Modifier le radar</string>
+    <string name="radar_empty">Aucun score de radar pour le moment</string>
+    <string name="radar_empty_hint">Touchez « Modifier le radar » pour définir les valeurs des axes.</string>
+    <string name="defects_title">Défauts observés</string>
+    <string name="defects_loading">Chargement des défauts…</string>
+    <string name="defects_none">Aucun défaut enregistré.</string>
+    <string name="defect_heavy_fc">FC abondant</string>
+    <string name="defect_low_fc">FC faible</string>
+    <string name="defect_light_cut">Coupe claire</string>
+    <string name="defect_dark_cut">Coupe sombre</string>
+    <string name="defect_drops">Gouttes</string>
+    <string name="defect_oily">Huileux</string>
+    <string name="defect_uneven">Irrégulier</string>
+    <string name="defect_tipping">Pointe brûlée</string>
+    <string name="defect_scorching">Brûlure</string>
+    <string name="defect_divots">Creux</string>
+    <string name="cuppings_title">Dégustations</string>
+    <string name="cuppings_empty_title">Pas encore de données sensorielles</string>
+    <string name="cuppings_empty_hint">Enregistrez une dégustation pour commencer à construire le profil sensoriel de cette torréfaction.</string>
+    <string name="action_record_first_cupping">Enregistrer votre première dégustation</string>
+    <string name="cuppings_none">Aucune dégustation pour le moment. Touchez le bouton + pour en enregistrer une.</string>
+    <string name="cupping_day_format">jour %1$d</string>
+    <string name="cupping_total_format">Total : %1$s</string>
+    <string name="cupping_row_format">%1$s — total : %2$s</string>
+    <string name="cd_edit_cupping">Modifier la dégustation</string>
+    <string name="cd_delete_cupping">Supprimer la dégustation</string>
+    <string name="cd_remove_descriptor">Supprimer %1$s</string>
+
+    <!-- Cupping entry -->
+    <string name="cupping_new_title">Nouvelle dégustation</string>
+    <string name="cupping_edit_title">Modifier la dégustation</string>
+    <string name="msg_cupping_saved">Dégustation enregistrée</string>
+    <string name="error_date_required">La date est obligatoire</string>
+    <string name="error_date_format">Format de date invalide (utilisez AAAA-MM-JJ)</string>
+    <string name="cupping_date_label">Date de dégustation</string>
+    <string name="cupping_date_hint">Date (AAAA-MM-JJ)</string>
+    <string name="cd_pick_date">Choisir une date</string>
+    <string name="rest_days_after">Jour %1$d après la torréfaction</string>
+    <string name="rest_days_before">%1$d jours avant la torréfaction</string>
+    <string name="rest_days_hint">Saisissez une date valide pour voir le repos</string>
+    <string name="sca_scores_title">Scores SCA</string>
+    <string name="sca_fragrance_aroma">Fragrance / Arôme</string>
+    <string name="sca_flavor">Saveur</string>
+    <string name="sca_aftertaste">Arrière-goût</string>
+    <string name="sca_acidity">Acidité</string>
+    <string name="sca_body">Corps</string>
+    <string name="sca_balance">Équilibre</string>
+    <string name="sca_uniformity">Uniformité</string>
+    <string name="sca_clean_cup">Tasse propre</string>
+    <string name="sca_sweetness">Douceur</string>
+    <string name="sca_overall">Global</string>
+    <string name="sca_short_aroma">Arôme</string>
+    <string name="sca_short_flavor">Saveur</string>
+    <string name="sca_short_aftertaste">Arrière</string>
+    <string name="sca_short_acidity">Acidité</string>
+    <string name="sca_short_body">Corps</string>
+    <string name="sca_short_balance">Équilibre</string>
+    <string name="sca_short_uniformity">Unif.</string>
+    <string name="sca_short_clean">Propre</string>
+    <string name="sca_short_sweet">Doux</string>
+    <string name="sca_short_overall">Global</string>
+    <string name="defects_penalty_title">Pénalité de défauts</string>
+    <string name="defects_penalty_label">Pénalité (soustraite du total)</string>
+    <string name="total_score_label">Score total</string>
+    <string name="radar_preview_title">Aperçu du radar</string>
+    <string name="descriptor_add_title">Ajouter un descripteur</string>
+    <string name="descriptor_free_text">Texte libre</string>
+    <string name="cd_add_descriptor">Ajouter un descripteur</string>
+    <string name="descriptor_lexicon">Lexique</string>
+    <string name="descriptors_title">Descripteurs</string>
+    <string name="descriptors_none">Aucun descripteur pour le moment. Touchez Ajouter pour étiqueter les saveurs.</string>
+    <string name="notes_label">Notes</string>
+    <string name="notes_hint">Notes de préparation, impressions…</string>
+    <string name="action_save_cupping">Enregistrer la dégustation</string>
+    <string name="action_update_cupping">Mettre à jour la dégustation</string>
+
+    <!-- Descriptor lexicon -->
+    <string-array name="coffee_lexicon">
+        <item>abricot</item>
+        <item>thé noir</item>
+        <item>bergamote</item>
+        <item>mûre</item>
+        <item>myrtille</item>
+        <item>sucre roux</item>
+        <item>caramel</item>
+        <item>cerise</item>
+        <item>chocolat</item>
+        <item>agrumes</item>
+        <item>cacao</item>
+        <item>noix de coco</item>
+        <item>groseille</item>
+        <item>floral</item>
+        <item>pamplemousse</item>
+        <item>pomme verte</item>
+        <item>noisette</item>
+        <item>miel</item>
+        <item>jasmin</item>
+        <item>citron</item>
+        <item>mangue</item>
+        <item>mélasse</item>
+        <item>noisetté</item>
+        <item>orange</item>
+        <item>papaye</item>
+        <item>pêche</item>
+        <item>poire</item>
+        <item>prune</item>
+        <item>framboise</item>
+        <item>épicé</item>
+        <item>fruits à noyau</item>
+        <item>fraise</item>
+        <item>caramel au beurre</item>
+        <item>tropical</item>
+        <item>vanille</item>
+        <item>vineux</item>
+        <item>boisé</item>
+        <item>amande</item>
+        <item>tabac</item>
+        <item>terreux</item>
+        <item>herbacé</item>
+        <item>poivre</item>
+        <item>anis</item>
+        <item>rose</item>
+        <item>pomme</item>
+        <item>melon</item>
+        <item>ananas</item>
+        <item>thé</item>
+        <item>malté</item>
+        <item>céréales</item>
+        <item>beurré</item>
+        <item>crémeux</item>
+        <item>rond</item>
+        <item>vif</item>
+        <item>propre</item>
+        <item>complexe</item>
+        <item>sucré</item>
+        <item>juteux</item>
+    </string-array>
+
+    <!-- Radar editor -->
+    <string name="msg_radar_saved">Radar enregistré</string>
+    <string name="action_save_radar">Enregistrer le radar</string>
+    <string name="radar_loading_labels">Chargement des étiquettes…</string>
+
+    <!-- Legacy editor -->
+    <string name="editor_title">Éditeur sensoriel</string>
+    <string name="action_save_defects">Enregistrer les défauts</string>
+    <string name="cuppings_none_short">Aucune dégustation pour le moment.</string>
+    <string name="defects_penalty_hint">Défauts (pénalité)</string>
+    <string name="descriptors_csv_hint">Descripteurs (séparés par des virgules)</string>
+    <string name="action_add_cupping">Ajouter une dégustation</string>
+    <string name="msg_defects_saved">Défauts enregistrés</string>
+    <string name="msg_cupping_added">Dégustation ajoutée</string>
+    <string name="msg_cupping_removed">Dégustation supprimée</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Réglages</string>
+    <string name="settings_section_storage">Stockage</string>
+    <string name="settings_section_import">Importation</string>
+    <string name="settings_section_display">Affichage</string>
+    <string name="settings_section_data">Données</string>
+    <string name="settings_section_about">À propos</string>
+    <string name="settings_logs_folder">Dossier des journaux</string>
+    <string name="settings_sensory_folder">Dossier sensoriel</string>
+    <string name="settings_roast_count">Torréfactions indexées : %1$d</string>
+    <string name="rebuild_index">Reconstruire l’index des torréfactions</string>
+    <string name="settings_theme_label">Thème</string>
+    <string name="theme_dark">Sombre</string>
+    <string name="theme_light">Clair</string>
+    <string name="settings_export_sensory">Exporter le magasin sensoriel (zip)</string>
+    <string name="settings_index_rebuilt">Index reconstruit : %1$d torréfactions</string>
+    <string name="settings_imported">%1$d fichier(s) importé(s). %2$d torréfactions indexées.</string>
+    <string name="msg_export_ok">Magasin sensoriel exporté</string>
+    <string name="msg_export_failed">Échec de l’exportation</string>
+    <string name="export_chooser_title">Partager le magasin sensoriel</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_license">Licence MIT</string>
+    <string name="about_license_text">Copyright (c) 2026 les contributeurs d’Artisan Companion. Une permission est accordée gratuitement à toute personne obtenant une copie de ce logiciel, de l’utiliser, le copier, le modifier, le fusionner, le publier, le distribuer, le sous-licencier et/ou le vendre, à condition que la notice de copyright soit incluse dans toutes les copies.</string>
+    <string name="about_disclaimer">Non affilié au projet Artisan, qui ne l’a pas approuvé ni ne le sponsorise.</string>
+
+    <!-- Intro overlay -->
+    <string name="intro_welcome_title">Bienvenue dans Artisan Companion</string>
+    <string name="intro_welcome_message">Consultez vos torréfactions et constituez un dossier sensoriel pour chaque lot.</string>
+</resources>

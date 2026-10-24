@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Coffee cup, drawn for the adaptive-icon safe zone (108dp canvas, content
+     kept inside the central ~72dp). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- steam -->
+    <path
+        android:pathData="M45,22 C43,26 47,29 45,33"
+        android:strokeColor="#E0A96D"
+        android:strokeWidth="4"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M59,20 C57,24 61,27 59,31"
+        android:strokeColor="#E0A96D"
+        android:strokeWidth="4"
+        android:strokeLineCap="round" />
+    <!-- cup body -->
+    <path
+        android:fillColor="#C98A4B"
+        android:pathData="M32,44 L72,44 L72,62 Q72,76 58,76 L46,76 Q32,76 32,62 Z" />
+    <!-- coffee surface -->
+    <path
+        android:fillColor="#E0A96D"
+        android:pathData="M34,44 Q52,39 70,44 Q52,49 34,44 Z" />
+    <!-- handle -->
+    <path
+        android:fillColor="#C98A4B"
+        android:pathData="M72,50 Q85,50 85,58 Q85,66 72,66 L72,60 Q78,60 78,58 Q78,56 72,56 Z" />
+    <!-- saucer -->
+    <path
+        android:fillColor="#C98A4B"
+        android:pathData="M28,80 L76,80 Q81,80 81,84 Q81,88 76,88 L28,88 Q23,88 23,84 Q23,80 28,80 Z" />
+</vector>

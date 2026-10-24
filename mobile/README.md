@@ -11,20 +11,34 @@ Full plan, architecture, storage model, milestones and risks:
 
 ## Build the APK
 
-`android/` is a Gradle project. It is a **scaffold** — open it in Android Studio
-and build there (it is not compiled in this repo's environment; there is no
-Android SDK here).
+`android/` is a Gradle project. On this machine everything needed to build and
+install is already wired into the folder:
+
+- `gradlew` / `gradlew.bat` + `gradle/wrapper/` — Gradle 8.7 wrapper.
+- `local.properties` — points at the shared Android SDK in `~/dev/tools/android-sdk`.
+- `tools/platform-tools/` — directory junction to the SDK's `platform-tools`
+  (gives `adb` for direct installs). Machine-specific, gitignored.
 
 ```bash
 cd mobile/android
-# 1. Create local.properties from the example and set your SDK path:
-cp local.properties.example local.properties   # then edit sdk.dir
-# 2. Build a debug APK:
-./gradlew assembleDebug        # Linux/macOS
-gradlew.bat assembleDebug      # Windows
-# 3. Install on a connected phone (USB debugging on):
-./gradlew installDebug
+
+# One-command build (bash):
+./build.sh
+# ...or (cmd):
+build.cmd
+
+# One-command build + install on a connected phone (USB debugging on):
+./install.sh                   # bash — gradle installDebug, adb fallback, then launches the app
+install.cmd                     # cmd equivalent
+
+# Raw Gradle still works:
+./gradlew assembleDebug         # Linux/macOS/Git Bash
+gradlew.bat assembleDebug       # Windows
 ```
+
+Requirements: Java 17 on PATH (JBR 17.0.14 on this machine). No other setup —
+`local.properties` already exists; on a different machine copy it from
+`local.properties.example` and set `sdk.dir`.
 
 On first open, Android Studio may ask to align AGP/Kotlin/Compose/Chaquopy
 versions — the pinned set in `build.gradle` / `app/build.gradle` is a

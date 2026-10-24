@@ -248,7 +248,33 @@ def get_profile(roast_uuid: str) -> str:
         raise RuntimeError("roast file not found")
 
     profile = parse_profile(alog_path)
-    ror_json = [v if v is not None else None for v in profile.ror_c_per_min]
+
+    # Trim the curve at DROP + 60 s when the recording continues much
+    # longer after the drop (e.g. extended cooling data). This keeps the
+    # profile chart focused on the roast itself.
+    _times = profile.times_s
+    _bt = profile.bt_c
+    _et = profile.et_c
+    _ror = profile.ror_c_per_min
+    _events = profile.events
+    drop_marker = profile.markers.get("DROP")
+    if drop_marker is not None and _times:
+        cut_time = drop_marker.time_s + 60.0
+        last_t = _times[-1]
+        if last_t > cut_time:
+            cut_idx = None
+            for i in range(len(_times)):
+                if _times[i] > cut_time:
+                    cut_idx = i
+                    break
+            if cut_idx is not None and cut_idx > 0:
+                _times = _times[:cut_idx]
+                _bt = _bt[:cut_idx]
+                _et = _et[:cut_idx]
+                _ror = _ror[:cut_idx]
+                _events = [e for e in _events if e.time_s <= cut_time]
+
+    ror_json = [v if v is not None else None for v in _ror]
     markers = {
         name: {
             "time_s": m.time_s,
@@ -265,7 +291,7 @@ def get_profile(roast_uuid: str) -> str:
             "slider_value": e.slider_value,
             "label": e.label,
         }
-        for e in profile.events
+        for e in _events
     ]
 
     phases: dict[str, Any] = {}
@@ -330,9 +356,9 @@ def get_profile(roast_uuid: str) -> str:
         "green_weight_g": idx.get("green_weight_g"),
         "roasted_weight_g": idx.get("roasted_weight_g"),
         "drop_bt_c": idx.get("drop_bt_c"),
-        "times_s": profile.times_s,
-        "bt_c": profile.bt_c,
-        "et_c": profile.et_c,
+        "times_s": _times,
+        "bt_c": _bt,
+        "et_c": _et,
         "ror_c_per_min": ror_json,
         "markers": markers,
         "events": events,

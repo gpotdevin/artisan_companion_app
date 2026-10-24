@@ -9,6 +9,7 @@ writes ``.alog`` files.
 
 from __future__ import annotations
 
+import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional, Union
@@ -33,10 +34,15 @@ class SensoryStore:
     """Sensory sidecar store rooted at one folder (default ``sensory``).
 
     The folder is created if missing. Use as a context manager, or call
-    :meth:`close` to release the index database::
+    :meth:`close` (a no-op kept for API compatibility)::
 
         with SensoryStore(logs_dir / "sensory") as store:
             record = store.add_cupping(uuid, {...})
+
+    A fresh SQLite connection to the index is opened and closed per
+    operation, so methods can safely be called from different threads
+    (Android's Dispatchers.IO and the desktop FastAPI app both dispatch
+    work to worker-thread pools).
 
     All mutating methods return the freshly stored record as it now
     exists on disk (derived fields recomputed). A roast with no sidecar
@@ -47,14 +53,30 @@ class SensoryStore:
     def __init__(self, sensory_dir: PathLike = "sensory") -> None:
         self._dir = Path(sensory_dir)
         self._dir.mkdir(parents=True, exist_ok=True)
-        self._conn = index.open_index(self._dir)
-        index.rebuild_annotations(self._conn, self._dir)
+        conn = self._connect()
+        try:
+            index.rebuild_annotations(conn, self._dir)
+        finally:
+            conn.close()
 
     # -- lifecycle ----------------------------------------------------------
 
     def close(self) -> None:
-        """Close the index database. The store must not be used after."""
-        self._conn.close()
+        """No-op: kept for API compatibility.
+
+        Index connections are opened and closed per operation, so there
+        is nothing persistent to release.
+        """
+
+    def _connect(self) -> sqlite3.Connection:
+        """Open a fresh index connection for a single operation.
+
+        SQLite connections are thread-affine, so the store must never
+        share one across calls. Callers close the connection when the
+        operation is done; ``index`` mutation functions commit through
+        their ``with conn:`` blocks.
+        """
+        return index.open_index(self._dir)
 
     def __enter__(self) -> "SensoryStore":
         return self
@@ -136,7 +158,11 @@ class SensoryStore:
         uuid = check_roast_uuid(roast_uuid)
         existed = sidecars.delete_record(self._dir, uuid)
         if existed:
-            index.remove_annotation(self._conn, uuid)
+            conn = self._connect()
+            try:
+                index.remove_annotation(conn, uuid)
+            finally:
+                conn.close()
         return existed
 
     # -- cupping sessions ----------------------------------------------------
@@ -244,7 +270,11 @@ class SensoryStore:
         existing record when its file/date are still unknown.
         """
         uuid = check_roast_uuid(roast_uuid)
-        index.upsert_roast(self._conn, uuid, source_file, roast_date)
+        conn = self._connect()
+        try:
+            index.upsert_roast(conn, uuid, source_file, roast_date)
+        finally:
+            conn.close()
         record = self.get(uuid)
         if record is None:
             return
@@ -261,7 +291,11 @@ class SensoryStore:
         self, annotated: Optional[bool] = None
     ) -> list[dict[str, Any]]:
         """List known roasts with annotation status (see ``index.list_roasts``)."""
-        return index.list_roasts(self._conn, annotated)
+        conn = self._connect()
+        try:
+            return index.list_roasts(conn, annotated)
+        finally:
+            conn.close()
 
     def search(
         self,
@@ -272,14 +306,18 @@ class SensoryStore:
         max_score: Optional[float] = None,
     ) -> list[dict[str, Any]]:
         """Search annotated records (see ``index.search_records``)."""
-        return index.search_records(
-            self._conn,
-            descriptor=descriptor,
-            date_from=date_from,
-            date_to=date_to,
-            min_score=min_score,
-            max_score=max_score,
-        )
+        conn = self._connect()
+        try:
+            return index.search_records(
+                conn,
+                descriptor=descriptor,
+                date_from=date_from,
+                date_to=date_to,
+                min_score=min_score,
+                max_score=max_score,
+            )
+        finally:
+            conn.close()
 
     # -- internals -------------------------------------------------------------
 
@@ -292,7 +330,11 @@ class SensoryStore:
 
     def _backfill_roast_ref(self, record: dict[str, Any]) -> None:
         """Fill a new record's roast_ref from the registry when possible."""
-        reg = index.get_roast(self._conn, record["roast_uuid"])
+        conn = self._connect()
+        try:
+            reg = index.get_roast(conn, record["roast_uuid"])
+        finally:
+            conn.close()
         if reg is None:
             return
         ref = record["roast_ref"]
@@ -309,5 +351,9 @@ class SensoryStore:
             raise SensoryStoreError(
                 f"{record['roast_uuid']}: sidecar missing after write"
             )
-        index.upsert_annotation(self._conn, stored)
+        conn = self._connect()
+        try:
+            index.upsert_annotation(conn, stored)
+        finally:
+            conn.close()
         return stored

@@ -1,8 +1,287 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App -->
     <string name="app_name">Artisan Companion</string>
+
+    <!-- Common -->
+    <string name="common_back">Back</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_save">Save</string>
+    <string name="common_dismiss">Dismiss</string>
+    <string name="common_retry">Retry</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add">Add</string>
+    <string name="common_error">Error</string>
+    <string name="common_error_format">Error: %1$s</string>
+    <string name="common_collapse">Collapse</string>
+    <string name="common_expand">Expand</string>
+    <string name="common_state_on">On</string>
+    <string name="common_state_off">Off</string>
+
+    <!-- Init error screen -->
+    <string name="init_error_title">Couldn\'t start Artisan Companion</string>
+    <string name="init_error_message">The app storage could not be initialized. Check that the device has free space, then retry.</string>
+
+    <!-- Library -->
     <string name="library_title">Roasts</string>
-    <string name="settings_title">Settings</string>
+    <string name="library_search_hint">Search roasts…</string>
+    <string name="library_no_match">No roasts match "%1$s"</string>
+    <string name="library_unknown_month">Unknown</string>
+    <string name="library_unparsable_title">Unparsable roast log</string>
+    <string name="library_unknown_error">Unknown parsing error</string>
+    <string name="library_empty_subtitle">Review your Artisan roast logs and record cupping notes</string>
+    <string name="onboarding_step_import">Import .alog files</string>
+    <string name="onboarding_step_browse">Browse your roasts</string>
+    <string name="onboarding_step_cupping">Record cuppings</string>
     <string name="import_logs">Import .alog files</string>
+    <string name="import_result_format">Imported %1$d file(s)</string>
+    <string name="status_unparsable">Unparsable</string>
+    <string name="status_cupped">Cupped</string>
+    <string name="status_cupped_score">Cupped %1$.1f</string>
+    <string name="status_uncupped">Uncupped</string>
+    <string name="library_detail_both">%1$dg → %2$dg</string>
+    <string name="library_detail_green">%1$dg green</string>
+    <string name="library_detail_roasted">%1$dg roasted</string>
+    <string name="library_detail_drop">Drop %1$d°C</string>
+    <string name="cd_unparsable">Unparsable</string>
+
+    <!-- Viewer -->
+    <string name="viewer_default_title">Roast</string>
+    <string name="tab_profile">Profile</string>
+    <string name="tab_sensory">Sensory</string>
+    <string name="legend_bt">BT</string>
+    <string name="legend_et">ET</string>
+    <string name="legend_ror">RoR /min</string>
+    <string name="chart_axis_temp">Temp</string>
+    <string name="chart_axis_min">min</string>
+    <string name="chart_axis_ror">RoR</string>
+    <string name="chart_marker_tp">TP</string>
+    <string name="card_phases">Phases</string>
+    <string name="card_markers">Markers</string>
+    <string name="card_roast">Roast</string>
+    <string name="phase_dry">DRY</string>
+    <string name="phase_mid">MID (Maillard)</string>
+    <string name="phase_dev">Dev</string>
+    <string name="phase_total">Total</string>
+    <string name="phase_ror_peak">RoR peak</string>
+    <string name="markers_none">No markers</string>
+    <string name="markers_time">Time</string>
+    <string name="markers_bt">BT</string>
+    <string name="roast_green">Green</string>
+    <string name="roast_roasted">Roasted</string>
+    <string name="roast_loss">Loss</string>
+    <string name="roast_ambient">Ambient</string>
+    <string name="roast_sampling">Sampling</string>
+    <string name="roast_machine">Machine</string>
+    <string name="roast_artisan">Artisan</string>
+    <string name="events_title_format">Events (%1$d)</string>
+    <string name="events_none">No events recorded</string>
+    <string name="event_slider_format">slider: %.0f</string>
+
+    <!-- Number formats -->
+    <string name="fmt_one_decimal">%.1f</string>
+    <string name="fmt_two_decimals">%.2f</string>
+    <string name="fmt_temp_short">%.0f°C</string>
+    <string name="fmt_grams">%.0f g</string>
+    <string name="fmt_percent">%.1f%%</string>
+    <string name="fmt_celsius">%.1f °C</string>
+    <string name="fmt_seconds">%.0f s</string>
+    <string name="fmt_ror">%.1f °C/min</string>
+
+    <!-- Sensory tab -->
+    <string name="dialog_delete_cupping_title">Delete cupping?</string>
+    <string name="dialog_delete_cupping_message">Delete the cupping session from %1$s? This cannot be undone.</string>
+    <string name="dialog_delete_cupping_message_nodate">Delete the cupping session? This cannot be undone.</string>
+    <string name="dialog_delete_cupping_simple">This cupping session will be permanently removed. This cannot be undone.</string>
+    <string name="dialog_delete_record_title">Delete sensory data?</string>
+    <string name="dialog_delete_record_message">All cupping sessions, radar scores, and defect flags for this roast will be permanently removed. This cannot be undone.</string>
+    <string name="msg_cupping_deleted">Cupping deleted</string>
+    <string name="msg_sensory_deleted">Sensory data deleted</string>
+    <string name="cd_record_cupping">Record cupping</string>
+    <string name="action_record_cupping">Record cupping</string>
+    <string name="action_delete_sensory">Delete all sensory data</string>
+    <string name="radar_title">Flavor radar</string>
+    <string name="action_edit_radar">Edit radar</string>
+    <string name="radar_empty">No radar scores yet</string>
+    <string name="radar_empty_hint">Tap “Edit radar” to set flavor axis values.</string>
+    <string name="defects_title">Defects observed</string>
+    <string name="defects_loading">Loading defect flags…</string>
+    <string name="defects_none">No defects recorded.</string>
+    <string name="defect_heavy_fc">Heavy FC</string>
+    <string name="defect_low_fc">Low FC</string>
+    <string name="defect_light_cut">Light cut</string>
+    <string name="defect_dark_cut">Dark cut</string>
+    <string name="defect_drops">Drops</string>
+    <string name="defect_oily">Oily</string>
+    <string name="defect_uneven">Uneven</string>
+    <string name="defect_tipping">Tipping</string>
+    <string name="defect_scorching">Scorching</string>
+    <string name="defect_divots">Divots</string>
+    <string name="cuppings_title">Cupping sessions</string>
+    <string name="cuppings_empty_title">No sensory data yet</string>
+    <string name="cuppings_empty_hint">Record a cupping session to start building the sensory profile of this roast.</string>
+    <string name="action_record_first_cupping">Record your first cupping</string>
+    <string name="cuppings_none">No cuppings yet. Tap the + button to record one.</string>
+    <string name="cupping_day_format">day %1$d</string>
+    <string name="cupping_total_format">Total: %1$s</string>
+    <string name="cupping_row_format">%1$s — total %2$s</string>
+    <string name="cd_edit_cupping">Edit cupping</string>
+    <string name="cd_delete_cupping">Delete cupping</string>
+    <string name="cd_remove_descriptor">Remove %1$s</string>
+
+    <!-- Cupping entry -->
+    <string name="cupping_new_title">New cupping</string>
+    <string name="cupping_edit_title">Edit cupping</string>
+    <string name="msg_cupping_saved">Cupping saved</string>
+    <string name="error_date_required">Date is required</string>
+    <string name="error_date_format">Invalid date format (use YYYY-MM-DD)</string>
+    <string name="cupping_date_label">Cupping date</string>
+    <string name="cupping_date_hint">Date (YYYY-MM-DD)</string>
+    <string name="cd_pick_date">Pick date</string>
+    <string name="rest_days_after">Day %1$d after roast</string>
+    <string name="rest_days_before">%1$d days before roast</string>
+    <string name="rest_days_hint">Enter a valid date to see rest days</string>
+    <string name="sca_scores_title">SCA scores</string>
+    <string name="sca_fragrance_aroma">Fragrance / Aroma</string>
+    <string name="sca_flavor">Flavor</string>
+    <string name="sca_aftertaste">Aftertaste</string>
+    <string name="sca_acidity">Acidity</string>
+    <string name="sca_body">Body</string>
+    <string name="sca_balance">Balance</string>
+    <string name="sca_uniformity">Uniformity</string>
+    <string name="sca_clean_cup">Clean Cup</string>
+    <string name="sca_sweetness">Sweetness</string>
+    <string name="sca_overall">Overall</string>
+    <string name="sca_short_aroma">Aroma</string>
+    <string name="sca_short_flavor">Flavor</string>
+    <string name="sca_short_aftertaste">After.</string>
+    <string name="sca_short_acidity">Acidity</string>
+    <string name="sca_short_body">Body</string>
+    <string name="sca_short_balance">Balance</string>
+    <string name="sca_short_uniformity">Unif.</string>
+    <string name="sca_short_clean">Clean</string>
+    <string name="sca_short_sweet">Sweet</string>
+    <string name="sca_short_overall">Overall</string>
+    <string name="defects_penalty_title">Defects penalty</string>
+    <string name="defects_penalty_label">Penalty (subtracted from total)</string>
+    <string name="total_score_label">Total score</string>
+    <string name="radar_preview_title">Radar preview</string>
+    <string name="descriptor_add_title">Add descriptor</string>
+    <string name="descriptor_free_text">Free text</string>
+    <string name="cd_add_descriptor">Add descriptor</string>
+    <string name="descriptor_lexicon">Lexicon</string>
+    <string name="descriptors_title">Descriptors</string>
+    <string name="descriptors_none">No descriptors yet. Tap Add to tag flavors.</string>
+    <string name="notes_label">Notes</string>
+    <string name="notes_hint">Brew notes, impressions…</string>
+    <string name="action_save_cupping">Save cupping</string>
+    <string name="action_update_cupping">Update cupping</string>
+
+    <!-- Descriptor lexicon -->
+    <string-array name="coffee_lexicon">
+        <item>apricot</item>
+        <item>black tea</item>
+        <item>bergamot</item>
+        <item>blackberry</item>
+        <item>blueberry</item>
+        <item>brown sugar</item>
+        <item>caramel</item>
+        <item>cherry</item>
+        <item>chocolate</item>
+        <item>citrus</item>
+        <item>cocoa</item>
+        <item>coconut</item>
+        <item>currant</item>
+        <item>floral</item>
+        <item>grapefruit</item>
+        <item>green apple</item>
+        <item>hazelnut</item>
+        <item>honey</item>
+        <item>jasmine</item>
+        <item>lemon</item>
+        <item>mango</item>
+        <item>molasses</item>
+        <item>nutty</item>
+        <item>orange</item>
+        <item>papaya</item>
+        <item>peach</item>
+        <item>pear</item>
+        <item>plum</item>
+        <item>raspberry</item>
+        <item>spicy</item>
+        <item>stone fruit</item>
+        <item>strawberry</item>
+        <item>toffee</item>
+        <item>tropical</item>
+        <item>vanilla</item>
+        <item>winey</item>
+        <item>woody</item>
+        <item>almond</item>
+        <item>tobacco</item>
+        <item>earthy</item>
+        <item>herbal</item>
+        <item>pepper</item>
+        <item>anise</item>
+        <item>rose</item>
+        <item>apple</item>
+        <item>melon</item>
+        <item>pineapple</item>
+        <item>tea</item>
+        <item>malty</item>
+        <item>cereal</item>
+        <item>buttery</item>
+        <item>creamy</item>
+        <item>round</item>
+        <item>bright</item>
+        <item>clean</item>
+        <item>complex</item>
+        <item>sweet</item>
+        <item>juicy</item>
+    </string-array>
+
+    <!-- Radar editor -->
+    <string name="msg_radar_saved">Radar saved</string>
+    <string name="action_save_radar">Save radar</string>
+    <string name="radar_loading_labels">Loading labels…</string>
+
+    <!-- Legacy editor -->
+    <string name="editor_title">Sensory editor</string>
+    <string name="action_save_defects">Save defects</string>
+    <string name="cuppings_none_short">No cuppings yet.</string>
+    <string name="defects_penalty_hint">Defects (penalty)</string>
+    <string name="descriptors_csv_hint">Descriptors (comma separated)</string>
+    <string name="action_add_cupping">Add cupping</string>
+    <string name="msg_defects_saved">Defects saved</string>
+    <string name="msg_cupping_added">Cupping added</string>
+    <string name="msg_cupping_removed">Cupping removed</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_storage">Storage</string>
+    <string name="settings_section_import">Import</string>
+    <string name="settings_section_display">Display</string>
+    <string name="settings_section_data">Data</string>
+    <string name="settings_section_about">About</string>
+    <string name="settings_logs_folder">Logs folder</string>
+    <string name="settings_sensory_folder">Sensory folder</string>
+    <string name="settings_roast_count">Roasts indexed: %1$d</string>
     <string name="rebuild_index">Rebuild roast index</string>
+    <string name="settings_theme_label">Theme</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
+    <string name="settings_export_sensory">Export sensory store (zip)</string>
+    <string name="settings_index_rebuilt">Index rebuilt: %1$d roasts</string>
+    <string name="settings_imported">Imported %1$d file(s). %2$d roasts indexed.</string>
+    <string name="msg_export_ok">Sensory store exported</string>
+    <string name="msg_export_failed">Export failed</string>
+    <string name="export_chooser_title">Share sensory store</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_license">MIT License</string>
+    <string name="about_license_text">Copyright (c) 2026 Artisan Companion contributors. Permission is hereby granted, free of charge, to any person obtaining a copy of this software to deal in it without restriction, including the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies, provided the copyright notice is included in all copies.</string>
+    <string name="about_disclaimer">Not affiliated with, endorsed by, or sponsored by the Artisan project.</string>
+
+    <!-- Intro overlay -->
+    <string name="intro_welcome_title">Welcome to Artisan Companion</string>
+    <string name="intro_welcome_message">Review your roast logs and build a sensory record for every batch.</string>
 </resources>

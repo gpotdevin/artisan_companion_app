@@ -5,8 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.Stroke
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import com.artisancompanion.ui.theme.Caramel
 import com.artisancompanion.ui.theme.CaramelBright
@@ -15,6 +16,7 @@ import com.artisancompanion.ui.theme.CreamDim
 import android.graphics.Paint as AndroidPaint
 import kotlin.math.PI
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.sin
 
 /** Flavor radar (spider) chart drawn on a Compose Canvas. Values are 0-10. */
@@ -32,7 +34,7 @@ fun RadarChart(labels: List<String>, values: List<Double>, modifier: Modifier = 
     Canvas(modifier) {
         val cx = size.width / 2f
         val cy = size.height / 2f
-        val radius = minOf(size.width, size.height) / 2f * 0.68f
+        val radius = min(size.width, size.height) / 2f * 0.68f
 
         // Concentric rings (0..10 in 5 steps).
         for (ring in 1..5) {

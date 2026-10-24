@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -38,15 +38,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.artisancompanion.R
 import com.artisancompanion.data.Cupping
 import com.artisancompanion.data.Repository
 import com.artisancompanion.data.SensoryRecord
 import com.artisancompanion.data.SensoryUpdate
 import com.artisancompanion.data.Scores
+import com.artisancompanion.ui.components.UiMessage
 import kotlinx.coroutines.launch
 
 class EditorViewModel : ViewModel() {
@@ -88,33 +91,45 @@ class EditorViewModel : ViewModel() {
         viewModelScope.launch {
             runCatching { Repository.updateRadar(state.uuid, state.radarValues, state.radarLabels) }
                 .onSuccess { rec ->
-                    state = state.copy(record = rec, radarValues = rec.radar.values, message = "Radar saved")
+                    state = state.copy(
+                        record = rec,
+                        radarValues = rec.radar.values,
+                        message = UiMessage(R.string.msg_radar_saved),
+                    )
                 }
-                .onFailure { state = state.copy(message = "Error: ${it.message}") }
+                .onFailure {
+                    state = state.copy(message = UiMessage(R.string.common_error_format, listOf(it.message.orEmpty())))
+                }
         }
     }
 
     fun saveDefects() {
         viewModelScope.launch {
             runCatching { Repository.updateSensory(state.uuid, SensoryUpdate(defects_observed = state.defects)) }
-                .onSuccess { rec -> state = state.copy(record = rec, message = "Defects saved") }
-                .onFailure { state = state.copy(message = "Error: ${it.message}") }
+                .onSuccess { rec -> state = state.copy(record = rec, message = UiMessage(R.string.msg_defects_saved)) }
+                .onFailure {
+                    state = state.copy(message = UiMessage(R.string.common_error_format, listOf(it.message.orEmpty())))
+                }
         }
     }
 
     fun addCupping(cupping: Cupping) {
         viewModelScope.launch {
             runCatching { Repository.addCupping(state.uuid, cupping) }
-                .onSuccess { rec -> state = state.copy(record = rec, message = "Cupping added") }
-                .onFailure { state = state.copy(message = "Error: ${it.message}") }
+                .onSuccess { rec -> state = state.copy(record = rec, message = UiMessage(R.string.msg_cupping_added)) }
+                .onFailure {
+                    state = state.copy(message = UiMessage(R.string.common_error_format, listOf(it.message.orEmpty())))
+                }
         }
     }
 
     fun deleteCupping(index: Int) {
         viewModelScope.launch {
             runCatching { Repository.removeCupping(state.uuid, index) }
-                .onSuccess { rec -> state = state.copy(record = rec, message = "Cupping removed") }
-                .onFailure { state = state.copy(message = "Error: ${it.message}") }
+                .onSuccess { rec -> state = state.copy(record = rec, message = UiMessage(R.string.msg_cupping_removed)) }
+                .onFailure {
+                    state = state.copy(message = UiMessage(R.string.common_error_format, listOf(it.message.orEmpty())))
+                }
         }
     }
 }
@@ -128,23 +143,23 @@ data class EditorUiState(
     val defectKeys: List<String> = emptyList(),
     val defects: Map<String, Boolean> = emptyMap(),
     val loading: Boolean = true,
-    val message: String? = null,
+    val message: UiMessage? = null,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditorScreen(uuid: String, onBack: () -> Unit) {
     val viewModel: EditorViewModel = viewModel()
-    val state = viewModel.uiState
+    val state = viewModel.state
     LaunchedEffect(uuid) { viewModel.load(uuid) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Sensory editor") },
+                title = { Text(stringResource(R.string.editor_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.common_back))
                     }
                 },
             )
@@ -160,14 +175,17 @@ fun EditorScreen(uuid: String, onBack: () -> Unit) {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                if (state.message != null) {
-                    Text(state.message!!, color = MaterialTheme.colorScheme.primary)
+                state.message?.let { msg ->
+                    Text(
+                        stringResource(msg.resId, *msg.args.toTypedArray()),
+                        color = MaterialTheme.colorScheme.primary,
+                    )
                 }
 
                 // ---- Radar ----
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("Flavor radar", style = MaterialTheme.typography.titleSmall)
+                        Text(stringResource(R.string.radar_title), style = MaterialTheme.typography.titleSmall)
                         RadarChart(
                             labels = state.radarLabels,
                             values = state.radarValues,
@@ -177,7 +195,7 @@ fun EditorScreen(uuid: String, onBack: () -> Unit) {
                         )
                         state.radarLabels.forEachIndexed { i, label ->
                             Column {
-                                Text("$label  ${"%.1f".format(state.radarValues.getOrNull(i) ?: 0.0)}")
+                                Text(label + "  " + stringResource(R.string.fmt_one_decimal, state.radarValues.getOrNull(i) ?: 0.0))
                                 Slider(
                                     value = (state.radarValues.getOrNull(i) ?: 0.0).toFloat(),
                                     onValueChange = { viewModel.setRadarValue(i, it.toDouble()) },
@@ -186,7 +204,7 @@ fun EditorScreen(uuid: String, onBack: () -> Unit) {
                             }
                         }
                         Button(onClick = { viewModel.saveRadar() }, modifier = Modifier.fillMaxWidth()) {
-                            Text("Save radar")
+                            Text(stringResource(R.string.action_save_radar))
                         }
                     }
                 }
@@ -194,18 +212,19 @@ fun EditorScreen(uuid: String, onBack: () -> Unit) {
                 // ---- Defects ----
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("Defects observed", style = MaterialTheme.typography.titleSmall)
+                        Text(stringResource(R.string.defects_title), style = MaterialTheme.typography.titleSmall)
                         state.defectKeys.forEach { key ->
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Checkbox(
                                     checked = state.defects[key] == true,
                                     onCheckedChange = { viewModel.setDefect(key, it) },
                                 )
-                                Text(key)
+                                val labelRes = defectLabelRes(key)
+                                Text(if (labelRes != 0) stringResource(labelRes) else key)
                             }
                         }
                         Button(onClick = { viewModel.saveDefects() }, modifier = Modifier.fillMaxWidth()) {
-                            Text("Save defects")
+                            Text(stringResource(R.string.action_save_defects))
                         }
                     }
                 }
@@ -213,10 +232,13 @@ fun EditorScreen(uuid: String, onBack: () -> Unit) {
                 // ---- Cuppings ----
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("Cupping sessions", style = MaterialTheme.typography.titleSmall)
+                        Text(stringResource(R.string.cuppings_title), style = MaterialTheme.typography.titleSmall)
                         val cuppings = state.record?.cuppings.orEmpty()
                         if (cuppings.isEmpty()) {
-                            Text("No cuppings yet.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(
+                                stringResource(R.string.cuppings_none_short),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                         }
                         cuppings.forEachIndexed { index, c ->
                             Row(
@@ -225,7 +247,11 @@ fun EditorScreen(uuid: String, onBack: () -> Unit) {
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Column(Modifier.weight(1f)) {
-                                    Text("${c.date}  total ${c.scores.total?.let { "%.1f".format(it) } ?: "--"}")
+                                    Text(stringResource(
+                                        R.string.cupping_row_format,
+                                        c.date,
+                                        c.scores.total?.let { stringResource(R.string.fmt_one_decimal, it) } ?: "--",
+                                    ))
                                     Text(
                                         c.descriptors.joinToString(", "),
                                         style = MaterialTheme.typography.bodySmall,
@@ -233,7 +259,10 @@ fun EditorScreen(uuid: String, onBack: () -> Unit) {
                                     )
                                 }
                                 IconButton(onClick = { viewModel.deleteCupping(index) }) {
-                                    Icon(Icons.Default.Delete, contentDescription = "Delete cupping")
+                                    Icon(
+                                        Icons.Default.Delete,
+                                        contentDescription = stringResource(R.string.cd_delete_cupping),
+                                    )
                                 }
                             }
                         }
@@ -268,7 +297,7 @@ private fun CuppingForm(scoreKeys: List<String>, onAdd: (Cupping) -> Unit) {
         OutlinedTextField(
             value = form.date,
             onValueChange = { form.date = it },
-            label = { Text("Date (YYYY-MM-DD)") },
+            label = { Text(stringResource(R.string.cupping_date_hint)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
         )
@@ -276,7 +305,10 @@ private fun CuppingForm(scoreKeys: List<String>, onAdd: (Cupping) -> Unit) {
             OutlinedTextField(
                 value = form.scores[key].orEmpty(),
                 onValueChange = { form.scores[key] = it },
-                label = { Text(scoreLabel(key)) },
+                label = {
+                    val labelRes = scoreLabelRes(key)
+                    Text(if (labelRes != 0) stringResource(labelRes) else key)
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -284,20 +316,20 @@ private fun CuppingForm(scoreKeys: List<String>, onAdd: (Cupping) -> Unit) {
         OutlinedTextField(
             value = form.scores["defects"].orEmpty(),
             onValueChange = { form.scores["defects"] = it },
-            label = { Text("Defects (penalty)") },
+            label = { Text(stringResource(R.string.defects_penalty_hint)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
             value = form.descriptors,
             onValueChange = { form.descriptors = it },
-            label = { Text("Descriptors (comma separated)") },
+            label = { Text(stringResource(R.string.descriptors_csv_hint)) },
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
             value = form.notes,
             onValueChange = { form.notes = it },
-            label = { Text("Notes") },
+            label = { Text(stringResource(R.string.notes_label)) },
             modifier = Modifier.fillMaxWidth(),
         )
         Button(
@@ -316,7 +348,7 @@ private fun CuppingForm(scoreKeys: List<String>, onAdd: (Cupping) -> Unit) {
         ) {
             Icon(Icons.Default.Add, contentDescription = null)
             Spacer(Modifier.width(8.dp))
-            Text("Add cupping")
+            Text(stringResource(R.string.action_add_cupping))
         }
     }
 }
@@ -348,16 +380,32 @@ private fun CuppingFormState.toCupping(): Cupping? {
     )
 }
 
-private fun scoreLabel(key: String): String = when (key) {
-    "fragrance_aroma" -> "Fragrance / Aroma"
-    "flavor" -> "Flavor"
-    "aftertaste" -> "Aftertaste"
-    "acidity" -> "Acidity"
-    "body" -> "Body"
-    "balance" -> "Balance"
-    "uniformity" -> "Uniformity"
-    "clean_cup" -> "Clean Cup"
-    "sweetness" -> "Sweetness"
-    "overall" -> "Overall"
-    else -> key
+/** String resource for an SCA score key's label, or 0 to fall back to the raw key. */
+private fun scoreLabelRes(key: String): Int = when (key) {
+    "fragrance_aroma" -> R.string.sca_fragrance_aroma
+    "flavor" -> R.string.sca_flavor
+    "aftertaste" -> R.string.sca_aftertaste
+    "acidity" -> R.string.sca_acidity
+    "body" -> R.string.sca_body
+    "balance" -> R.string.sca_balance
+    "uniformity" -> R.string.sca_uniformity
+    "clean_cup" -> R.string.sca_clean_cup
+    "sweetness" -> R.string.sca_sweetness
+    "overall" -> R.string.sca_overall
+    else -> 0
+}
+
+/** String resource for a defect key, or 0 to fall back to the raw key. */
+private fun defectLabelRes(key: String): Int = when (key) {
+    "heavyFC" -> R.string.defect_heavy_fc
+    "lowFC" -> R.string.defect_low_fc
+    "lightCut" -> R.string.defect_light_cut
+    "darkCut" -> R.string.defect_dark_cut
+    "drops" -> R.string.defect_drops
+    "oily" -> R.string.defect_oily
+    "uneven" -> R.string.defect_uneven
+    "tipping" -> R.string.defect_tipping
+    "scorching" -> R.string.defect_scorching
+    "divots" -> R.string.defect_divots
+    else -> 0
 }

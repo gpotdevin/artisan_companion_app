@@ -1,7 +1,11 @@
 # Copy this file to local.properties (next to settings.gradle) and set the path
 # to your Android SDK. local.properties is gitignored — do not commit it.
 #
-# Windows example:
+# This machine keeps a generic, project-agnostic SDK in ~/dev/tools (see
+# ~/dev/tools/README.md):
+#   sdk.dir=C:/Users/guill/dev/tools/android-sdk
+#
+# Other Windows example (per-user SDK install):
 #   sdk.dir=C\:\Users\you\AppData\Local\Android\Sdk
 # macOS/Linux example:
 #   sdk.dir=/Users/you/Library/Android/sdk

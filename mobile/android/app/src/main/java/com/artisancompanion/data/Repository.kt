@@ -1,5 +1,6 @@
 package com.artisancompanion.data
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
@@ -22,7 +23,16 @@ object Repository {
     }
 
     private suspend fun <T> io(block: () -> String, decode: (String) -> T): T =
-        withContext(Dispatchers.IO) { decode(block()) }
+        withContext(Dispatchers.IO) {
+            try {
+                decode(block())
+            } catch (e: Exception) {
+                // The PyException message embeds the full Python traceback,
+                // so logcat shows exactly which api.* call failed and why.
+                Log.e("ArtisanCompanion", "Repository call failed", e)
+                throw e
+            }
+        }
 
     // -- lifecycle / index ---------------------------------------------------
 
