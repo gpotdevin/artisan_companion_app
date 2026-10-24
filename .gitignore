@@ -12,6 +12,7 @@ build/
 # except the anonymized test fixtures
 !tests/fixtures/alogs/*.alog
 /sensory/
+tests/fixtures/sensory/
 *.sqlite
 *.db
 

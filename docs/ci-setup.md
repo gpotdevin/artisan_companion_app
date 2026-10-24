@@ -11,7 +11,6 @@ Configure these secrets in the GitHub repository settings
 | `ARTISAN_RELEASE_STORE_PASSWORD` | Keystore password | Set when creating the keystore |
 | `ARTISAN_RELEASE_KEY_ALIAS` | Key alias | `ArtisanCompanion_app` |
 | `ARTISAN_RELEASE_KEY_PASSWORD` | Key password | Set when creating the keystore |
-| `ARTISAN_RELEASE_STORE_FILE` | Path to decoded keystore in CI | Set automatically by the workflow |
 
 ## Keystore Location
 
@@ -30,12 +29,16 @@ for easy CI secret setup.
 
 ```bash
 cd mobile/android
-export ARTISAN_RELEASE_STORE_FILE=../../../ArtisanCompanion.keystore
+# Use an absolute path to the keystore (simplest, avoids relative-path confusion):
+export ARTISAN_RELEASE_STORE_FILE=/path/to/dev/ArtisanCompanion.keystore
 export ARTISAN_RELEASE_STORE_PASSWORD=<password>
 export ARTISAN_RELEASE_KEY_ALIAS=ArtisanCompanion_app
 export ARTISAN_RELEASE_KEY_PASSWORD=<password>
 ./gradlew :app:assembleRelease :app:bundleRelease
 ```
+
+The keystore lives **outside the repo** at `../ArtisanCompanion.keystore`
+relative to the repo root (same pattern as runBeat).
 
 ## Version Numbering
 

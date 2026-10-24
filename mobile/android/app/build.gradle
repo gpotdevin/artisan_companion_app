@@ -65,6 +65,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // Enable desugaring so java.time (LocalDate, YearMonth, etc.) works on
+        // API 24-25 (minSdk = 24). Without this, the app crashes with
+        // NoClassDefFoundError on Android 7.x when using java.time APIs.
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -95,6 +99,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.5.3")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+    // Core library desugaring: provides java.time backport for API 24-25.
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.3")
 }

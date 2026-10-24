@@ -628,11 +628,11 @@
                 html += '
                     <li class="cupping-item">
                         <div class="header">
-                            <span class="date">' + cupping.date + '</span>
+                            <span class="date">' + escapeHtml(cupping.date) + '</span>
                             <span class="score">' + cupping.scores.total + ' pts</span>
                         </div>
                         <div class="body">
-                            <strong>Descriptors:</strong> ' + (cupping.descriptors ? cupping.descriptors.join(', ') : 'None') + '<br>
+                            <strong>Descriptors:</strong> ' + (cupping.descriptors ? escapeHtml(cupping.descriptors.join(', ')) : 'None') + '<br>
                             <strong>Notes:</strong> ' + escapeHtml(cupping.notes || 'None') + '
                         </div>
                         <div class="button-group" style="margin-top: 8px;">
