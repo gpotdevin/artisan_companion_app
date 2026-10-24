@@ -38,7 +38,12 @@ mobile/android/.idea/
 mobile/android/captures/
 mobile/android/.cxx/
 mobile/android/tools/
+mobile/android/artisan-release.keystore
 *.iml
+
+# Keystores (stored outside the repo at ../)
+*.keystore
+*.jks
 
 # Termux venv created on-device
 .venv-mobile/

@@ -1,11 +1,20 @@
-# artisan-companion (working title)
+# Artisan Companion
 
 A companion app for [Artisan](https://artisan-scope.org/) scope users who log their
 coffee roasts as `.alog` files and want to attach **sensory information** (cupping
 notes, flavor scores, defects) to each roast, and to **review roast profiles**
 (curves, events, phases) without opening Artisan.
 
-> Status: M0–M4 complete; 298 tests passed / 1 skipped; CI green; M5 release prep in progress on branch `dev`.
+> Status: M0–M6 complete; CI green; preparing for GitHub publication and Play Store release.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/screenshot_library.png" width="220"/>
+  <img src="docs/screenshots/screenshot_viewer.png" width="220"/>
+</p>
 
 ## Goals
 
@@ -42,7 +51,14 @@ visible there like any data entered in Artisan itself.
 
 ## Install
 
-Development install (from repo root):
+### From GitHub
+
+```bash
+git clone https://github.com/gpotdevin/artisan_companion_app.git
+cd artisan_companion_app
+```
+
+### Development install (from repo root)
 
 ```bash
 pip install -e ".[app]"
@@ -97,7 +113,8 @@ fully offline. The UI is native Material 3 with Canvas-drawn charts; the proven
 Python core (`alog_core`, `store`, `sync`) is embedded via Chaquopy and exposed
 through a thin JSON facade — no Python source is modified.
 
-- Build the APK from [`mobile/android/`](mobile/android/) (Android Studio).
+- **Source**: [github.com/gpotdevin/artisan_companion_app](https://github.com/gpotdevin/artisan_companion_app)
+- Build the APK from [`mobile/android/`](mobile/android/) (Android Studio or `./gradlew assembleRelease`).
 - See [`mobile/README.md`](mobile/README.md) for build/usage and
   [`docs/mobile-port.md`](docs/mobile-port.md) for the full plan.
 
@@ -113,6 +130,7 @@ A non-native stopgap (web UI in Termux + Chrome) is also available at
 | [docs/ui-spec.md](docs/ui-spec.md) | Proposed UI specification: screens, wireframes, states, acceptance criteria |
 | [docs/mobile-port.md](docs/mobile-port.md) | Android port: native Kotlin (Compose) app + embedded Python core, storage, milestones |
 | [docs/sample-gallery.md](docs/sample-gallery.md) | Gallery of the 7 fixture roasts with version-specific notes |
+| [docs/ci-setup.md](docs/ci-setup.md) | CI/CD setup: GitHub Secrets, keystore, release flow, version numbering |
 | [research/upstream-findings.md](research/upstream-findings.md) | Evidence collected from the Artisan source code and a 230-file log corpus |
 | [research/m0-roundtrip.md](research/m0-roundtrip.md) | Artisan 4.2 integrity findings and native sync design |
 
@@ -126,6 +144,17 @@ that evidence file and in the pre-existing technical descriptions of the corpus.
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## AI support
+
+This app was made with support of *Mistral AI* models (Mistral Large).
+
+I personally do not consider myself to be a good software developer. I was happy utilizing the models developed by Mistral AI to support me doing this work. I am not affiliated with the company, I simply purchased a regular subscription to use their services. I made my best to limit my token/energy consumption.
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/gpotdevin/artisan_companion_app/issues)
+- **Repository**: [github.com/gpotdevin/artisan_companion_app](https://github.com/gpotdevin/artisan_companion_app)
 
 ## Affiliation
 

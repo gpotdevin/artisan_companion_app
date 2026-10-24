@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme: Material3 DayNight, no action bar (Compose draws its own). -->
+    <style name="Theme.ArtisanCompanion" parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+</resources>

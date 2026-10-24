@@ -280,6 +280,7 @@
     <string name="about_license">Licence MIT</string>
     <string name="about_license_text">Copyright (c) 2026 les contributeurs d’Artisan Companion. Une permission est accordée gratuitement à toute personne obtenant une copie de ce logiciel, de l’utiliser, le copier, le modifier, le fusionner, le publier, le distribuer, le sous-licencier et/ou le vendre, à condition que la notice de copyright soit incluse dans toutes les copies.</string>
     <string name="about_disclaimer">Non affilié au projet Artisan, qui ne l’a pas approuvé ni ne le sponsorise.</string>
+    <string name="about_repo">github.com/gpotdevin/artisan_companion_app</string>
 
     <!-- Intro overlay -->
     <string name="intro_welcome_title">Bienvenue dans Artisan Companion</string>
