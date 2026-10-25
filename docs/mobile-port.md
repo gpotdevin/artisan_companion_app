@@ -145,7 +145,7 @@ code. Only `api.py` lives inside the Gradle project.
 
 | Risk | Mitigation |
 |---|---|
-| Chaquopy / AGP / Kotlin / Compose version drift — the Gradle files pin a known-good set (AGP 8.5.2, Kotlin 2.0.0, Compose BOM 2024.09.00, Compose Compiler 1.5.14, Chaquopy 16.0.0) | Open in Android Studio and align versions with the Studio template if version checks complain. The Python side is the stable part. |
+| Chaquopy / AGP / Kotlin / Compose version drift — the Gradle files pin a known-good set (AGP 8.9.1, Kotlin 1.9.22, Compose Compiler 1.5.8, Compose UI 1.5.3, Material3 1.1.2, Chaquopy 16.0.0, Gradle 8.11.1, compileSdk 36, minSdk 26, targetSdk 36) | Open in Android Studio and align versions with the Studio template if version checks complain. The Python side is the stable part. |
 | APK size — embedded CPython adds ~15–25 MB | Acceptable for a companion app; Chaquopy can strip unused stdlib modules later. |
 | Kotlin/Compose code is **uncompiled** here (no Android SDK) | It is a scaffold. Build in Android Studio; expect minor API adjustments (imports, Material3 opt-ins). The data layer (`Models`, `PythonBridge`, `Repository`, `api.py`) is the most stable. |
 | `python.srcDir("../../../src")` path | Relative to the `app` module; resolves to the repo `src/`. If packages aren't found, check this path. |
