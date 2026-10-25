@@ -7,7 +7,14 @@ plugins {
 
 android {
     namespace = "com.artisancompanion"
-    compileSdk = 34
+    compileSdk = 36
+    buildToolsVersion "34.0.0"
+    ndkVersion "26.1.10909125"
+
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
 
     // versionCode is read from build-counter.txt to ensure a monotonically
     // increasing integer for Play Store uploads (same pattern as runBeat).
@@ -18,8 +25,8 @@ android {
 
     defaultConfig {
         applicationId = "com.artisancompanion"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 26
+        targetSdk = 36
         versionCode = buildNumber
         versionName = vName
 
@@ -65,13 +72,15 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-        // Enable desugaring so java.time (LocalDate, YearMonth, etc.) works on
-        // API 24-25 (minSdk = 24). Without this, the app crashes with
-        // NoClassDefFoundError on Android 7.x when using java.time APIs.
-        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 
     buildTypes {
@@ -99,9 +108,6 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.5.3")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-
-    // Core library desugaring: provides java.time backport for API 24-25.
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.3")
 }

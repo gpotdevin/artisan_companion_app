@@ -14,7 +14,7 @@ Full plan, architecture, storage model, milestones and risks:
 `android/` is a Gradle project. On this machine everything needed to build and
 install is already wired into the folder:
 
-- `gradlew` / `gradlew.bat` + `gradle/wrapper/` — Gradle 8.7 wrapper.
+- `gradlew` / `gradlew.bat` + `gradle/wrapper/` — Gradle 8.11.1 wrapper.
 - `local.properties` — points at the shared Android SDK in `~/dev/tools/android-sdk`.
 - `tools/platform-tools/` — directory junction to the SDK's `platform-tools`
   (gives `adb` for direct installs). Machine-specific, gitignored.
@@ -38,13 +38,13 @@ gradlew.bat assembleDebug       # Windows
 
 Requirements: Java 17 on PATH (JBR 17.0.14 on this machine). No other setup —
 `local.properties` already exists; on a different machine copy it from
-`local.properties.example` and set `sdk.dir`.
+`local.properties.example` and set `sdk.dir` and `ndk.dir`.
 
 On first open, Android Studio may ask to align AGP/Kotlin/Compose/Chaquopy
 versions — the pinned set in `build.gradle` / `app/build.gradle` is a
-known-good starting point (AGP 8.5.0, Kotlin 1.9.22, Compose Compiler 1.5.8,
+known-good starting point (AGP 8.9.1, Kotlin 1.9.22, Compose Compiler 1.5.8,
 Compose UI 1.5.3, Material3 1.1.2, Material 1.11.0, Chaquopy 16.0.0,
-Gradle 8.7, compileSdk 34, minSdk 24, targetSdk 34).
+Gradle 8.11.1, compileSdk 36, minSdk 26, targetSdk 36).
 
 ## Release signing
 
