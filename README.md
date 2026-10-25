@@ -1,13 +1,27 @@
 # Artisan Companion
 
-A companion app for [Artisan](https://artisan-scope.org/) scope users who log their
-coffee roasts as `.alog` files and want to attach **sensory information** (cupping
-notes, flavor scores, defects) to each roast, and to **review roast profiles**
-(curves, events, phases) without opening Artisan.
-
-> Status: M0–M6 complete; CI green; preparing for GitHub publication and Play Store release.
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/gpotdevin/artisan_companion_app)](https://github.com/gpotdevin/artisan_companion_app/releases)
+
+**Artisan Companion — sensory annotation and profile viewer for Artisan roast logs**
+
+A native Android app for [Artisan](https://artisan-scope.org/) users who log their
+coffee roasts as `.alog` files and want to attach **sensory information** (cupping
+notes, flavor radar scores, defects) to each roast, and to **review roast profiles**
+(BT/ET curves, Rate of Rise, event markers) — all fully offline on the phone.
+
+## Features
+
+- **Roast library** — browse and search your imported `.alog` files with key details (batch size, drop temperature, duration)
+- **Profile viewer** — Artisan-style chart with BT/ET curves, Rate of Rise, event flags, and phase shading (DRY / FCs / DROP markers); tap legend items to toggle curves
+- **Cupping recorder** — SCA-style sensory scores (fragrance, flavor, acidity, body, aftertaste, etc.), aroma descriptors, and free-text notes
+- **Flavor radar** — visual radar chart of flavor attributes with a customizable editor
+- **Defect tracking** — light cut, dark cut, and other defect flags per roast
+- **Import & export** — import `.alog` files via Android's Storage Access Framework; export the entire sensory store as a zip for backup or transfer
+- **Opt-in native sync** — write sensory fields back into `.alog` files (backup-first with `.bak`, integrity hash recomputed for Artisan 4.2+ so files load with zero warnings)
+- **Offline-first** — no network permissions, no accounts, no cloud; all data stays on the device
+- **Light & dark themes** — system-aware Material 3 theming
+- **English & French** — full localization
 
 ## Screenshots
 
@@ -16,130 +30,112 @@ notes, flavor scores, defects) to each roast, and to **review roast profiles**
   <img src="docs/screenshots/screenshot_viewer.png" width="220"/>
 </p>
 
-## Goals
+## Download
 
-1. **Sensory annotation** — add structured sensory data (SCA-style cupping scores,
-   aroma descriptors, defects, brew impressions) to existing Artisan `.alog` roast
-   logs, in a way that is safe for the original files and, where possible, visible
-   inside Artisan itself.
-2. **Profile viewer** — render a roast profile (ET/BT curves, RoR, event markers,
-   phase boundaries) from a `.alog` file, similar to what Artisan shows, but as a
-   lightweight standalone viewer with the sensory data displayed alongside.
+### GitHub Release
 
-## Scope
+Download the latest signed APK for direct install:
 
-The app works **offline on existing `.alog` files**, long after the roast
-happened — sensory impressions arrive days or weeks later, once beans are
-rested and cupped, which is exactly the information that cannot be captured in
-Artisan during a roast or shortly after. It deliberately does **not**:
+**[Download v1.0.0 APK](https://github.com/gpotdevin/artisan_companion_app/releases/download/v1.0.0/app-release.apk)** (38 MB)
 
-- interface with Artisan while it runs (no live telemetry, no recording,
-  no daemon, no plugin or messaging connection);
-- replace any part of Artisan's logging workflow.
+Or get the AAB for sideloading via tools like APKPure or bundletool:
 
-Artisan only ever re-encounters the data indirectly: when the user opens an
-annotated log in Artisan, the sensory summary written to the native fields is
-visible there like any data entered in Artisan itself.
+**[Download v1.0.0 AAB](https://github.com/gpotdevin/artisan_companion_app/releases/download/v1.0.0/app-release.aab)** (26 MB)
 
-## Features
+See all releases on the [Releases page](https://github.com/gpotdevin/artisan_companion_app/releases).
 
-- **stdlib-only `.alog` parser** — Pure Python, zero dependencies for parsing and indexing Artisan roast logs; handles all Artisan versions 2.4.6–4.2.0
-- **Sensory store** — JSON sidecar files keyed by `roastUUID` store cupping sessions, flavor radar, defects, and media references; SQLite index for listing/search
-- **Sensory editor web UI** — Form-driven entry of cupping sessions (SCA scores), aroma descriptors, defects, overall rating; renders the native flavor radar
-- **Profile viewer** — Artisan-style chart with BT/ET curves, RoR, event flags, phase shading (DRY/FCs/DROP markers)
-- **Opt-in native sync** — Backup-first write of sensory fields (`flavors`, `flavorlabels`, `cuppingnotes`, defect flags) into `.alog` files; for Artisan 4.2+ the integrity hash is recomputed so files load with zero warnings; a `.bak` backup is always made first
+### Google Play Store
 
-## Install
+*Upcoming*
 
-### From GitHub
+### Requirements
+
+- Android 8.0 (API 26) or later
+- ~80 MB storage (includes embedded Python runtime)
+
+## Build from source
 
 ```bash
 git clone https://github.com/gpotdevin/artisan_companion_app.git
-cd artisan_companion_app
+cd artisan_companion_app/mobile/android
+./gradlew assembleDebug      # debug APK
+./gradlew assembleRelease    # signed release APK (requires keystore)
 ```
 
-### Development install (from repo root)
+Requirements: Java 17, Android SDK (compileSdk 36), NDK 26.1.10909125.
+
+See [`mobile/README.md`](mobile/README.md) for detailed build instructions,
+release signing setup, and version numbering.
+
+## How it works
+
+The app is a **native Kotlin (Jetpack Compose)** Android app with an embedded
+**Python core** via [Chaquopy](https://chaquo.com/chaquopy/). The proven stdlib-only
+Python modules (`alog_core`, `store`, `sync`) parse `.alog` files, manage the
+sensory sidecar store, and handle native sync — exposed to Kotlin through a thin
+JSON facade (`mobile/android/app/src/main/python/api.py`). No Python source in
+`src/` is modified for the Android build.
+
+```
++----------------------------------------------+
+|  Kotlin / Jetpack Compose UI                 |  Material 3, Canvas charts, navigation
+|  (Library, Viewer, Cupping, Radar)           |
++----------------------------------------------+
+|  PythonBridge (Chaquopy JSON facade)         |  api.py
++----------------------------------------------+
+|  Python core (src/)                          |  alog_core, store, sync
+|  embedded CPython 3.x (Chaquopy)             |
++----------------------------------------------+
+```
+
+## Desktop / Python CLI
+
+The Python core also runs as a standalone web app on desktop (FastAPI + vanilla JS):
 
 ```bash
 pip install -e ".[app]"
+artisan-companion --logs-dir /path/to/your/alogs
 ```
 
-The `app` extra provides FastAPI + uvicorn for the web UI. Add the `dev`
-extra (`pip install -e ".[app,dev]"`) to also run the test suite.
-
-## Run
-
-Start the local web UI:
-
-```bash
-artisan-companion
-```
-
-or
-
-```bash
-python -m app
-```
-
-The app serves on `http://127.0.0.1:8000` by default.
-
-CLI flags:
-- `--logs-dir PATH` — directory containing `.alog` files (default: `./logs` or current directory)
-- `--sensory-dir PATH` — directory for sensory sidecar files (default: `<logs-dir>/../sensory`)
-
-## Try it with sample data
-
-The repository includes 7 anonymized `.alog` fixtures in `tests/fixtures/alogs/`, one per Artisan version 2.4.6–4.2.0. See `docs/sample-gallery.md` for a detailed gallery and how to view them.
-
-To view a fixture roast, run the app against the fixtures (from the repo root):
-
-```bash
-artisan-companion --logs-dir tests/fixtures/alogs
-```
-
-Then:
-
-1. Open `http://127.0.0.1:8000/viewer?uuid=<roast-uuid>` in your browser
-2. Use the UUID from the fixture's `roastUUID` field, or browse from the library page
-
-The app keeps its sensory store next to the logs directory by default
-(`tests/fixtures/sensory/`, gitignored); pass `--sensory-dir PATH` to put it
-elsewhere.
-
-## Mobile (Android)
-
-The app runs on an Android phone as a **native Kotlin (Jetpack Compose) app**,
-fully offline. The UI is native Material 3 with Canvas-drawn charts; the proven
-Python core (`alog_core`, `store`, `sync`) is embedded via Chaquopy and exposed
-through a thin JSON facade — no Python source is modified.
-
-- **Source**: [github.com/gpotdevin/artisan_companion_app](https://github.com/gpotdevin/artisan_companion_app)
-- Build the APK from [`mobile/android/`](mobile/android/) (Android Studio or `./gradlew assembleRelease`).
-- See [`mobile/README.md`](mobile/README.md) for build/usage and
-  [`docs/mobile-port.md`](docs/mobile-port.md) for the full plan.
-
-A non-native stopgap (web UI in Termux + Chrome) is also available at
-[`mobile/termux/`](mobile/termux/).
+Serves on `http://127.0.0.1:8000` with a library browser, profile viewer, and
+sensory editor. Add the `dev` extra (`pip install -e ".[app,dev]"`) to run the
+test suite (298 tests).
 
 ## Documentation
 
 | Document | Content |
 |---|---|
-| [docs/feasibility-evaluation.md](docs/feasibility-evaluation.md) | What the `.alog` format allows, what survives a round trip through Artisan, and the verdict |
-| [docs/implementation-plan.md](docs/implementation-plan.md) | Architecture, data model, tech stack, milestones, risks |
-| [docs/ui-spec.md](docs/ui-spec.md) | Proposed UI specification: screens, wireframes, states, acceptance criteria |
-| [docs/mobile-port.md](docs/mobile-port.md) | Android port: native Kotlin (Compose) app + embedded Python core, storage, milestones |
-| [docs/sample-gallery.md](docs/sample-gallery.md) | Gallery of the 7 fixture roasts with version-specific notes |
-| [docs/ci-setup.md](docs/ci-setup.md) | CI/CD setup: GitHub Secrets, keystore, release flow, version numbering |
-| [research/upstream-findings.md](research/upstream-findings.md) | Evidence collected from the Artisan source code and a 230-file log corpus |
+| [docs/mobile-port.md](docs/mobile-port.md) | Android port architecture, storage model, milestones, risks |
+| [mobile/README.md](mobile/README.md) | Build instructions, release signing, version numbering |
+| [docs/ci-setup.md](docs/ci-setup.md) | CI/CD setup: GitHub Secrets, keystore, release flow |
+| [docs/implementation-plan.md](docs/implementation-plan.md) | Architecture, data model, tech stack, milestones |
+| [docs/feasibility-evaluation.md](docs/feasibility-evaluation.md) | `.alog` format analysis and round-trip findings |
+| [docs/ui-spec.md](docs/ui-spec.md) | UI specification: screens, wireframes, acceptance criteria |
+| [docs/sample-gallery.md](docs/sample-gallery.md) | Gallery of 7 fixture roasts (Artisan 2.4.6-4.2.0) |
+| [docs/reviews/m7-review-summary.md](docs/reviews/m7-review-summary.md) | M7 code review summary (10 findings, all resolved) |
+| [docs/sdk-alignment-plan.md](docs/sdk-alignment-plan.md) | SDK alignment plan (runBeat parity) |
+| [research/upstream-findings.md](research/upstream-findings.md) | Evidence from Artisan source and 230-file log corpus |
 | [research/m0-roundtrip.md](research/m0-roundtrip.md) | Artisan 4.2 integrity findings and native sync design |
+
+## Scope
+
+The app works **offline on existing `.alog` files**, long after the roast
+happened — sensory impressions arrive days or weeks later, once beans are
+rested and cupped. It deliberately does **not**:
+
+- interface with Artisan while it runs (no live telemetry, no recording,
+  no daemon, no plugin or messaging connection);
+- replace any part of Artisan's logging workflow.
+
+Artisan only re-encounters the data indirectly: when the user opens an
+annotated log in Artisan, the sensory summary written to the native fields
+is visible there like any data entered in Artisan itself.
 
 ## Context
 
-The evaluation was performed against a real corpus of 230 `.alog` files
-(2021–2026, Artisan versions 2.4.6 → 4.2.0) and the open-source Artisan code base
-(https://github.com/artisan-roaster-scope/artisan). Format analysis details are in
-that evidence file and in the pre-existing technical descriptions of the corpus.
+The `.alog` format analysis was performed against a real corpus of 230 `.alog`
+files (2021-2026, Artisan versions 2.4.6 to 4.2.0) and the open-source Artisan
+code base (https://github.com/artisan-roaster-scope/artisan).
 
 ## License
 
@@ -158,4 +154,4 @@ I personally do not consider myself to be a good software developer. I was happy
 
 ## Affiliation
 
-artisan-companion is an independent project. It is not affiliated with, endorsed by, or sponsored by Artisan (artisan-scope.org). 'Artisan' is a trademark of its respective owners. This project only reads and writes the public `.alog` file format.
+Artisan Companion is an independent project. It is not affiliated with, endorsed by, or sponsored by Artisan (artisan-scope.org). 'Artisan' is a trademark of its respective owners. This project only reads and writes the public `.alog` file format.
