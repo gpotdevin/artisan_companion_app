@@ -37,6 +37,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.artisancompanion.R
+import com.artisancompanion.data.FileImport
 import com.artisancompanion.data.Preferences
 import com.artisancompanion.data.Repository
 import com.artisancompanion.ui.components.BottomTab
@@ -139,6 +140,40 @@ fun ArtisanCompanionApp() {
     }
 
     val importResultFormat = stringResource(R.string.import_result_format)
+
+    // Handle .alog files shared from other apps (ACTION_SEND / ACTION_VIEW).
+    // The URI arrives via MainActivity.pendingShareUri — set before composition
+    // on cold start, or pushed from onNewIntent when the app is already running.
+    LaunchedEffect(root) {
+        MainActivity.pendingShareUri.collect { uri ->
+            if (uri == null) return@collect
+            MainActivity.pendingShareUri.value = null
+            try {
+                val count = FileImport.copyInto(
+                    context.contentResolver,
+                    listOf(uri),
+                    File(root, "logs"),
+                )
+                if (count > 0) {
+                    Repository.rebuildIndex()
+                    showSnackbar(importResultFormat.format(count))
+                    nav.navigate("library") {
+                        popUpTo("library") { saveState = true }
+                        launchSingleTop = true
+                    }
+                } else {
+                    showSnackbar(
+                        context.getString(R.string.common_error_format, "Not an .alog file")
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Share import failed", e)
+                showSnackbar(
+                    context.getString(R.string.common_error_format, e.message ?: "Import failed")
+                )
+            }
+        }
+    }
 
     /** Navigate between top-level tabs. */
     val onNavigateToTab: (BottomTab) -> Unit = { tab ->

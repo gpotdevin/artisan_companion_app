@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">Artisan Companion</string>
+
+    <!-- Common -->
+    <string name="common_back">Voltar</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_delete">Excluir</string>
+    <string name="common_save">Salvar</string>
+    <string name="common_dismiss">Descartar</string>
+    <string name="common_retry">Tentar novamente</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add">Adicionar</string>
+    <string name="common_error">Erro</string>
+    <string name="common_error_format">Erro: %1$s</string>
+    <string name="common_collapse">Recolher</string>
+    <string name="common_expand">Expandir</string>
+    <string name="common_state_on">Ligado</string>
+    <string name="common_state_off">Desligado</string>
+
+    <!-- Init error screen -->
+    <string name="init_error_title">Não foi possível iniciar o Artisan Companion</string>
+    <string name="init_error_message">Não foi possível inicializar o armazenamento do app. Verifique se o dispositivo tem espaço livre e tente novamente.</string>
+
+    <!-- Library -->
+    <string name="library_title">Torras</string>
+    <string name="library_search_hint">Buscar torras…</string>
+    <string name="library_no_match">Nenhuma torra corresponde a "%1$s"</string>
+    <string name="library_unknown_month">Desconhecido</string>
+    <string name="library_unparsable_title">Registro de torra ilegível</string>
+    <string name="library_unknown_error">Erro de análise desconhecido</string>
+    <string name="library_empty_subtitle">Revise seus registros de torra Artisan e grave notas de prova</string>
+    <string name="onboarding_step_import">Importar ficheiros .alog</string>
+    <string name="onboarding_step_browse">Explorar as torras</string>
+    <string name="onboarding_step_cupping">Registar provas</string>
+    <string name="import_logs">Importar ficheiros .alog</string>
+    <string name="import_result_format">%1$d ficheiro(s) importado(s)</string>
+    <string name="status_unparsable">Ilegível</string>
+    <string name="status_cupped">Provada</string>
+    <string name="status_cupped_score">Provada %1$.1f</string>
+    <string name="status_uncupped">Não provada</string>
+    <string name="library_detail_both">%1$dg → %2$dg</string>
+    <string name="library_detail_green">%1$dg verde</string>
+    <string name="library_detail_roasted">%1$dg torrado</string>
+    <string name="library_detail_drop">Drop %1$d°C</string>
+    <string name="cd_unparsable">Ilegível</string>
+    <string name="cd_source_file">Ficheiro de origem</string>
+
+    <!-- Viewer -->
+    <string name="viewer_default_title">Torra</string>
+    <string name="tab_profile">Perfil</string>
+    <string name="tab_sensory">Sensorial</string>
+    <string name="legend_bt">BT</string>
+    <string name="legend_et">ET</string>
+    <string name="legend_ror">RoR /min</string>
+    <string name="chart_axis_temp">Temp</string>
+    <string name="chart_axis_min">min</string>
+    <string name="chart_axis_ror">RoR</string>
+    <string name="chart_marker_tp">TP</string>
+    <string name="card_phases">Fases</string>
+    <string name="card_markers">Marcadores</string>
+    <string name="card_roast">Torra</string>
+    <string name="phase_dry">DRY</string>
+    <string name="phase_mid">MID (Maillard)</string>
+    <string name="phase_dev">Desenvolvimento</string>
+    <string name="phase_total">Total</string>
+    <string name="phase_ror_peak">Pico de RoR</string>
+    <string name="markers_none">Sem marcadores</string>
+    <string name="markers_time">Tempo</string>
+    <string name="markers_bt">BT</string>
+    <string name="roast_green">Verde</string>
+    <string name="roast_roasted">Torrado</string>
+    <string name="roast_loss">Perda</string>
+    <string name="roast_ambient">Ambiente</string>
+    <string name="roast_sampling">Amostragem</string>
+    <string name="roast_machine">Máquina</string>
+    <string name="roast_artisan">Artisan</string>
+    <string name="events_title_format">Eventos (%1$d)</string>
+    <string name="events_none">Sem eventos registados</string>
+    <string name="event_slider_format">Controlo: %.0f</string>
+
+    <!-- Number formats -->
+    <string name="fmt_one_decimal">%.1f</string>
+    <string name="fmt_two_decimals">%.2f</string>
+    <string name="fmt_temp_short">%.0f°C</string>
+    <string name="fmt_grams">%.0f g</string>
+    <string name="fmt_percent">%.1f%%</string>
+    <string name="fmt_celsius">%.1f °C</string>
+    <string name="fmt_seconds">%.0f s</string>
+    <string name="fmt_ror">%.1f °C/min</string>
+
+    <!-- Sensory tab -->
+    <string name="dialog_delete_cupping_title">Eliminar a prova?</string>
+    <string name="dialog_delete_cupping_message">Eliminar a prova de %1$s? Esta ação não pode ser desfeita.</string>
+    <string name="dialog_delete_cupping_message_nodate">Eliminar a prova? Esta ação não pode ser desfeita.</string>
+    <string name="dialog_delete_cupping_simple">Esta prova será removida permanentemente. Esta ação não pode ser desfeita.</string>
+    <string name="dialog_delete_record_title">Eliminar os dados sensoriais?</string>
+    <string name="dialog_delete_record_message">Todas as provas, pontuações de radar e marcações de defeitos desta torra serão removidas permanentemente. Esta ação não pode ser desfeita.</string>
+    <string name="msg_cupping_deleted">Prova eliminada</string>
+    <string name="msg_sensory_deleted">Dados sensoriais eliminados</string>
+    <string name="cd_record_cupping">Registar prova</string>
+    <string name="action_record_cupping">Registar prova</string>
+    <string name="action_delete_sensory">Eliminar todos os dados sensoriais</string>
+    <string name="radar_title">Radar de sabores</string>
+    <string name="action_edit_radar">Editar radar</string>
+    <string name="radar_empty">Ainda sem pontuações de radar</string>
+    <string name="radar_empty_hint">Toque em "Editar radar" para definir os valores dos eixos.</string>
+    <string name="defects_title">Defeitos observados</string>
+    <string name="defects_loading">A carregar marcações de defeitos…</string>
+    <string name="defects_none">Sem defeitos registados.</string>
+    <string name="defect_heavy_fc">FC alto</string>
+    <string name="defect_low_fc">FC baixo</string>
+    <string name="defect_light_cut">Corte claro</string>
+    <string name="defect_dark_cut">Corte escuro</string>
+    <string name="defect_drops">Gotas</string>
+    <string name="defect_oily">Oleoso</string>
+    <string name="defect_uneven">Desigual</string>
+    <string name="defect_tipping">Ponta queimada</string>
+    <string name="defect_scorching">Queimadura</string>
+    <string name="defect_divots">Fendas</string>
+    <string name="cuppings_title">Sessões de prova</string>
+    <string name="cuppings_empty_title">Ainda sem dados sensoriais</string>
+    <string name="cuppings_empty_hint">Registe uma prova para começar a construir o perfil sensorial desta torra.</string>
+    <string name="action_record_first_cupping">Registar a sua primeira prova</string>
+    <string name="cuppings_none">Sem provas ainda. Toque no botão + para registar uma.</string>
+    <string name="cupping_day_format">Dia %1$d</string>
+    <string name="cupping_total_format">Total: %1$s</string>
+    <string name="cupping_row_format">%1$s — total %2$s</string>
+    <string name="cd_edit_cupping">Editar prova</string>
+    <string name="cd_delete_cupping">Eliminar prova</string>
+    <string name="cd_remove_descriptor">Remover %1$s</string>
+
+    <!-- Cupping entry -->
+    <string name="cupping_new_title">Nova prova</string>
+    <string name="cupping_edit_title">Editar prova</string>
+    <string name="msg_cupping_saved">Prova guardada</string>
+    <string name="error_date_required">A data é obrigatória</string>
+    <string name="error_date_format">Formato de data inválido (use AAAA-MM-DD)</string>
+    <string name="cupping_date_label">Data da prova</string>
+    <string name="cupping_date_hint">Data (AAAA-MM-DD)</string>
+    <string name="cd_pick_date">Escolher data</string>
+    <string name="rest_days_after">Dia %1$d após a torra</string>
+    <string name="rest_days_before">%1$d dias antes da torra</string>
+    <string name="rest_days_hint">Introduza uma data válida para ver os dias de descanso</string>
+    <string name="sca_scores_title">Pontuações SCA</string>
+    <string name="sca_fragrance_aroma">Fragrância / Aroma</string>
+    <string name="sca_flavor">Sabor</string>
+    <string name="sca_aftertaste">Retrogosto</string>
+    <string name="sca_acidity">Acidez</string>
+    <string name="sca_body">Corpo</string>
+    <string name="sca_balance">Equilíbrio</string>
+    <string name="sca_uniformity">Uniformidade</string>
+    <string name="sca_clean_cup">Xícara limpa</string>
+    <string name="sca_sweetness">Doçura</string>
+    <string name="sca_overall">Geral</string>
+    <string name="sca_short_aroma">Aroma</string>
+    <string name="sca_short_flavor">Sabor</string>
+    <string name="sca_short_aftertaste">Retrog.</string>
+    <string name="sca_short_acidity">Acidez</string>
+    <string name="sca_short_body">Corpo</string>
+    <string name="sca_short_balance">Equil.</string>
+    <string name="sca_short_uniformity">Unif.</string>
+    <string name="sca_short_clean">Limpa</string>
+    <string name="sca_short_sweet">Doce</string>
+    <string name="sca_short_overall">Geral</string>
+    <string name="defects_penalty_title">Penalização por defeitos</string>
+    <string name="defects_penalty_label">Penalização (subtraída do total)</string>
+    <string name="total_score_label">Pontuação total</string>
+    <string name="radar_preview_title">Pré-visualização do radar</string>
+    <string name="descriptor_add_title">Adicionar descritor</string>
+    <string name="descriptor_free_text">Texto livre</string>
+    <string name="cd_add_descriptor">Adicionar descritor</string>
+    <string name="descriptor_lexicon">Léxico</string>
+    <string name="descriptors_title">Descritores</string>
+    <string name="descriptors_none">Sem descritores ainda. Toque em Adicionar para etiquetar os sabores.</string>
+    <string name="notes_label">Notas</string>
+    <string name="notes_hint">Notas de extração, impressões…</string>
+    <string name="action_save_cupping">Guardar prova</string>
+    <string name="action_update_cupping">Atualizar prova</string>
+
+    <!-- Descriptor lexicon -->
+    <string-array name="coffee_lexicon">
+        <item>damasco</item>
+        <item>chá preto</item>
+        <item>bergamota</item>
+        <item>amora</item>
+        <item>mirtilo</item>
+        <item>açúcar mascavado</item>
+        <item>caramelo</item>
+        <item>cereja</item>
+        <item>chocolate</item>
+        <item>cítricos</item>
+        <item>cacau</item>
+        <item>coco</item>
+        <item>groselha</item>
+        <item>floral</item>
+        <item>toranja</item>
+        <item>maçã verde</item>
+        <item>avelã</item>
+        <item>mel</item>
+        <item>jasmim</item>
+        <item>limão</item>
+        <item>manga</item>
+        <item>melaço</item>
+        <item>de nozes</item>
+        <item>laranja</item>
+        <item>papaia</item>
+        <item>pêssego</item>
+        <item>pera</item>
+        <item>ameixa</item>
+        <item>framboesa</item>
+        <item>picante</item>
+        <item>fruta de caroço</item>
+        <item>morango</item>
+        <item>caramelo</item>
+        <item>tropical</item>
+        <item>baunilha</item>
+        <item>vinoso</item>
+        <item>amadeirado</item>
+        <item>amêndoa</item>
+        <item>tabaco</item>
+        <item>terroso</item>
+        <item>herbáceo</item>
+        <item>pimenta</item>
+        <item>anis</item>
+        <item>rosa</item>
+        <item>maçã</item>
+        <item>melão</item>
+        <item>abacaxi</item>
+        <item>chá</item>
+        <item>maltado</item>
+        <item>cereais</item>
+        <item>manteigado</item>
+        <item>cremoso</item>
+        <item>redondo</item>
+        <item>brilhante</item>
+        <item>limpo</item>
+        <item>complexo</item>
+        <item>doce</item>
+        <item>suculento</item>
+    </string-array>
+
+    <!-- Radar editor -->
+    <string name="msg_radar_saved">Radar guardado</string>
+    <string name="action_save_radar">Guardar radar</string>
+    <string name="radar_loading_labels">A carregar etiquetas…</string>
+
+    <!-- Legacy editor -->
+    <string name="editor_title">Editor sensorial</string>
+    <string name="action_save_defects">Guardar defeitos</string>
+    <string name="cuppings_none_short">Sem provas ainda.</string>
+    <string name="defects_penalty_hint">Defeitos (penalização)</string>
+    <string name="descriptors_csv_hint">Descritores (separados por vírgulas)</string>
+    <string name="action_add_cupping">Adicionar prova</string>
+    <string name="msg_defects_saved">Defeitos guardados</string>
+    <string name="msg_cupping_added">Prova adicionada</string>
+    <string name="msg_cupping_removed">Prova removida</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Definições</string>
+    <string name="settings_section_storage">Armazenamento</string>
+    <string name="settings_section_import">Importar</string>
+    <string name="settings_section_display">Ecrã</string>
+    <string name="settings_section_data">Dados</string>
+    <string name="settings_section_about">Sobre</string>
+    <string name="settings_logs_folder">Pasta de registos</string>
+    <string name="settings_sensory_folder">Pasta sensorial</string>
+    <string name="settings_roast_count">Torras indexadas: %1$d</string>
+    <string name="rebuild_index">Reconstruir índice de torras</string>
+    <string name="settings_theme_label">Tema</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="theme_light">Claro</string>
+    <string name="settings_export_sensory">Exportar arquivo sensorial (zip)</string>
+    <string name="settings_index_rebuilt">Índice reconstruído: %1$d torras</string>
+    <string name="settings_imported">%1$d ficheiro(s) importado(s). %2$d torras indexadas.</string>
+    <string name="msg_export_ok">Arquivo sensorial exportado</string>
+    <string name="msg_export_failed">Falha na exportação</string>
+    <string name="export_chooser_title">Partilhar arquivo sensorial</string>
+    <string name="about_version">Versão %1$s</string>
+    <string name="about_license">Licença MIT</string>
+    <string name="about_license_text">Copyright (c) 2026 os contribuidores do Artisan Companion. Pela presente é concedida permissão gratuita a qualquer pessoa que obtenha uma cópia deste software para o usar, copiar, modificar, fundir, publicar, distribuir, sublicenciar e/ou vender, desde que o aviso de copyright seja incluído em todas as cópias.</string>
+    <string name="about_disclaimer">Não afiliado, endossado ou patrocinado pelo projeto Artisan.</string>
+    <string name="about_repo">github.com/gpotdevin/artisan_companion_app</string>
+
+    <!-- Intro overlay -->
+    <string name="intro_welcome_title">Bem-vindo ao Artisan Companion</string>
+    <string name="intro_welcome_message">Revise seus registos de torra e crie um registo sensorial para cada lote.</string>
+</resources>

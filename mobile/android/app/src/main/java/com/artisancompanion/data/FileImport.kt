@@ -33,6 +33,24 @@ object FileImport {
             count
         }
 
+    /**
+     * Copy a single .alog file from [uri] into [destDir].
+     * Returns the destination filename on success, null if the URI does not
+     * resolve to an .alog file or the copy fails. Used for share intents
+     * (ACTION_SEND / ACTION_VIEW) where exactly one file is expected.
+     */
+    suspend fun copySingle(resolver: ContentResolver, uri: Uri, destDir: File): String? =
+        withContext(Dispatchers.IO) {
+            val name = displayName(resolver, uri) ?: return@withContext null
+            if (!name.endsWith(".alog", ignoreCase = true)) return@withContext null
+            destDir.mkdirs()
+            val target = File(destDir, name)
+            resolver.openInputStream(uri)?.use { input ->
+                FileOutputStream(target).use { output -> input.copyTo(output) }
+            } ?: return@withContext null
+            name
+        }
+
     private fun displayName(resolver: ContentResolver, uri: Uri): String? =
         resolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c ->
             if (c.moveToFirst()) c.getString(0) else null

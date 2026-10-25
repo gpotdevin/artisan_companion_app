@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">Artisan Companion</string>
+
+    <!-- Common -->
+    <string name="common_back">Tillbaka</string>
+    <string name="common_cancel">Avbryt</string>
+    <string name="common_delete">Radera</string>
+    <string name="common_save">Spara</string>
+    <string name="common_dismiss">Avfärda</string>
+    <string name="common_retry">Försök igen</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add">Lägg till</string>
+    <string name="common_error">Fel</string>
+    <string name="common_error_format">Fel: %1$s</string>
+    <string name="common_collapse">Fäll ihop</string>
+    <string name="common_expand">Fäll ut</string>
+    <string name="common_state_on">På</string>
+    <string name="common_state_off">Av</string>
+
+    <!-- Init error screen -->
+    <string name="init_error_title">Artisan Companion kunde inte startas</string>
+    <string name="init_error_message">Appens lagring kunde inte initieras. Kontrollera att enheten har ledigt utrymme och försök igen.</string>
+
+    <!-- Library -->
+    <string name="library_title">Rostningar</string>
+    <string name="library_search_hint">Sök rostningar…</string>
+    <string name="library_no_match">Inga rostningar matchar "%1$s"</string>
+    <string name="library_unknown_month">Okänd</string>
+    <string name="library_unparsable_title">Oläslig rostningslogg</string>
+    <string name="library_unknown_error">Okänt analysfel</string>
+    <string name="library_empty_subtitle">Granska dina Artisan-rostningsloggar och registrera koppningsanteckningar</string>
+    <string name="onboarding_step_import">Importera .alog-filer</string>
+    <string name="onboarding_step_browse">Bläddra bland rostningar</string>
+    <string name="onboarding_step_cupping">Registrera koppningar</string>
+    <string name="import_logs">Importera .alog-filer</string>
+    <string name="import_result_format">%1$d fil(er) importerad(e)</string>
+    <string name="status_unparsable">Oläslig</string>
+    <string name="status_cupped">Koppad</string>
+    <string name="status_cupped_score">Koppad %1$.1f</string>
+    <string name="status_uncupped">Ej koppad</string>
+    <string name="library_detail_both">%1$dg → %2$dg</string>
+    <string name="library_detail_green">%1$dg grön</string>
+    <string name="library_detail_roasted">%1$dg rostad</string>
+    <string name="library_detail_drop">Drop %1$d°C</string>
+    <string name="cd_unparsable">Oläslig</string>
+    <string name="cd_source_file">Källfil</string>
+
+    <!-- Viewer -->
+    <string name="viewer_default_title">Rostning</string>
+    <string name="tab_profile">Profil</string>
+    <string name="tab_sensory">Sensorik</string>
+    <string name="legend_bt">BT</string>
+    <string name="legend_et">ET</string>
+    <string name="legend_ror">RoR /min</string>
+    <string name="chart_axis_temp">Temp</string>
+    <string name="chart_axis_min">min</string>
+    <string name="chart_axis_ror">RoR</string>
+    <string name="chart_marker_tp">TP</string>
+    <string name="card_phases">Faser</string>
+    <string name="card_markers">Markörer</string>
+    <string name="card_roast">Rostning</string>
+    <string name="phase_dry">DRY</string>
+    <string name="phase_mid">MID (Maillard)</string>
+    <string name="phase_dev">Utv.</string>
+    <string name="phase_total">Total</string>
+    <string name="phase_ror_peak">RoR-topp</string>
+    <string name="markers_none">Inga markörer</string>
+    <string name="markers_time">Tid</string>
+    <string name="markers_bt">BT</string>
+    <string name="roast_green">Grön</string>
+    <string name="roast_roasted">Rostad</string>
+    <string name="roast_loss">Förlust</string>
+    <string name="roast_ambient">Omgivning</string>
+    <string name="roast_sampling">Sampling</string>
+    <string name="roast_machine">Maskin</string>
+    <string name="roast_artisan">Artisan</string>
+    <string name="events_title_format">Händelser (%1$d)</string>
+    <string name="events_none">Inga händelser registrerade</string>
+    <string name="event_slider_format">Reglage: %.0f</string>
+
+    <!-- Number formats -->
+    <string name="fmt_one_decimal">%.1f</string>
+    <string name="fmt_two_decimals">%.2f</string>
+    <string name="fmt_temp_short">%.0f°C</string>
+    <string name="fmt_grams">%.0f g</string>
+    <string name="fmt_percent">%.1f%%</string>
+    <string name="fmt_celsius">%.1f °C</string>
+    <string name="fmt_seconds">%.0f s</string>
+    <string name="fmt_ror">%.1f °C/min</string>
+
+    <!-- Sensory tab -->
+    <string name="dialog_delete_cupping_title">Ta bort koppning?</string>
+    <string name="dialog_delete_cupping_message">Ta bort koppningen från %1$s? Detta kan inte ångras.</string>
+    <string name="dialog_delete_cupping_message_nodate">Ta bort koppningen? Detta kan inte ångras.</string>
+    <string name="dialog_delete_cupping_simple">Denna koppning tas bort permanent. Detta kan inte ångras.</string>
+    <string name="dialog_delete_record_title">Ta bort sensordata?</string>
+    <string name="dialog_delete_record_message">Alla koppningar, radarpoäng och defektmarkeringar för denna rostning tas bort permanent. Detta kan inte ångras.</string>
+    <string name="msg_cupping_deleted">Koppning borttagen</string>
+    <string name="msg_sensory_deleted">Sensordata borttagen</string>
+    <string name="cd_record_cupping">Registrera koppning</string>
+    <string name="action_record_cupping">Registrera koppning</string>
+    <string name="action_delete_sensory">Ta bort alla sensordata</string>
+    <string name="radar_title">Smakradar</string>
+    <string name="action_edit_radar">Redigera radar</string>
+    <string name="radar_empty">Inga radarpoäng än</string>
+    <string name="radar_empty_hint">Tryck på "Redigera radar" för att ange axelvärden.</string>
+    <string name="defects_title">Observerade defekter</string>
+    <string name="defects_loading">Laddar defektmarkeringar…</string>
+    <string name="defects_none">Inga defekter registrerade.</string>
+    <string name="defect_heavy_fc">Mycket FC</string>
+    <string name="defect_low_fc">Lågt FC</string>
+    <string name="defect_light_cut">Ljus skärning</string>
+    <string name="defect_dark_cut">Mörk skärning</string>
+    <string name="defect_drops">Droppar</string>
+    <string name="defect_oily">Olja</string>
+    <string name="defect_uneven">Ojämn</string>
+    <string name="defect_tipping">Bränd spets</string>
+    <string name="defect_scorching">Svedning</string>
+    <string name="defect_divots">Inbuktningar</string>
+    <string name="cuppings_title">Koppningssessioner</string>
+    <string name="cuppings_empty_title">Inga sensordata än</string>
+    <string name="cuppings_empty_hint">Registrera en koppning för att börja bygga upp den sensoriska profilen för denna rostning.</string>
+    <string name="action_record_first_cupping">Registrera din första koppning</string>
+    <string name="cuppings_none">Inga koppningar än. Tryck på + för att registrera en.</string>
+    <string name="cupping_day_format">Dag %1$d</string>
+    <string name="cupping_total_format">Totalt: %1$s</string>
+    <string name="cupping_row_format">%1$s — totalt %2$s</string>
+    <string name="cd_edit_cupping">Redigera koppning</string>
+    <string name="cd_delete_cupping">Ta bort koppning</string>
+    <string name="cd_remove_descriptor">Ta bort %1$s</string>
+
+    <!-- Cupping entry -->
+    <string name="cupping_new_title">Ny koppning</string>
+    <string name="cupping_edit_title">Redigera koppning</string>
+    <string name="msg_cupping_saved">Koppning sparad</string>
+    <string name="error_date_required">Datum krävs</string>
+    <string name="error_date_format">Ogiltigt datumformat (använd ÅÅÅÅ-MM-DD)</string>
+    <string name="cupping_date_label">Koppningsdatum</string>
+    <string name="cupping_date_hint">Datum (ÅÅÅÅ-MM-DD)</string>
+    <string name="cd_pick_date">Välj datum</string>
+    <string name="rest_days_after">Dag %1$d efter rostning</string>
+    <string name="rest_days_before">%1$d dagar före rostning</string>
+    <string name="rest_days_hint">Ange ett giltigt datum för att se vilodagar</string>
+    <string name="sca_scores_title">SCA-poäng</string>
+    <string name="sca_fragrance_aroma">Doft / Arom</string>
+    <string name="sca_flavor">Smak</string>
+    <string name="sca_aftertaste">Eftersmak</string>
+    <string name="sca_acidity">Syra</string>
+    <string name="sca_body">Kropp</string>
+    <string name="sca_balance">Balans</string>
+    <string name="sca_uniformity">Uniformitet</string>
+    <string name="sca_clean_cup">Ren kopp</string>
+    <string name="sca_sweetness">Sötma</string>
+    <string name="sca_overall">Helhet</string>
+    <string name="sca_short_aroma">Arom</string>
+    <string name="sca_short_flavor">Smak</string>
+    <string name="sca_short_aftertaste">Efter.</string>
+    <string name="sca_short_acidity">Syra</string>
+    <string name="sca_short_body">Kropp</string>
+    <string name="sca_short_balance">Balans</string>
+    <string name="sca_short_uniformity">Unif.</string>
+    <string name="sca_short_clean">Ren</string>
+    <string name="sca_short_sweet">Söt</string>
+    <string name="sca_short_overall">Helhet</string>
+    <string name="defects_penalty_title">Defektavdrag</string>
+    <string name="defects_penalty_label">Avdrag (dras av från totalen)</string>
+    <string name="total_score_label">Totalpoäng</string>
+    <string name="radar_preview_title">Radarförhandsvisning</string>
+    <string name="descriptor_add_title">Lägg till deskriptor</string>
+    <string name="descriptor_free_text">Fritext</string>
+    <string name="cd_add_descriptor">Lägg till deskriptor</string>
+    <string name="descriptor_lexicon">Lexikon</string>
+    <string name="descriptors_title">Deskriptorer</string>
+    <string name="descriptors_none">Inga deskriptorer än. Tryck på Lägg till för att tagga smaker.</string>
+    <string name="notes_label">Anteckningar</string>
+    <string name="notes_hint">Brygganteckningar, intryck…</string>
+    <string name="action_save_cupping">Spara koppning</string>
+    <string name="action_update_cupping">Uppdatera koppning</string>
+
+    <!-- Descriptor lexicon -->
+    <string-array name="coffee_lexicon">
+        <item>aprikos</item>
+        <item>svart te</item>
+        <item>bergamott</item>
+        <item>björnbär</item>
+        <item>blåbär</item>
+        <item>farinsocker</item>
+        <item>karamell</item>
+        <item>körsbär</item>
+        <item>choklad</item>
+        <item>citrus</item>
+        <item>kakao</item>
+        <item>kokosnöt</item>
+        <item>vinbär</item>
+        <item>blommig</item>
+        <item>grapefrukt</item>
+        <item>grönt äpple</item>
+        <item>hasselnöt</item>
+        <item>honung</item>
+        <item>jasmin</item>
+        <item>citron</item>
+        <item>mango</item>
+        <item>melass</item>
+        <item>nötig</item>
+        <item>apelsin</item>
+        <item>papaya</item>
+        <item>persika</item>
+        <item>päron</item>
+        <item>plommon</item>
+        <item>hallon</item>
+        <item>kryddig</item>
+        <item>stenfrukt</item>
+        <item>jordgubbe</item>
+        <item>toffee</item>
+        <item>tropisk</item>
+        <item>vanilj</item>
+        <item>vinös</item>
+        <item>träig</item>
+        <item>mandel</item>
+        <item>tobak</item>
+        <item>jordig</item>
+        <item>örtig</item>
+        <item>peppar</item>
+        <item>anis</item>
+        <item>ros</item>
+        <item>äpple</item>
+        <item>melon</item>
+        <item>ananas</item>
+        <item>te</item>
+        <item>maltig</item>
+        <item>spannmål</item>
+        <item>smörig</item>
+        <item>krämig</item>
+        <item>rund</item>
+        <item>ljus</item>
+        <item>ren</item>
+        <item>komplex</item>
+        <item>söt</item>
+        <item>saftig</item>
+    </string-array>
+
+    <!-- Radar editor -->
+    <string name="msg_radar_saved">Radar sparad</string>
+    <string name="action_save_radar">Spara radar</string>
+    <string name="radar_loading_labels">Laddar etiketter…</string>
+
+    <!-- Legacy editor -->
+    <string name="editor_title">Sensorikredigerare</string>
+    <string name="action_save_defects">Spara defekter</string>
+    <string name="cuppings_none_short">Inga koppningar än.</string>
+    <string name="defects_penalty_hint">Defekter (avdrag)</string>
+    <string name="descriptors_csv_hint">Deskriptorer (kommaseparerade)</string>
+    <string name="action_add_cupping">Lägg till koppning</string>
+    <string name="msg_defects_saved">Defekter sparade</string>
+    <string name="msg_cupping_added">Koppning tillagd</string>
+    <string name="msg_cupping_removed">Koppning borttagen</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Inställningar</string>
+    <string name="settings_section_storage">Lagring</string>
+    <string name="settings_section_import">Importera</string>
+    <string name="settings_section_display">Skärm</string>
+    <string name="settings_section_data">Data</string>
+    <string name="settings_section_about">Om</string>
+    <string name="settings_logs_folder">Loggmapp</string>
+    <string name="settings_sensory_folder">Sensormapp</string>
+    <string name="settings_roast_count">Indexerade rostningar: %1$d</string>
+    <string name="rebuild_index">Bygg om rostningsindex</string>
+    <string name="settings_theme_label">Tema</string>
+    <string name="theme_dark">Mörk</string>
+    <string name="theme_light">Ljus</string>
+    <string name="settings_export_sensory">Exportera sensorarkiv (zip)</string>
+    <string name="settings_index_rebuilt">Index återuppbyggt: %1$d rostningar</string>
+    <string name="settings_imported">%1$d fil(er) importerad(e). %2$d rostningar indexerade.</string>
+    <string name="msg_export_ok">Sensorarkiv exporterat</string>
+    <string name="msg_export_failed">Export misslyckades</string>
+    <string name="export_chooser_title">Dela sensorarkiv</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_license">MIT-licens</string>
+    <string name="about_license_text">Copyright (c) 2026 Artisan Companion-bidragsgivare. Härmed ges kostnadsfritt tillstånd till varje person som erhåller en kopia av denna programvara att använda, kopiera, modifiera, slå samman, publicera, distribuera, underlicensiera och/eller sälja den, förutsatt att upphovsrättsmeddelandet inkluderas i alla kopior.</string>
+    <string name="about_disclaimer">Inte ansluten till, godkänd eller sponsrad av Artisan-projektet.</string>
+    <string name="about_repo">github.com/gpotdevin/artisan_companion_app</string>
+
+    <!-- Intro overlay -->
+    <string name="intro_welcome_title">Välkommen till Artisan Companion</string>
+    <string name="intro_welcome_message">Granska dina rostningsloggar och skapa en sensorisk post för varje parti.</string>
+</resources>

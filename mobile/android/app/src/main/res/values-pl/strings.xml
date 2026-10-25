@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">Artisan Companion</string>
+
+    <!-- Common -->
+    <string name="common_back">Wstecz</string>
+    <string name="common_cancel">Anuluj</string>
+    <string name="common_delete">Usuń</string>
+    <string name="common_save">Zapisz</string>
+    <string name="common_dismiss">Odrzuć</string>
+    <string name="common_retry">Spróbuj ponownie</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add">Dodaj</string>
+    <string name="common_error">Błąd</string>
+    <string name="common_error_format">Błąd: %1$s</string>
+    <string name="common_collapse">Zwiń</string>
+    <string name="common_expand">Rozwiń</string>
+    <string name="common_state_on">Włączone</string>
+    <string name="common_state_off">Wyłączone</string>
+
+    <!-- Init error screen -->
+    <string name="init_error_title">Nie można uruchomić Artisan Companion</string>
+    <string name="init_error_message">Nie można zainicjować pamięci aplikacji. Sprawdź, czy urządzenie ma wolne miejsce, a następnie spróbuj ponownie.</string>
+
+    <!-- Library -->
+    <string name="library_title">Paleni</string>
+    <string name="library_search_hint">Szukaj paleni…</string>
+    <string name="library_no_match">Żadne palenie nie pasuje do "%1$s"</string>
+    <string name="library_unknown_month">Nieznany</string>
+    <string name="library_unparsable_title">Nieczytelny dziennik palenia</string>
+    <string name="library_unknown_error">Nieznany błąd analizy</string>
+    <string name="library_empty_subtitle">Przejrzyj dzienniki palenia Artisan i zapisuj notatki z cuppingu</string>
+    <string name="onboarding_step_import">Importuj pliki .alog</string>
+    <string name="onboarding_step_browse">Przeglądaj palenia</string>
+    <string name="onboarding_step_cupping">Zapisuj cuppingi</string>
+    <string name="import_logs">Importuj pliki .alog</string>
+    <string name="import_result_format">Zaimportowano %1$d plik(ów)</string>
+    <string name="status_unparsable">Nieczytelny</string>
+    <string name="status_cupped">Oceniona</string>
+    <string name="status_cupped_score">Oceniona %1$.1f</string>
+    <string name="status_uncupped">Nieoceniona</string>
+    <string name="library_detail_both">%1$dg → %2$dg</string>
+    <string name="library_detail_green">%1$dg zielona</string>
+    <string name="library_detail_roasted">%1$dg upalona</string>
+    <string name="library_detail_drop">Drop %1$d°C</string>
+    <string name="cd_unparsable">Nieczytelny</string>
+    <string name="cd_source_file">Plik źródłowy</string>
+
+    <!-- Viewer -->
+    <string name="viewer_default_title">Palenie</string>
+    <string name="tab_profile">Profil</string>
+    <string name="tab_sensory">Sensoryka</string>
+    <string name="legend_bt">BT</string>
+    <string name="legend_et">ET</string>
+    <string name="legend_ror">RoR /min</string>
+    <string name="chart_axis_temp">Temp</string>
+    <string name="chart_axis_min">min</string>
+    <string name="chart_axis_ror">RoR</string>
+    <string name="chart_marker_tp">TP</string>
+    <string name="card_phases">Fazy</string>
+    <string name="card_markers">Znaczniki</string>
+    <string name="card_roast">Palenie</string>
+    <string name="phase_dry">DRY</string>
+    <string name="phase_mid">MID (Maillard)</string>
+    <string name="phase_dev">Rozw.</string>
+    <string name="phase_total">Razem</string>
+    <string name="phase_ror_peak">Szczyt RoR</string>
+    <string name="markers_none">Brak znaczników</string>
+    <string name="markers_time">Czas</string>
+    <string name="markers_bt">BT</string>
+    <string name="roast_green">Zielona</string>
+    <string name="roast_roasted">Upalona</string>
+    <string name="roast_loss">Ubytek</string>
+    <string name="roast_ambient">Otoczenie</string>
+    <string name="roast_sampling">Próbkowanie</string>
+    <string name="roast_machine">Maszyna</string>
+    <string name="roast_artisan">Artisan</string>
+    <string name="events_title_format">Zdarzenia (%1$d)</string>
+    <string name="events_none">Brak zarejestrowanych zdarzeń</string>
+    <string name="event_slider_format">Suwak: %.0f</string>
+
+    <!-- Number formats -->
+    <string name="fmt_one_decimal">%.1f</string>
+    <string name="fmt_two_decimals">%.2f</string>
+    <string name="fmt_temp_short">%.0f°C</string>
+    <string name="fmt_grams">%.0f g</string>
+    <string name="fmt_percent">%.1f%%</string>
+    <string name="fmt_celsius">%.1f °C</string>
+    <string name="fmt_seconds">%.0f s</string>
+    <string name="fmt_ror">%.1f °C/min</string>
+
+    <!-- Sensory tab -->
+    <string name="dialog_delete_cupping_title">Usunąć cupping?</string>
+    <string name="dialog_delete_cupping_message">Usunąć cupping z dnia %1$s? Tej operacji nie można cofnąć.</string>
+    <string name="dialog_delete_cupping_message_nodate">Usunąć cupping? Tej operacji nie można cofnąć.</string>
+    <string name="dialog_delete_cupping_simple">Ten cupping zostanie trwale usunięty. Tej operacji nie można cofnąć.</string>
+    <string name="dialog_delete_record_title">Usunąć dane sensoryczne?</string>
+    <string name="dialog_delete_record_message">Wszystkie cuppingi, wyniki radaru i flagi defektów dla tego palenia zostaną trwale usunięte. Tej operacji nie można cofnąć.</string>
+    <string name="msg_cupping_deleted">Cupping usunięty</string>
+    <string name="msg_sensory_deleted">Dane sensoryczne usunięte</string>
+    <string name="cd_record_cupping">Zapisz cupping</string>
+    <string name="action_record_cupping">Zapisz cupping</string>
+    <string name="action_delete_sensory">Usuń wszystkie dane sensoryczne</string>
+    <string name="radar_title">Radar smaków</string>
+    <string name="action_edit_radar">Edytuj radar</string>
+    <string name="radar_empty">Brak wyników radaru</string>
+    <string name="radar_empty_hint">Dotknij "Edytuj radar", aby ustawić wartości osi.</string>
+    <string name="defects_title">Zaobserwowane wady</string>
+    <string name="defects_loading">Ładowanie flag wad…</string>
+    <string name="defects_none">Brak zarejestrowanych wad.</string>
+    <string name="defect_heavy_fc">Wysokie FC</string>
+    <string name="defect_low_fc">Niskie FC</string>
+    <string name="defect_light_cut">Jasne cięcie</string>
+    <string name="defect_dark_cut">Ciemne cięcie</string>
+    <string name="defect_drops">Krople</string>
+    <string name="defect_oily">Oleista</string>
+    <string name="defect_uneven">Nierówna</string>
+    <string name="defect_tipping">Przypalenie końcówek</string>
+    <string name="defect_scorching">Przypalenie</string>
+    <string name="defect_divots">Wżery</string>
+    <string name="cuppings_title">Sesje cuppingowe</string>
+    <string name="cuppings_empty_title">Brak danych sensorycznych</string>
+    <string name="cuppings_empty_hint">Zapisz cupping, aby rozpocząć budowanie profilu sensorycznego tego palenia.</string>
+    <string name="action_record_first_cupping">Zapisz pierwszy cupping</string>
+    <string name="cuppings_none">Brak cuppingów. Dotknij przycisku +, aby zapisać jeden.</string>
+    <string name="cupping_day_format">Dzień %1$d</string>
+    <string name="cupping_total_format">Razem: %1$s</string>
+    <string name="cupping_row_format">%1$s — razem %2$s</string>
+    <string name="cd_edit_cupping">Edytuj cupping</string>
+    <string name="cd_delete_cupping">Usuń cupping</string>
+    <string name="cd_remove_descriptor">Usuń %1$s</string>
+
+    <!-- Cupping entry -->
+    <string name="cupping_new_title">Nowy cupping</string>
+    <string name="cupping_edit_title">Edytuj cupping</string>
+    <string name="msg_cupping_saved">Cupping zapisany</string>
+    <string name="error_date_required">Data jest wymagana</string>
+    <string name="error_date_format">Nieprawidłowy format daty (użyj RRRR-MM-DD)</string>
+    <string name="cupping_date_label">Data cuppingu</string>
+    <string name="cupping_date_hint">Data (RRRR-MM-DD)</string>
+    <string name="cd_pick_date">Wybierz datę</string>
+    <string name="rest_days_after">Dzień %1$d po paleniu</string>
+    <string name="rest_days_before">%1$d dni przed paleniem</string>
+    <string name="rest_days_hint">Wprowadź prawidłową datę, aby zobaczyć dni odpoczynku</string>
+    <string name="sca_scores_title">Wyniki SCA</string>
+    <string name="sca_fragrance_aroma">Aromat / Zapach</string>
+    <string name="sca_flavor">Smak</string>
+    <string name="sca_aftertaste">Posmak</string>
+    <string name="sca_acidity">Kwasowość</string>
+    <string name="sca_body">Ciało</string>
+    <string name="sca_balance">Równowaga</string>
+    <string name="sca_uniformity">Jednorodność</string>
+    <string name="sca_clean_cup">Czysta filiżanka</string>
+    <string name="sca_sweetness">Słodycz</string>
+    <string name="sca_overall">Ogólna</string>
+    <string name="sca_short_aroma">Aromat</string>
+    <string name="sca_short_flavor">Smak</string>
+    <string name="sca_short_aftertaste">Posmak</string>
+    <string name="sca_short_acidity">Kwasow.</string>
+    <string name="sca_short_body">Ciało</string>
+    <string name="sca_short_balance">Równow.</string>
+    <string name="sca_short_uniformity">Jedn.</string>
+    <string name="sca_short_clean">Czysta</string>
+    <string name="sca_short_sweet">Słodka</string>
+    <string name="sca_short_overall">Ogólna</string>
+    <string name="defects_penalty_title">Kara za wady</string>
+    <string name="defects_penalty_label">Kara (odejmowana od sumy)</string>
+    <string name="total_score_label">Wynik całkowity</string>
+    <string name="radar_preview_title">Podgląd radaru</string>
+    <string name="descriptor_add_title">Dodaj deskryptor</string>
+    <string name="descriptor_free_text">Własny tekst</string>
+    <string name="cd_add_descriptor">Dodaj deskryptor</string>
+    <string name="descriptor_lexicon">Leksykon</string>
+    <string name="descriptors_title">Deskryptory</string>
+    <string name="descriptors_none">Brak deskryptorów. Dotknij Dodaj, aby oznaczyć smaki.</string>
+    <string name="notes_label">Notatki</string>
+    <string name="notes_hint">Notatki z parzenia, wrażenia…</string>
+    <string name="action_save_cupping">Zapisz cupping</string>
+    <string name="action_update_cupping">Aktualizuj cupping</string>
+
+    <!-- Descriptor lexicon -->
+    <string-array name="coffee_lexicon">
+        <item>morela</item>
+        <item>czarna herbata</item>
+        <item>bergamotka</item>
+        <item>jeżyna</item>
+        <item>borówka</item>
+        <item>cukier brązowy</item>
+        <item>karmel</item>
+        <item>wiśnia</item>
+        <item>czekolada</item>
+        <item>cytrusy</item>
+        <item>kakao</item>
+        <item>kokos</item>
+        <item>porzeczka</item>
+        <item>kwiatowy</item>
+        <item>grejpfrut</item>
+        <item>zielone jabłko</item>
+        <item>orzech laskowy</item>
+        <item>miód</item>
+        <item>jaśmin</item>
+        <item>cytryna</item>
+        <item>mango</item>
+        <item>melasa</item>
+        <item>orzechowy</item>
+        <item>pomarańcza</item>
+        <item>papaja</item>
+        <item>brzoskwinia</item>
+        <item>gruszka</item>
+        <item>śliwka</item>
+        <item>malina</item>
+        <item>pikantny</item>
+        <item>pestkowiec</item>
+        <item>truskawka</item>
+        <item>toffi</item>
+        <item>tropikalny</item>
+        <item>wanilia</item>
+        <item>winny</item>
+        <item>drzewny</item>
+        <item>migdał</item>
+        <item>tytoń</item>
+        <item>ziemisty</item>
+        <item>ziołowy</item>
+        <item>pieprz</item>
+        <item>anyż</item>
+        <item>róża</item>
+        <item>jabłko</item>
+        <item>melon</item>
+        <item>ananas</item>
+        <item>herbata</item>
+        <item>słodowy</item>
+        <item>zboża</item>
+        <item>maślany</item>
+        <item>kremowy</item>
+        <item>okrągły</item>
+        <item>jasny</item>
+        <item>czysty</item>
+        <item>złożony</item>
+        <item>słodki</item>
+        <item>soczysty</item>
+    </string-array>
+
+    <!-- Radar editor -->
+    <string name="msg_radar_saved">Radar zapisany</string>
+    <string name="action_save_radar">Zapisz radar</string>
+    <string name="radar_loading_labels">Ładowanie etykiet…</string>
+
+    <!-- Legacy editor -->
+    <string name="editor_title">Edytor sensoryczny</string>
+    <string name="action_save_defects">Zapisz wady</string>
+    <string name="cuppings_none_short">Brak cuppingów.</string>
+    <string name="defects_penalty_hint">Wady (kara)</string>
+    <string name="descriptors_csv_hint">Deskryptory (oddzielone przecinkami)</string>
+    <string name="action_add_cupping">Dodaj cupping</string>
+    <string name="msg_defects_saved">Wady zapisane</string>
+    <string name="msg_cupping_added">Cupping dodany</string>
+    <string name="msg_cupping_removed">Cupping usunięty</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ustawienia</string>
+    <string name="settings_section_storage">Pamięć</string>
+    <string name="settings_section_import">Importuj</string>
+    <string name="settings_section_display">Wyświetlanie</string>
+    <string name="settings_section_data">Dane</string>
+    <string name="settings_section_about">O aplikacji</string>
+    <string name="settings_logs_folder">Folder dzienników</string>
+    <string name="settings_sensory_folder">Folder sensoryczny</string>
+    <string name="settings_roast_count">Zindeksowane palenia: %1$d</string>
+    <string name="rebuild_index">Odbuduj indeks paleni</string>
+    <string name="settings_theme_label">Motyw</string>
+    <string name="theme_dark">Ciemny</string>
+    <string name="theme_light">Jasny</string>
+    <string name="settings_export_sensory">Eksportuj archiwum sensoryczne (zip)</string>
+    <string name="settings_index_rebuilt">Indeks odbudowany: %1$d paleni</string>
+    <string name="settings_imported">Zaimportowano %1$d plik(ów). Zindeksowano %2$d paleni.</string>
+    <string name="msg_export_ok">Archiwum sensoryczne wyeksportowane</string>
+    <string name="msg_export_failed">Eksport nieudany</string>
+    <string name="export_chooser_title">Udostępnij archiwum sensoryczne</string>
+    <string name="about_version">Wersja %1$s</string>
+    <string name="about_license">Licencja MIT</string>
+    <string name="about_license_text">Copyright (c) 2026 współtwórcy Artisan Companion. Niniejszym udziela się bezpłatnie każdej osobie otrzymującej kopię tego oprogramowania zezwolenia na używanie, kopiowanie, modyfikowanie, łączenie, publikowanie, dystrybuowanie, sublicencjonowanie i/lub sprzedaż, pod warunkiem że informacja o prawach autorskich będzie zawarta we wszystkich kopiach.</string>
+    <string name="about_disclaimer">Niepowiązany, popierany ani sponsorowany przez projekt Artisan.</string>
+    <string name="about_repo">github.com/gpotdevin/artisan_companion_app</string>
+
+    <!-- Intro overlay -->
+    <string name="intro_welcome_title">Witamy w Artisan Companion</string>
+    <string name="intro_welcome_message">Przejrzyj dzienniki palenia i utwórz zapis sensoryczny dla każdej partii.</string>
+</resources>

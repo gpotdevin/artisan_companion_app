@@ -20,6 +20,7 @@ from .schema import (
     DEFAULT_RADAR_LABELS,
     _parse_roast_date,
     check_roast_uuid,
+    compute_radar_means,
     new_record,
     normalize_cupping,
     normalize_media,
@@ -180,6 +181,7 @@ class SensoryStore:
         record["cuppings"].append(
             normalize_cupping(cupping, roast_date=roast_date)
         )
+        record["radar"] = compute_radar_means(record)
         return self._save(record)
 
     def edit_cupping(
@@ -205,6 +207,7 @@ class SensoryStore:
         if "scores" in changes:
             merged["scores"] = {**current["scores"], **changes["scores"]}
         cuppings[cupping_index] = {**current, **merged}
+        record["radar"] = compute_radar_means(record)
         return self._save(record)
 
     def remove_cupping(self, roast_uuid: str, cupping_index: int) -> dict[str, Any]:
@@ -217,6 +220,7 @@ class SensoryStore:
                 f"{roast_uuid}: no cupping at index {cupping_index!r}"
             )
         del cuppings[cupping_index]
+        record["radar"] = compute_radar_means(record)
         return self._save(record)
 
     # -- radar and native sync -------------------------------------------------
@@ -230,13 +234,16 @@ class SensoryStore:
         """Update the flavor radar ``values`` (and ``labels`` when given).
 
         ``labels`` default to the stored labels (the Artisan defaults for
-        a fresh record). Returns the stored record.
+        a fresh record).  The radar is marked as manually set so that the
+        next cupping mutation counts these values as one additional
+        session in the mean calculation.  Returns the stored record.
         """
         record = self._require(roast_uuid)
         record["radar"] = normalize_radar({
             "labels": list(labels) if labels is not None
             else record["radar"]["labels"] or list(DEFAULT_RADAR_LABELS),
             "values": list(values) if values is not None else [],
+            "manual": True,
         })
         return self._save(record)
 

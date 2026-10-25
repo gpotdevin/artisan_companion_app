@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">Artisan Companion</string>
+
+    <!-- Common -->
+    <string name="common_back">Indietro</string>
+    <string name="common_cancel">Annulla</string>
+    <string name="common_delete">Elimina</string>
+    <string name="common_save">Salva</string>
+    <string name="common_dismiss">Ignora</string>
+    <string name="common_retry">Riprova</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add">Aggiungi</string>
+    <string name="common_error">Errore</string>
+    <string name="common_error_format">Errore: %1$s</string>
+    <string name="common_collapse">Comprimi</string>
+    <string name="common_expand">Espandi</string>
+    <string name="common_state_on">Attivo</string>
+    <string name="common_state_off">Spento</string>
+
+    <!-- Init error screen -->
+    <string name="init_error_title">Impossibile avviare Artisan Companion</string>
+    <string name="init_error_message">Impossibile inizializzare l\'archiviazione dell\'app. Verifica che il dispositivo abbia spazio libero, quindi riprova.</string>
+
+    <!-- Library -->
+    <string name="library_title">Torrefazioni</string>
+    <string name="library_search_hint">Cerca torrefazioni…</string>
+    <string name="library_no_match">Nessuna torrefazione corrisponde a "%1$s"</string>
+    <string name="library_unknown_month">Sconosciuto</string>
+    <string name="library_unparsable_title">Registro di torrefazione illeggibile</string>
+    <string name="library_unknown_error">Errore di analisi sconosciuto</string>
+    <string name="library_empty_subtitle">Consulta i registri di torrefazione Artisan e registra le note di cupping</string>
+    <string name="onboarding_step_import">Importa file .alog</string>
+    <string name="onboarding_step_browse">Sfoglia le torrefazioni</string>
+    <string name="onboarding_step_cupping">Registra cupping</string>
+    <string name="import_logs">Importa file .alog</string>
+    <string name="import_result_format">%1$d file importato/i</string>
+    <string name="status_unparsable">Illeggibile</string>
+    <string name="status_cupped">Assaggiata</string>
+    <string name="status_cupped_score">Assaggiata %1$.1f</string>
+    <string name="status_uncupped">Non assaggiata</string>
+    <string name="library_detail_both">%1$dg → %2$dg</string>
+    <string name="library_detail_green">%1$dg verde</string>
+    <string name="library_detail_roasted">%1$dg tostato</string>
+    <string name="library_detail_drop">Drop %1$d°C</string>
+    <string name="cd_unparsable">Illeggibile</string>
+    <string name="cd_source_file">File sorgente</string>
+
+    <!-- Viewer -->
+    <string name="viewer_default_title">Torrefazione</string>
+    <string name="tab_profile">Profilo</string>
+    <string name="tab_sensory">Sensoriale</string>
+    <string name="legend_bt">BT</string>
+    <string name="legend_et">ET</string>
+    <string name="legend_ror">RoR /min</string>
+    <string name="chart_axis_temp">Temp</string>
+    <string name="chart_axis_min">min</string>
+    <string name="chart_axis_ror">RoR</string>
+    <string name="chart_marker_tp">TP</string>
+    <string name="card_phases">Fasi</string>
+    <string name="card_markers">Marcatori</string>
+    <string name="card_roast">Torrefazione</string>
+    <string name="phase_dry">DRY</string>
+    <string name="phase_mid">MID (Maillard)</string>
+    <string name="phase_dev">Sviluppo</string>
+    <string name="phase_total">Totale</string>
+    <string name="phase_ror_peak">Picco RoR</string>
+    <string name="markers_none">Nessun marcatore</string>
+    <string name="markers_time">Tempo</string>
+    <string name="markers_bt">BT</string>
+    <string name="roast_green">Verde</string>
+    <string name="roast_roasted">Tostato</string>
+    <string name="roast_loss">Perdita</string>
+    <string name="roast_ambient">Ambiente</string>
+    <string name="roast_sampling">Campionamento</string>
+    <string name="roast_machine">Macchina</string>
+    <string name="roast_artisan">Artisan</string>
+    <string name="events_title_format">Eventi (%1$d)</string>
+    <string name="events_none">Nessun evento registrato</string>
+    <string name="event_slider_format">Cursore: %.0f</string>
+
+    <!-- Number formats -->
+    <string name="fmt_one_decimal">%.1f</string>
+    <string name="fmt_two_decimals">%.2f</string>
+    <string name="fmt_temp_short">%.0f°C</string>
+    <string name="fmt_grams">%.0f g</string>
+    <string name="fmt_percent">%.1f%%</string>
+    <string name="fmt_celsius">%.1f °C</string>
+    <string name="fmt_seconds">%.0f s</string>
+    <string name="fmt_ror">%.1f °C/min</string>
+
+    <!-- Sensory tab -->
+    <string name="dialog_delete_cupping_title">Eliminare il cupping?</string>
+    <string name="dialog_delete_cupping_message">Eliminare il cupping del %1$s? Questa azione non può essere annullata.</string>
+    <string name="dialog_delete_cupping_message_nodate">Eliminare il cupping? Questa azione non può essere annullata.</string>
+    <string name="dialog_delete_cupping_simple">Questo cupping verrà rimosso definitivamente. Questa azione non può essere annullata.</string>
+    <string name="dialog_delete_record_title">Eliminare i dati sensoriali?</string>
+    <string name="dialog_delete_record_message">Tutti i cupping, i punteggi radar e i flag di difetto per questa torrefazione verranno rimossi definitivamente. Questa azione non può essere annullata.</string>
+    <string name="msg_cupping_deleted">Cupping eliminato</string>
+    <string name="msg_sensory_deleted">Dati sensoriali eliminati</string>
+    <string name="cd_record_cupping">Registra cupping</string>
+    <string name="action_record_cupping">Registra cupping</string>
+    <string name="action_delete_sensory">Elimina tutti i dati sensoriali</string>
+    <string name="radar_title">Radar dei sapori</string>
+    <string name="action_edit_radar">Modifica radar</string>
+    <string name="radar_empty">Nessun punteggio radar ancora</string>
+    <string name="radar_empty_hint">Tocca "Modifica radar" per impostare i valori degli assi.</string>
+    <string name="defects_title">Difetti osservati</string>
+    <string name="defects_loading">Caricamento flag di difetto…</string>
+    <string name="defects_none">Nessun difetto registrato.</string>
+    <string name="defect_heavy_fc">FC abbondante</string>
+    <string name="defect_low_fc">FC basso</string>
+    <string name="defect_light_cut">Taglio chiaro</string>
+    <string name="defect_dark_cut">Taglio scuro</string>
+    <string name="defect_drops">Gocce</string>
+    <string name="defect_oily">Oleoso</string>
+    <string name="defect_uneven">Irregolare</string>
+    <string name="defect_tipping">Punta bruciata</string>
+    <string name="defect_scorching">Bruciatura</string>
+    <string name="defect_divots">Intagli</string>
+    <string name="cuppings_title">Sessioni di cupping</string>
+    <string name="cuppings_empty_title">Nessun dato sensoriale ancora</string>
+    <string name="cuppings_empty_hint">Registra un cupping per iniziare a costruire il profilo sensoriale di questa torrefazione.</string>
+    <string name="action_record_first_cupping">Registra il tuo primo cupping</string>
+    <string name="cuppings_none">Nessun cupping ancora. Tocca il pulsante + per registrarne uno.</string>
+    <string name="cupping_day_format">Giorno %1$d</string>
+    <string name="cupping_total_format">Totale: %1$s</string>
+    <string name="cupping_row_format">%1$s — totale %2$s</string>
+    <string name="cd_edit_cupping">Modifica cupping</string>
+    <string name="cd_delete_cupping">Elimina cupping</string>
+    <string name="cd_remove_descriptor">Rimuovi %1$s</string>
+
+    <!-- Cupping entry -->
+    <string name="cupping_new_title">Nuovo cupping</string>
+    <string name="cupping_edit_title">Modifica cupping</string>
+    <string name="msg_cupping_saved">Cupping salvato</string>
+    <string name="error_date_required">La data è obbligatoria</string>
+    <string name="error_date_format">Formato data non valido (usa AAAA-MM-GG)</string>
+    <string name="cupping_date_label">Data del cupping</string>
+    <string name="cupping_date_hint">Data (AAAA-MM-GG)</string>
+    <string name="cd_pick_date">Scegli data</string>
+    <string name="rest_days_after">Giorno %1$d dopo la torrefazione</string>
+    <string name="rest_days_before">%1$d giorni prima della torrefazione</string>
+    <string name="rest_days_hint">Inserisci una data valida per vedere i giorni di riposo</string>
+    <string name="sca_scores_title">Punteggi SCA</string>
+    <string name="sca_fragrance_aroma">Fragranza / Aroma</string>
+    <string name="sca_flavor">Sapore</string>
+    <string name="sca_aftertaste">Retrogusto</string>
+    <string name="sca_acidity">Acidità</string>
+    <string name="sca_body">Corpo</string>
+    <string name="sca_balance">Equilibrio</string>
+    <string name="sca_uniformity">Uniformità</string>
+    <string name="sca_clean_cup">Tazza pulita</string>
+    <string name="sca_sweetness">Dolcezza</string>
+    <string name="sca_overall">Complessivo</string>
+    <string name="sca_short_aroma">Aroma</string>
+    <string name="sca_short_flavor">Sapore</string>
+    <string name="sca_short_aftertaste">Retrog.</string>
+    <string name="sca_short_acidity">Acidità</string>
+    <string name="sca_short_body">Corpo</string>
+    <string name="sca_short_balance">Equil.</string>
+    <string name="sca_short_uniformity">Unif.</string>
+    <string name="sca_short_clean">Pulito</string>
+    <string name="sca_short_sweet">Dolce</string>
+    <string name="sca_short_overall">Compl.</string>
+    <string name="defects_penalty_title">Penalità difetti</string>
+    <string name="defects_penalty_label">Penalità (sottratta dal totale)</string>
+    <string name="total_score_label">Punteggio totale</string>
+    <string name="radar_preview_title">Anteprima radar</string>
+    <string name="descriptor_add_title">Aggiungi descrittore</string>
+    <string name="descriptor_free_text">Testo libero</string>
+    <string name="cd_add_descriptor">Aggiungi descrittore</string>
+    <string name="descriptor_lexicon">Lessico</string>
+    <string name="descriptors_title">Descrittori</string>
+    <string name="descriptors_none">Nessun descrittore ancora. Tocca Aggiungi per etichettare i sapori.</string>
+    <string name="notes_label">Note</string>
+    <string name="notes_hint">Note di infusione, impressioni…</string>
+    <string name="action_save_cupping">Salva cupping</string>
+    <string name="action_update_cupping">Aggiorna cupping</string>
+
+    <!-- Descriptor lexicon -->
+    <string-array name="coffee_lexicon">
+        <item>albicocca</item>
+        <item>tè nero</item>
+        <item>bergamotto</item>
+        <item>mora</item>
+        <item>mirtillo</item>
+        <item>zucchero di canna</item>
+        <item>caramello</item>
+        <item>ciliegia</item>
+        <item>cioccolato</item>
+        <item>agrumi</item>
+        <item>cacao</item>
+        <item>cocco</item>
+        <item>ribes</item>
+        <item>floreale</item>
+        <item>pompelmo</item>
+        <item>mela verde</item>
+        <item>nocciola</item>
+        <item>miele</item>
+        <item>gelsomino</item>
+        <item>limone</item>
+        <item>mango</item>
+        <item>melassa</item>
+        <item>nocciolato</item>
+        <item>arancia</item>
+        <item>papaya</item>
+        <item>pesca</item>
+        <item>pera</item>
+        <item>prugna</item>
+        <item>lampone</item>
+        <item>speziato</item>
+        <item>frutta a nocciolo</item>
+        <item>fragola</item>
+        <item>mou</item>
+        <item>tropicale</item>
+        <item>vaniglia</item>
+        <item>vinoso</item>
+        <item>legnoso</item>
+        <item>mandorla</item>
+        <item>tabacco</item>
+        <item>terroso</item>
+        <item>erbaceo</item>
+        <item>pepe</item>
+        <item>anice</item>
+        <item>rosa</item>
+        <item>mela</item>
+        <item>melone</item>
+        <item>ananas</item>
+        <item>tè</item>
+        <item>maltato</item>
+        <item>cereali</item>
+        <item>buroso</item>
+        <item>cremoso</item>
+        <item>rotondo</item>
+        <item>brillante</item>
+        <item>pulito</item>
+        <item>complesso</item>
+        <item>dolce</item>
+        <item>succoso</item>
+    </string-array>
+
+    <!-- Radar editor -->
+    <string name="msg_radar_saved">Radar salvato</string>
+    <string name="action_save_radar">Salva radar</string>
+    <string name="radar_loading_labels">Caricamento etichette…</string>
+
+    <!-- Legacy editor -->
+    <string name="editor_title">Editor sensoriale</string>
+    <string name="action_save_defects">Salva difetti</string>
+    <string name="cuppings_none_short">Nessun cupping ancora.</string>
+    <string name="defects_penalty_hint">Difetti (penalità)</string>
+    <string name="descriptors_csv_hint">Descrittori (separati da virgola)</string>
+    <string name="action_add_cupping">Aggiungi cupping</string>
+    <string name="msg_defects_saved">Difetti salvati</string>
+    <string name="msg_cupping_added">Cupping aggiunto</string>
+    <string name="msg_cupping_removed">Cupping rimosso</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_section_storage">Archiviazione</string>
+    <string name="settings_section_import">Importa</string>
+    <string name="settings_section_display">Schermo</string>
+    <string name="settings_section_data">Dati</string>
+    <string name="settings_section_about">Informazioni</string>
+    <string name="settings_logs_folder">Cartella dei registri</string>
+    <string name="settings_sensory_folder">Cartella sensoriale</string>
+    <string name="settings_roast_count">Torrefazioni indicizzate: %1$d</string>
+    <string name="rebuild_index">Ricostruisci indice delle torrefazioni</string>
+    <string name="settings_theme_label">Tema</string>
+    <string name="theme_dark">Scuro</string>
+    <string name="theme_light">Chiaro</string>
+    <string name="settings_export_sensory">Esporta archivio sensoriale (zip)</string>
+    <string name="settings_index_rebuilt">Indice ricostruito: %1$d torrefazioni</string>
+    <string name="settings_imported">%1$d file importato/i. %2$d torrefazioni indicizzate.</string>
+    <string name="msg_export_ok">Archivio sensoriale esportato</string>
+    <string name="msg_export_failed">Esportazione fallita</string>
+    <string name="export_chooser_title">Condividi archivio sensoriale</string>
+    <string name="about_version">Versione %1$s</string>
+    <string name="about_license">Licenza MIT</string>
+    <string name="about_license_text">Copyright (c) 2026 i contributori di Artisan Companion. È concesso gratuitamente a chiunque ottenga una copia di questo software il permesso di usarlo, copiarlo, modificarlo, unirlo, pubblicarlo, distribuirlo, sublicenziarlo e/o venderlo, a condizione che l\'avviso di copyright sia incluso in tutte le copie.</string>
+    <string name="about_disclaimer">Non affiliato, approvato o sponsorizzato dal progetto Artisan.</string>
+    <string name="about_repo">github.com/gpotdevin/artisan_companion_app</string>
+
+    <!-- Intro overlay -->
+    <string name="intro_welcome_title">Benvenuto in Artisan Companion</string>
+    <string name="intro_welcome_message">Consulta i registri di torrefazione e crea un record sensoriale per ogni lotto.</string>
+</resources>

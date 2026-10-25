@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">Artisan Companion</string>
+
+    <!-- Common -->
+    <string name="common_back">Zpět</string>
+    <string name="common_cancel">Zrušit</string>
+    <string name="common_delete">Smazat</string>
+    <string name="common_save">Uložit</string>
+    <string name="common_dismiss">Zahodit</string>
+    <string name="common_retry">Opakovat</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add">Přidat</string>
+    <string name="common_error">Chyba</string>
+    <string name="common_error_format">Chyba: %1$s</string>
+    <string name="common_collapse">Sbalit</string>
+    <string name="common_expand">Rozbalit</string>
+    <string name="common_state_on">Zapnuto</string>
+    <string name="common_state_off">Vypnuto</string>
+
+    <!-- Init error screen -->
+    <string name="init_error_title">Artisan Companion nelze spustit</string>
+    <string name="init_error_message">Úložiště aplikace se nepodařilo inicializovat. Zkontrolujte, zda má zařízení volné místo, a opakujte akci.</string>
+
+    <!-- Library -->
+    <string name="library_title">Pražení</string>
+    <string name="library_search_hint">Hledat pražení…</string>
+    <string name="library_no_match">Žádné pražení neodpovídá "%1$s"</string>
+    <string name="library_unknown_month">Neznámý</string>
+    <string name="library_unparsable_title">Nečitelný záznam pražení</string>
+    <string name="library_unknown_error">Neznámá chyba analýzy</string>
+    <string name="library_empty_subtitle">Zkontrolujte záznamy pražení Artisan a zaznamenávejte poznámky z cuppingu</string>
+    <string name="onboarding_step_import">Importovat soubory .alog</string>
+    <string name="onboarding_step_browse">Procházet pražení</string>
+    <string name="onboarding_step_cupping">Zaznamenávat cuppingy</string>
+    <string name="import_logs">Importovat soubory .alog</string>
+    <string name="import_result_format">Importováno %1$d soubor(ů)</string>
+    <string name="status_unparsable">Nečitelné</string>
+    <string name="status_cupped">Ochutnáno</string>
+    <string name="status_cupped_score">Ochutnáno %1$.1f</string>
+    <string name="status_uncupped">Neochutnáno</string>
+    <string name="library_detail_both">%1$dg → %2$dg</string>
+    <string name="library_detail_green">%1$dg zelená</string>
+    <string name="library_detail_roasted">%1$dg upražená</string>
+    <string name="library_detail_drop">Drop %1$d°C</string>
+    <string name="cd_unparsable">Nečitelné</string>
+    <string name="cd_source_file">Zdrojový soubor</string>
+
+    <!-- Viewer -->
+    <string name="viewer_default_title">Pražení</string>
+    <string name="tab_profile">Profil</string>
+    <string name="tab_sensory">Senzorika</string>
+    <string name="legend_bt">BT</string>
+    <string name="legend_et">ET</string>
+    <string name="legend_ror">RoR /min</string>
+    <string name="chart_axis_temp">Tepl.</string>
+    <string name="chart_axis_min">min</string>
+    <string name="chart_axis_ror">RoR</string>
+    <string name="chart_marker_tp">TP</string>
+    <string name="card_phases">Fáze</string>
+    <string name="card_markers">Značky</string>
+    <string name="card_roast">Pražení</string>
+    <string name="phase_dry">DRY</string>
+    <string name="phase_mid">MID (Maillard)</string>
+    <string name="phase_dev">Vývoj</string>
+    <string name="phase_total">Celkem</string>
+    <string name="phase_ror_peak">Vrchol RoR</string>
+    <string name="markers_none">Žádné značky</string>
+    <string name="markers_time">Čas</string>
+    <string name="markers_bt">BT</string>
+    <string name="roast_green">Zelená</string>
+    <string name="roast_roasted">Upražená</string>
+    <string name="roast_loss">Úbytek</string>
+    <string name="roast_ambient">Okolí</string>
+    <string name="roast_sampling">Vzorkování</string>
+    <string name="roast_machine">Stroj</string>
+    <string name="roast_artisan">Artisan</string>
+    <string name="events_title_format">Události (%1$d)</string>
+    <string name="events_none">Žádné zaznamenané události</string>
+    <string name="event_slider_format">Posuvník: %.0f</string>
+
+    <!-- Number formats -->
+    <string name="fmt_one_decimal">%.1f</string>
+    <string name="fmt_two_decimals">%.2f</string>
+    <string name="fmt_temp_short">%.0f°C</string>
+    <string name="fmt_grams">%.0f g</string>
+    <string name="fmt_percent">%.1f%%</string>
+    <string name="fmt_celsius">%.1f °C</string>
+    <string name="fmt_seconds">%.0f s</string>
+    <string name="fmt_ror">%.1f °C/min</string>
+
+    <!-- Sensory tab -->
+    <string name="dialog_delete_cupping_title">Smazat cupping?</string>
+    <string name="dialog_delete_cupping_message">Smazat cupping z %1$s? Tuto akci nelze vrátit.</string>
+    <string name="dialog_delete_cupping_message_nodate">Smazat cupping? Tuto akci nelze vrátit.</string>
+    <string name="dialog_delete_cupping_simple">Tento cupping bude trvale odstraněn. Tuto akci nelze vrátit.</string>
+    <string name="dialog_delete_record_title">Smazat senzorická data?</string>
+    <string name="dialog_delete_record_message">Všechna cuppingová hodnocení, skóre radaru a příznaky vad pro toto pražení budou trvale odstraněny. Tuto akci nelze vrátit.</string>
+    <string name="msg_cupping_deleted">Cupping smazán</string>
+    <string name="msg_sensory_deleted">Senzorická data smazána</string>
+    <string name="cd_record_cupping">Zaznamenat cupping</string>
+    <string name="action_record_cupping">Zaznamenat cupping</string>
+    <string name="action_delete_sensory">Smazat všechna senzorická data</string>
+    <string name="radar_title">Radar chutí</string>
+    <string name="action_edit_radar">Upravit radar</string>
+    <string name="radar_empty">Zatím žádné skóre radaru</string>
+    <string name="radar_empty_hint">Klepněte na "Upravit radar" pro nastavení hodnot os.</string>
+    <string name="defects_title">Zjištěné vady</string>
+    <string name="defects_loading">Načítání příznaků vad…</string>
+    <string name="defects_none">Žádné zaznamenané vady.</string>
+    <string name="defect_heavy_fc">Vysoké FC</string>
+    <string name="defect_low_fc">Nízké FC</string>
+    <string name="defect_light_cut">Světlý řez</string>
+    <string name="defect_dark_cut">Tmavý řez</string>
+    <string name="defect_drops">Kapky</string>
+    <string name="defect_oily">Olejnatý</string>
+    <string name="defect_uneven">Nerovnoměrné</string>
+    <string name="defect_tipping">Spálené špičky</string>
+    <string name="defect_scorching">Připálení</string>
+    <string name="defect_divots">Vrypy</string>
+    <string name="cuppings_title">Cuppingové relace</string>
+    <string name="cuppings_empty_title">Zatím žádná senzorická data</string>
+    <string name="cuppings_empty_hint">Zaznamenejte cupping, abyste začali budovat senzorický profil tohoto pražení.</string>
+    <string name="action_record_first_cupping">Zaznamenat první cupping</string>
+    <string name="cuppings_none">Zatím žádné cuppingy. Klepněte na + pro zaznamenání.</string>
+    <string name="cupping_day_format">Den %1$d</string>
+    <string name="cupping_total_format">Celkem: %1$s</string>
+    <string name="cupping_row_format">%1$s — celkem %2$s</string>
+    <string name="cd_edit_cupping">Upravit cupping</string>
+    <string name="cd_delete_cupping">Smazat cupping</string>
+    <string name="cd_remove_descriptor">Odebrat %1$s</string>
+
+    <!-- Cupping entry -->
+    <string name="cupping_new_title">Nový cupping</string>
+    <string name="cupping_edit_title">Upravit cupping</string>
+    <string name="msg_cupping_saved">Cupping uložen</string>
+    <string name="error_date_required">Datum je povinné</string>
+    <string name="error_date_format">Neplatný formát data (použijte RRRR-MM-DD)</string>
+    <string name="cupping_date_label">Datum cuppingu</string>
+    <string name="cupping_date_hint">Datum (RRRR-MM-DD)</string>
+    <string name="cd_pick_date">Vybrat datum</string>
+    <string name="rest_days_after">Den %1$d po pražení</string>
+    <string name="rest_days_before">%1$d dní před pražením</string>
+    <string name="rest_days_hint">Zadejte platné datum pro zobrazení dnů odpočinku</string>
+    <string name="sca_scores_title">Skóre SCA</string>
+    <string name="sca_fragrance_aroma">Vůně / Aroma</string>
+    <string name="sca_flavor">Chuť</string>
+    <string name="sca_aftertaste">Dochuť</string>
+    <string name="sca_acidity">Kyselost</string>
+    <string name="sca_body">Tělo</string>
+    <string name="sca_balance">Rovnováha</string>
+    <string name="sca_uniformity">Jednotnost</string>
+    <string name="sca_clean_cup">Čistý šálek</string>
+    <string name="sca_sweetness">Sladkost</string>
+    <string name="sca_overall">Celkové</string>
+    <string name="sca_short_aroma">Aroma</string>
+    <string name="sca_short_flavor">Chuť</string>
+    <string name="sca_short_aftertaste">Dochuť</string>
+    <string name="sca_short_acidity">Kyselost</string>
+    <string name="sca_short_body">Tělo</string>
+    <string name="sca_short_balance">Rovnov.</string>
+    <string name="sca_short_uniformity">Jedn.</string>
+    <string name="sca_short_clean">Čistý</string>
+    <string name="sca_short_sweet">Sladký</string>
+    <string name="sca_short_overall">Celkové</string>
+    <string name="defects_penalty_title">Postih za vady</string>
+    <string name="defects_penalty_label">Postih (odečteno od celku)</string>
+    <string name="total_score_label">Celkové skóre</string>
+    <string name="radar_preview_title">Náhled radaru</string>
+    <string name="descriptor_add_title">Přidat deskriptor</string>
+    <string name="descriptor_free_text">Volný text</string>
+    <string name="cd_add_descriptor">Přidat deskriptor</string>
+    <string name="descriptor_lexicon">Lexikon</string>
+    <string name="descriptors_title">Deskriptory</string>
+    <string name="descriptors_none">Zatím žádné deskriptory. Klepněte na Přidat pro označení chutí.</string>
+    <string name="notes_label">Poznámky</string>
+    <string name="notes_hint">Poznámky k extrakci, dojmy…</string>
+    <string name="action_save_cupping">Uložit cupping</string>
+    <string name="action_update_cupping">Aktualizovat cupping</string>
+
+    <!-- Descriptor lexicon -->
+    <string-array name="coffee_lexicon">
+        <item>meruňka</item>
+        <item>černý čaj</item>
+        <item>bergamot</item>
+        <item>ostružina</item>
+        <item>borůvka</item>
+        <item>hnědý cukr</item>
+        <item>karamel</item>
+        <item>třešeň</item>
+        <item>čokoláda</item>
+        <item>citrusy</item>
+        <item>kakao</item>
+        <item>kokos</item>
+        <item>rybíz</item>
+        <item>květinový</item>
+        <item>grep</item>
+        <item>zelené jablko</item>
+        <item>lískový ořech</item>
+        <item>med</item>
+        <item>jasmín</item>
+        <item>citron</item>
+        <item>mango</item>
+        <item>melasa</item>
+        <item>ořechový</item>
+        <item>pomeranč</item>
+        <item>papája</item>
+        <item>broskev</item>
+        <item>hruška</item>
+        <item>švestka</item>
+        <item>malina</item>
+        <item>pikantní</item>
+        <item>peckovice</item>
+        <item>jahoda</item>
+        <item>toffee</item>
+        <item>tropický</item>
+        <item>vanilka</item>
+        <item>vínový</item>
+        <item>dřevitý</item>
+        <item>mandle</item>
+        <item>tabák</item>
+        <item>zemitý</item>
+        <item>bylinný</item>
+        <item>pepř</item>
+        <item>anýz</item>
+        <item>růže</item>
+        <item>jablko</item>
+        <item>meloun</item>
+        <item>ananas</item>
+        <item>čaj</item>
+        <item>sladový</item>
+        <item>obiloviny</item>
+        <item>máselný</item>
+        <item>krémový</item>
+        <item>kulatý</item>
+        <item>světlý</item>
+        <item>čistý</item>
+        <item>komplexní</item>
+        <item>sladký</item>
+        <item>šťavnatý</item>
+    </string-array>
+
+    <!-- Radar editor -->
+    <string name="msg_radar_saved">Radar uložen</string>
+    <string name="action_save_radar">Uložit radar</string>
+    <string name="radar_loading_labels">Načítání popisků…</string>
+
+    <!-- Legacy editor -->
+    <string name="editor_title">Senzorický editor</string>
+    <string name="action_save_defects">Uložit vady</string>
+    <string name="cuppings_none_short">Zatím žádné cuppingy.</string>
+    <string name="defects_penalty_hint">Vady (postih)</string>
+    <string name="descriptors_csv_hint">Deskriptory (oddělené čárkami)</string>
+    <string name="action_add_cupping">Přidat cupping</string>
+    <string name="msg_defects_saved">Vady uloženy</string>
+    <string name="msg_cupping_added">Cupping přidán</string>
+    <string name="msg_cupping_removed">Cupping odebrán</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Nastavení</string>
+    <string name="settings_section_storage">Úložiště</string>
+    <string name="settings_section_import">Importovat</string>
+    <string name="settings_section_display">Zobrazení</string>
+    <string name="settings_section_data">Data</string>
+    <string name="settings_section_about">O aplikaci</string>
+    <string name="settings_logs_folder">Složka protokolů</string>
+    <string name="settings_sensory_folder">Senzorická složka</string>
+    <string name="settings_roast_count">Indexovaná pražení: %1$d</string>
+    <string name="rebuild_index">Přestavět index pražení</string>
+    <string name="settings_theme_label">Motiv</string>
+    <string name="theme_dark">Tmavý</string>
+    <string name="theme_light">Světlý</string>
+    <string name="settings_export_sensory">Exportovat senzorický archiv (zip)</string>
+    <string name="settings_index_rebuilt">Index přestavěn: %1$d pražení</string>
+    <string name="settings_imported">Importováno %1$d soubor(ů). Indexováno %2$d pražení.</string>
+    <string name="msg_export_ok">Senzorický archiv exportován</string>
+    <string name="msg_export_failed">Export selhal</string>
+    <string name="export_chooser_title">Sdílet senzorický archiv</string>
+    <string name="about_version">Verze %1$s</string>
+    <string name="about_license">Licence MIT</string>
+    <string name="about_license_text">Copyright (c) 2026 přispěvatelé Artisan Companion. Tímto se bezplatně uděluje každé osobě, která získá kopii tohoto softwaru, povolení jej používat, kopírovat, upravovat, slučovat, publikovat, distribuovat, poskytovat sublicence a/nebo prodávat, za podmínky, že oznámení o autorských právech bude uvedeno ve všech kopiích.</string>
+    <string name="about_disclaimer">Není přidružen, schválen ani sponzorován projektem Artisan.</string>
+    <string name="about_repo">github.com/gpotdevin/artisan_companion_app</string>
+
+    <!-- Intro overlay -->
+    <string name="intro_welcome_title">Vítejte v Artisan Companion</string>
+    <string name="intro_welcome_message">Zkontrolujte záznamy pražení a vytvořte senzorický záznam pro každou várku.</string>
+</resources>

@@ -131,8 +131,12 @@ def normalize_roast_ref(raw: Any) -> dict[str, Optional[str]]:
     }
 
 
-def normalize_radar(raw: Any) -> dict[str, list]:
-    """Normalize a radar section; non-numeric values are dropped silently."""
+def normalize_radar(raw: Any) -> dict[str, Any]:
+    """Normalize a radar section; non-numeric values are dropped silently.
+
+    The ``manual`` flag records whether the values were set by the user
+    (via the radar editor) rather than auto-computed from cupping means.
+    """
     d = raw if isinstance(raw, dict) else {}
     labels = [
         s for s in (_as_str(v) for v in _as_list(d.get("labels")))
@@ -148,7 +152,7 @@ def normalize_radar(raw: Any) -> dict[str, list]:
                 f"radar.values: expected a number in 0-10, got {x!r}"
             )
         values.append(v)
-    return {"labels": labels, "values": values}
+    return {"labels": labels, "values": values, "manual": _as_bool(d.get("manual"))}
 
 
 def normalize_defects(raw: Any) -> dict[str, bool]:
@@ -303,3 +307,108 @@ def refresh_record(record: dict[str, Any]) -> dict[str, Any]:
     recomputed, so nothing can ever be stored inconsistently.
     """
     return normalize_record(record, roast_uuid=record.get("roast_uuid"))
+
+
+# ---------------------------------------------------------------------------
+# Radar mean computation (M9 Task 2)
+# ---------------------------------------------------------------------------
+
+#: Maps a radar label (case-insensitive) to the SCA score key it
+#: represents. ``"Head"`` has no direct SCA equivalent and falls back to
+#: ``"overall"``. ``"Aroma"`` and ``"Fragrance"`` both map to
+#: ``"fragrance_aroma"``.
+_RADAR_LABEL_TO_KEY: dict[str, str] = {
+    "acidity": "acidity",
+    "aftertaste": "aftertaste",
+    "clean cup": "clean_cup",
+    "head": "overall",
+    "fragrance": "fragrance_aroma",
+    "aroma": "fragrance_aroma",
+    "sweetness": "sweetness",
+    "balance": "balance",
+    "body": "body",
+}
+
+#: Reverse mapping: first default label for each SCA score key.
+_KEY_TO_RADAR_LABEL: dict[str, str] = {
+    "acidity": "Acidity",
+    "aftertaste": "Aftertaste",
+    "clean_cup": "Clean Cup",
+    "overall": "Head",
+    "fragrance_aroma": "Fragrance",
+    "sweetness": "Sweetness",
+    "balance": "Balance",
+    "body": "Body",
+}
+
+
+def radar_label_to_score_key(label: str) -> Optional[str]:
+    """Map a radar axis label to its SCA score key (case-insensitive).
+
+    Returns ``None`` for labels with no SCA equivalent.
+    """
+    return _RADAR_LABEL_TO_KEY.get(label.strip().lower())
+
+
+def score_key_to_radar_label(key: str) -> Optional[str]:
+    """Map an SCA score key back to its default radar label.
+
+    Returns ``None`` for keys that have no default radar label
+    (``flavor``, ``uniformity``).
+    """
+    return _KEY_TO_RADAR_LABEL.get(key)
+
+
+def compute_radar_means(record: dict[str, Any]) -> dict[str, Any]:
+    """Recompute radar values as the mean across all cupping sessions.
+
+    A pre-existing *manually-set* radar (``manual`` flag is true and any
+    value is non-zero) counts as one additional session.  Auto-computed
+    radar values (``manual`` is false) are never double-counted.  Labels
+    are never changed; only values are updated.  When there are no
+    cuppings and no manual radar, the radar is returned unchanged.
+
+    Means are rounded to 2 decimal places.  Cuppings missing a score for
+    a particular key are skipped for that axis.  Labels with no SCA
+    equivalent keep their current value.  After recomputation the
+    ``manual`` flag is cleared.
+    """
+    radar = record.get("radar") or {}
+    labels: list[str] = list(radar.get("labels") or [])
+    values: list[float] = list(radar.get("values") or [])
+    cuppings: list[dict[str, Any]] = record.get("cuppings") or []
+
+    # Only a manually-set radar with non-zero values counts as a session.
+    is_manual = radar.get("manual", False) and any(v > 0.0 for v in values)
+
+    # No data to average — leave the radar as-is (but clear manual flag
+    # so a stale manual marker doesn't linger).
+    if not cuppings and not is_manual:
+        return {"labels": labels, "values": values, "manual": False}
+
+    # Pad / trim values to match labels length.
+    if len(values) < len(labels):
+        values.extend([0.0] * (len(labels) - len(values)))
+    elif len(values) > len(labels):
+        values = values[: len(labels)]
+
+    new_values = list(values)
+
+    for i, label in enumerate(labels):
+        key = radar_label_to_score_key(label)
+        if key is None:
+            continue  # no SCA equivalent — leave value unchanged
+
+        data_points: list[float] = []
+        for cupping in cuppings:
+            score = cupping.get("scores", {}).get(key)
+            if score is not None:
+                data_points.append(float(score))
+
+        if is_manual:
+            data_points.append(values[i])
+
+        if data_points:
+            new_values[i] = round(sum(data_points) / len(data_points), 2)
+
+    return {"labels": labels, "values": new_values, "manual": False}

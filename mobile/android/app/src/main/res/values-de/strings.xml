@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">Artisan Companion</string>
+
+    <!-- Common -->
+    <string name="common_back">Zurück</string>
+    <string name="common_cancel">Abbrechen</string>
+    <string name="common_delete">Löschen</string>
+    <string name="common_save">Speichern</string>
+    <string name="common_dismiss">Verwerfen</string>
+    <string name="common_retry">Erneut versuchen</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add">Hinzufügen</string>
+    <string name="common_error">Fehler</string>
+    <string name="common_error_format">Fehler: %1$s</string>
+    <string name="common_collapse">Einklappen</string>
+    <string name="common_expand">Ausklappen</string>
+    <string name="common_state_on">An</string>
+    <string name="common_state_off">Aus</string>
+
+    <!-- Init error screen -->
+    <string name="init_error_title">Artisan Companion konnte nicht gestartet werden</string>
+    <string name="init_error_message">Der App-Speicher konnte nicht initialisiert werden. Stellen Sie sicher, dass das Gerät über freien Speicherplatz verfügt, und versuchen Sie es erneut.</string>
+
+    <!-- Library -->
+    <string name="library_title">Röstungen</string>
+    <string name="library_search_hint">Röstungen suchen…</string>
+    <string name="library_no_match">Keine Röstungen entsprechen "%1$s"</string>
+    <string name="library_unknown_month">Unbekannt</string>
+    <string name="library_unparsable_title">Unlesbares Röstprotokoll</string>
+    <string name="library_unknown_error">Unbekannter Analysefehler</string>
+    <string name="library_empty_subtitle">Überprüfen Sie Ihre Artisan-Röstprotokolle und erfassen Sie Cupping-Notizen</string>
+    <string name="onboarding_step_import">.alog-Dateien importieren</string>
+    <string name="onboarding_step_browse">Röstungen durchsuchen</string>
+    <string name="onboarding_step_cupping">Cuppings erfassen</string>
+    <string name="import_logs">.alog-Dateien importieren</string>
+    <string name="import_result_format">%1$d Datei(en) importiert</string>
+    <string name="status_unparsable">Unlesbar</string>
+    <string name="status_cupped">Verkostet</string>
+    <string name="status_cupped_score">Verkostet %1$.1f</string>
+    <string name="status_uncupped">Nicht verkostet</string>
+    <string name="library_detail_both">%1$dg → %2$dg</string>
+    <string name="library_detail_green">%1$dg grün</string>
+    <string name="library_detail_roasted">%1$dg geröstet</string>
+    <string name="library_detail_drop">Drop %1$d°C</string>
+    <string name="cd_unparsable">Unlesbar</string>
+    <string name="cd_source_file">Quelldatei</string>
+
+    <!-- Viewer -->
+    <string name="viewer_default_title">Röstung</string>
+    <string name="tab_profile">Profil</string>
+    <string name="tab_sensory">Sensorik</string>
+    <string name="legend_bt">BT</string>
+    <string name="legend_et">ET</string>
+    <string name="legend_ror">RoR /min</string>
+    <string name="chart_axis_temp">Temp</string>
+    <string name="chart_axis_min">min</string>
+    <string name="chart_axis_ror">RoR</string>
+    <string name="chart_marker_tp">TP</string>
+    <string name="card_phases">Phasen</string>
+    <string name="card_markers">Markierungen</string>
+    <string name="card_roast">Röstung</string>
+    <string name="phase_dry">DRY</string>
+    <string name="phase_mid">MID (Maillard)</string>
+    <string name="phase_dev">Dev</string>
+    <string name="phase_total">Gesamt</string>
+    <string name="phase_ror_peak">RoR-Spitze</string>
+    <string name="markers_none">Keine Markierungen</string>
+    <string name="markers_time">Zeit</string>
+    <string name="markers_bt">BT</string>
+    <string name="roast_green">Grün</string>
+    <string name="roast_roasted">Geröstet</string>
+    <string name="roast_loss">Verlust</string>
+    <string name="roast_ambient">Umgebung</string>
+    <string name="roast_sampling">Abtastung</string>
+    <string name="roast_machine">Maschine</string>
+    <string name="roast_artisan">Artisan</string>
+    <string name="events_title_format">Ereignisse (%1$d)</string>
+    <string name="events_none">Keine Ereignisse erfasst</string>
+    <string name="event_slider_format">Regler: %.0f</string>
+
+    <!-- Number formats -->
+    <string name="fmt_one_decimal">%.1f</string>
+    <string name="fmt_two_decimals">%.2f</string>
+    <string name="fmt_temp_short">%.0f°C</string>
+    <string name="fmt_grams">%.0f g</string>
+    <string name="fmt_percent">%.1f%%</string>
+    <string name="fmt_celsius">%.1f °C</string>
+    <string name="fmt_seconds">%.0f s</string>
+    <string name="fmt_ror">%.1f °C/min</string>
+
+    <!-- Sensory tab -->
+    <string name="dialog_delete_cupping_title">Cupping löschen?</string>
+    <string name="dialog_delete_cupping_message">Das Cupping vom %1$s löschen? Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="dialog_delete_cupping_message_nodate">Cupping löschen? Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="dialog_delete_cupping_simple">Dieses Cupping wird dauerhaft entfernt. Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="dialog_delete_record_title">Sensordaten löschen?</string>
+    <string name="dialog_delete_record_message">Alle Cuppings, Radar-Bewertungen und Fehlermarkierungen für diese Röstung werden dauerhaft entfernt. Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="msg_cupping_deleted">Cupping gelöscht</string>
+    <string name="msg_sensory_deleted">Sensordaten gelöscht</string>
+    <string name="cd_record_cupping">Cupping erfassen</string>
+    <string name="action_record_cupping">Cupping erfassen</string>
+    <string name="action_delete_sensory">Alle Sensordaten löschen</string>
+    <string name="radar_title">Geschmacksradar</string>
+    <string name="action_edit_radar">Radar bearbeiten</string>
+    <string name="radar_empty">Noch keine Radar-Bewertungen</string>
+    <string name="radar_empty_hint">Tippen Sie auf "Radar bearbeiten", um Achsenwerte festzulegen.</string>
+    <string name="defects_title">Beobachtete Fehler</string>
+    <string name="defects_loading">Fehlermarkierungen werden geladen…</string>
+    <string name="defects_none">Keine Fehler erfasst.</string>
+    <string name="defect_heavy_fc">Viel FC</string>
+    <string name="defect_low_fc">Wenig FC</string>
+    <string name="defect_light_cut">Heller Schnitt</string>
+    <string name="defect_dark_cut">Dunkler Schnitt</string>
+    <string name="defect_drops">Tropfen</string>
+    <string name="defect_oily">Ölig</string>
+    <string name="defect_uneven">Ungleichmäßig</string>
+    <string name="defect_tipping">Spitzenverbrennung</string>
+    <string name="defect_scorching">Verbrennung</string>
+    <string name="defect_divots">Einschnitte</string>
+    <string name="cuppings_title">Cupping-Sitzungen</string>
+    <string name="cuppings_empty_title">Noch keine Sensordaten</string>
+    <string name="cuppings_empty_hint">Erfassen Sie ein Cupping, um mit dem Aufbau des sensorischen Profils dieser Röstung zu beginnen.</string>
+    <string name="action_record_first_cupping">Erstes Cupping erfassen</string>
+    <string name="cuppings_none">Noch keine Cuppings. Tippen Sie auf +, um eines zu erfassen.</string>
+    <string name="cupping_day_format">Tag %1$d</string>
+    <string name="cupping_total_format">Gesamt: %1$s</string>
+    <string name="cupping_row_format">%1$s — Gesamt %2$s</string>
+    <string name="cd_edit_cupping">Cupping bearbeiten</string>
+    <string name="cd_delete_cupping">Cupping löschen</string>
+    <string name="cd_remove_descriptor">%1$s entfernen</string>
+
+    <!-- Cupping entry -->
+    <string name="cupping_new_title">Neues Cupping</string>
+    <string name="cupping_edit_title">Cupping bearbeiten</string>
+    <string name="msg_cupping_saved">Cupping gespeichert</string>
+    <string name="error_date_required">Datum ist erforderlich</string>
+    <string name="error_date_format">Ungültiges Datumsformat (JJJJ-MM-TT verwenden)</string>
+    <string name="cupping_date_label">Cupping-Datum</string>
+    <string name="cupping_date_hint">Datum (JJJJ-MM-TT)</string>
+    <string name="cd_pick_date">Datum wählen</string>
+    <string name="rest_days_after">Tag %1$d nach der Röstung</string>
+    <string name="rest_days_before">%1$d Tage vor der Röstung</string>
+    <string name="rest_days_hint">Geben Sie ein gültiges Datum ein, um die Ruhezeit zu sehen</string>
+    <string name="sca_scores_title">SCA-Bewertungen</string>
+    <string name="sca_fragrance_aroma">Duft / Aroma</string>
+    <string name="sca_flavor">Geschmack</string>
+    <string name="sca_aftertaste">Nachgeschmack</string>
+    <string name="sca_acidity">Säure</string>
+    <string name="sca_body">Körper</string>
+    <string name="sca_balance">Balance</string>
+    <string name="sca_uniformity">Uniformität</string>
+    <string name="sca_clean_cup">Saubere Tasse</string>
+    <string name="sca_sweetness">Süße</string>
+    <string name="sca_overall">Gesamt</string>
+    <string name="sca_short_aroma">Aroma</string>
+    <string name="sca_short_flavor">Geschmack</string>
+    <string name="sca_short_aftertaste">Nachg.</string>
+    <string name="sca_short_acidity">Säure</string>
+    <string name="sca_short_body">Körper</string>
+    <string name="sca_short_balance">Balance</string>
+    <string name="sca_short_uniformity">Unif.</string>
+    <string name="sca_short_clean">Sauber</string>
+    <string name="sca_short_sweet">Süß</string>
+    <string name="sca_short_overall">Gesamt</string>
+    <string name="defects_penalty_title">Fehlerabzug</string>
+    <string name="defects_penalty_label">Abzug (vom Gesamtwert abgezogen)</string>
+    <string name="total_score_label">Gesamtpunktzahl</string>
+    <string name="radar_preview_title">Radar-Vorschau</string>
+    <string name="descriptor_add_title">Deskriptor hinzufügen</string>
+    <string name="descriptor_free_text">Freier Text</string>
+    <string name="cd_add_descriptor">Deskriptor hinzufügen</string>
+    <string name="descriptor_lexicon">Lexikon</string>
+    <string name="descriptors_title">Deskriptoren</string>
+    <string name="descriptors_none">Noch keine Deskriptoren. Tippen Sie auf Hinzufügen, um Geschmacksnoten zu erfassen.</string>
+    <string name="notes_label">Notizen</string>
+    <string name="notes_hint">Brühnotizen, Eindrücke…</string>
+    <string name="action_save_cupping">Cupping speichern</string>
+    <string name="action_update_cupping">Cupping aktualisieren</string>
+
+    <!-- Descriptor lexicon -->
+    <string-array name="coffee_lexicon">
+        <item>Aprikose</item>
+        <item>schwarzer Tee</item>
+        <item>Bergamotte</item>
+        <item>Brombeere</item>
+        <item>Heidelbeere</item>
+        <item>brauner Zucker</item>
+        <item>Karamell</item>
+        <item>Kirsche</item>
+        <item>Schokolade</item>
+        <item>Zitrus</item>
+        <item>Kakao</item>
+        <item>Kokosnuss</item>
+        <item>Johannisbeere</item>
+        <item>blumig</item>
+        <item>Grapefruit</item>
+        <item>grüner Apfel</item>
+        <item>Haselnuss</item>
+        <item>Honig</item>
+        <item>Jasmin</item>
+        <item>Zitrone</item>
+        <item>Mango</item>
+        <item>Melasse</item>
+        <item>nussig</item>
+        <item>Orange</item>
+        <item>Papaya</item>
+        <item>Pfirsich</item>
+        <item>Birne</item>
+        <item>Pflaume</item>
+        <item>Himbeere</item>
+        <item>würzig</item>
+        <item>Steinobst</item>
+        <item>Erdbeere</item>
+        <item>Toffee</item>
+        <item>tropisch</item>
+        <item>Vanille</item>
+        <item>weinig</item>
+        <item>holzig</item>
+        <item>Mandel</item>
+        <item>Tabak</item>
+        <item>erdig</item>
+        <item>kräuterartig</item>
+        <item>Pfeffer</item>
+        <item>Anis</item>
+        <item>Rose</item>
+        <item>Apfel</item>
+        <item>Melone</item>
+        <item>Ananas</item>
+        <item>Tee</item>
+        <item>malzig</item>
+        <item>Getreide</item>
+        <item>buttrig</item>
+        <item>cremig</item>
+        <item>rund</item>
+        <item>hell</item>
+        <item>sauber</item>
+        <item>komplex</item>
+        <item>süß</item>
+        <item>saftig</item>
+    </string-array>
+
+    <!-- Radar editor -->
+    <string name="msg_radar_saved">Radar gespeichert</string>
+    <string name="action_save_radar">Radar speichern</string>
+    <string name="radar_loading_labels">Bezeichnungen werden geladen…</string>
+
+    <!-- Legacy editor -->
+    <string name="editor_title">Sensorik-Editor</string>
+    <string name="action_save_defects">Fehler speichern</string>
+    <string name="cuppings_none_short">Noch keine Cuppings.</string>
+    <string name="defects_penalty_hint">Fehler (Abzug)</string>
+    <string name="descriptors_csv_hint">Deskriptoren (kommagetrennt)</string>
+    <string name="action_add_cupping">Cupping hinzufügen</string>
+    <string name="msg_defects_saved">Fehler gespeichert</string>
+    <string name="msg_cupping_added">Cupping hinzugefügt</string>
+    <string name="msg_cupping_removed">Cupping entfernt</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_section_storage">Speicher</string>
+    <string name="settings_section_import">Import</string>
+    <string name="settings_section_display">Anzeige</string>
+    <string name="settings_section_data">Daten</string>
+    <string name="settings_section_about">Über</string>
+    <string name="settings_logs_folder">Protokollordner</string>
+    <string name="settings_sensory_folder">Sensorikordner</string>
+    <string name="settings_roast_count">Indizierte Röstungen: %1$d</string>
+    <string name="rebuild_index">Röstindex neu aufbauen</string>
+    <string name="settings_theme_label">Design</string>
+    <string name="theme_dark">Dunkel</string>
+    <string name="theme_light">Hell</string>
+    <string name="settings_export_sensory">Sensorik-Archiv exportieren (zip)</string>
+    <string name="settings_index_rebuilt">Index neu aufgebaut: %1$d Röstungen</string>
+    <string name="settings_imported">%1$d Datei(en) importiert. %2$d Röstungen indiziert.</string>
+    <string name="msg_export_ok">Sensorik-Archiv exportiert</string>
+    <string name="msg_export_failed">Export fehlgeschlagen</string>
+    <string name="export_chooser_title">Sensorik-Archiv teilen</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_license">MIT-Lizenz</string>
+    <string name="about_license_text">Copyright (c) 2026 Artisan Companion Mitwirkende. Hiermit wird unentgeltlich jeder Person, die eine Kopie dieser Software erhält, die Erlaubnis erteilt, sie uneingeschränkt zu nutzen, zu kopieren, zu modifizieren, zu fusionieren, zu veröffentlichen, zu verbreiten, zu unterlizenzieren und/oder zu verkaufen, unter der Bedingung, dass der Urheberrechtshinweis in allen Kopien enthalten ist.</string>
+    <string name="about_disclaimer">Nicht mit dem Artisan-Projekt verbunden, von diesem unterstützt oder gesponsert.</string>
+    <string name="about_repo">github.com/gpotdevin/artisan_companion_app</string>
+
+    <!-- Intro overlay -->
+    <string name="intro_welcome_title">Willkommen bei Artisan Companion</string>
+    <string name="intro_welcome_message">Überprüfen Sie Ihre Röstprotokolle und erstellen Sie für jede Charge einen sensorischen Eintrag.</string>
+</resources>

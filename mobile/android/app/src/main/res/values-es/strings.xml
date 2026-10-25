@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App -->
+    <string name="app_name">Artisan Companion</string>
+
+    <!-- Common -->
+    <string name="common_back">Atrás</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_delete">Eliminar</string>
+    <string name="common_save">Guardar</string>
+    <string name="common_dismiss">Descartar</string>
+    <string name="common_retry">Reintentar</string>
+    <string name="common_ok">OK</string>
+    <string name="common_add">Añadir</string>
+    <string name="common_error">Error</string>
+    <string name="common_error_format">Error: %1$s</string>
+    <string name="common_collapse">Contraer</string>
+    <string name="common_expand">Expandir</string>
+    <string name="common_state_on">Activado</string>
+    <string name="common_state_off">Desactivado</string>
+
+    <!-- Init error screen -->
+    <string name="init_error_title">No se pudo iniciar Artisan Companion</string>
+    <string name="init_error_message">No se pudo inicializar el almacenamiento de la aplicación. Comprueba que el dispositivo tenga espacio libre y vuelve a intentarlo.</string>
+
+    <!-- Library -->
+    <string name="library_title">Tuestes</string>
+    <string name="library_search_hint">Buscar tuestes…</string>
+    <string name="library_no_match">Ningún tueste coincide con "%1$s"</string>
+    <string name="library_unknown_month">Desconocido</string>
+    <string name="library_unparsable_title">Registro de tueste ilegible</string>
+    <string name="library_unknown_error">Error de análisis desconocido</string>
+    <string name="library_empty_subtitle">Revisa tus registros de tueste Artisan y graba notas de cata</string>
+    <string name="onboarding_step_import">Importar archivos .alog</string>
+    <string name="onboarding_step_browse">Explora tus tuestes</string>
+    <string name="onboarding_step_cupping">Registrar catas</string>
+    <string name="import_logs">Importar archivos .alog</string>
+    <string name="import_result_format">%1$d archivo(s) importado(s)</string>
+    <string name="status_unparsable">Ilegible</string>
+    <string name="status_cupped">Catada</string>
+    <string name="status_cupped_score">Catada %1$.1f</string>
+    <string name="status_uncupped">Sin catar</string>
+    <string name="library_detail_both">%1$dg → %2$dg</string>
+    <string name="library_detail_green">%1$dg verde</string>
+    <string name="library_detail_roasted">%1$dg tostado</string>
+    <string name="library_detail_drop">Drop %1$d°C</string>
+    <string name="cd_unparsable">Ilegible</string>
+    <string name="cd_source_file">Archivo fuente</string>
+
+    <!-- Viewer -->
+    <string name="viewer_default_title">Tueste</string>
+    <string name="tab_profile">Perfil</string>
+    <string name="tab_sensory">Sensorial</string>
+    <string name="legend_bt">BT</string>
+    <string name="legend_et">ET</string>
+    <string name="legend_ror">RoR /min</string>
+    <string name="chart_axis_temp">Temp</string>
+    <string name="chart_axis_min">min</string>
+    <string name="chart_axis_ror">RoR</string>
+    <string name="chart_marker_tp">TP</string>
+    <string name="card_phases">Fases</string>
+    <string name="card_markers">Marcadores</string>
+    <string name="card_roast">Tueste</string>
+    <string name="phase_dry">DRY</string>
+    <string name="phase_mid">MID (Maillard)</string>
+    <string name="phase_dev">Desarrollo</string>
+    <string name="phase_total">Total</string>
+    <string name="phase_ror_peak">Pico de RoR</string>
+    <string name="markers_none">Sin marcadores</string>
+    <string name="markers_time">Tiempo</string>
+    <string name="markers_bt">BT</string>
+    <string name="roast_green">Verde</string>
+    <string name="roast_roasted">Tostado</string>
+    <string name="roast_loss">Pérdida</string>
+    <string name="roast_ambient">Ambiente</string>
+    <string name="roast_sampling">Muestreo</string>
+    <string name="roast_machine">Máquina</string>
+    <string name="roast_artisan">Artisan</string>
+    <string name="events_title_format">Eventos (%1$d)</string>
+    <string name="events_none">Sin eventos registrados</string>
+    <string name="event_slider_format">Control: %.0f</string>
+
+    <!-- Number formats -->
+    <string name="fmt_one_decimal">%.1f</string>
+    <string name="fmt_two_decimals">%.2f</string>
+    <string name="fmt_temp_short">%.0f°C</string>
+    <string name="fmt_grams">%.0f g</string>
+    <string name="fmt_percent">%.1f%%</string>
+    <string name="fmt_celsius">%.1f °C</string>
+    <string name="fmt_seconds">%.0f s</string>
+    <string name="fmt_ror">%.1f °C/min</string>
+
+    <!-- Sensory tab -->
+    <string name="dialog_delete_cupping_title">¿Eliminar la cata?</string>
+    <string name="dialog_delete_cupping_message">¿Eliminar la cata del %1$s? Esta acción no se puede deshacer.</string>
+    <string name="dialog_delete_cupping_message_nodate">¿Eliminar la cata? Esta acción no se puede deshacer.</string>
+    <string name="dialog_delete_cupping_simple">Esta cata se eliminará permanentemente. Esta acción no se puede deshacer.</string>
+    <string name="dialog_delete_record_title">¿Eliminar los datos sensoriales?</string>
+    <string name="dialog_delete_record_message">Todas las catas, puntuaciones de radar y marcas de defectos de este tueste se eliminarán permanentemente. Esta acción no se puede deshacer.</string>
+    <string name="msg_cupping_deleted">Cata eliminada</string>
+    <string name="msg_sensory_deleted">Datos sensoriales eliminados</string>
+    <string name="cd_record_cupping">Registrar cata</string>
+    <string name="action_record_cupping">Registrar cata</string>
+    <string name="action_delete_sensory">Eliminar todos los datos sensoriales</string>
+    <string name="radar_title">Radar de sabores</string>
+    <string name="action_edit_radar">Editar radar</string>
+    <string name="radar_empty">Sin puntuaciones de radar aún</string>
+    <string name="radar_empty_hint">Toca "Editar radar" para establecer los valores de los ejes.</string>
+    <string name="defects_title">Defectos observados</string>
+    <string name="defects_loading">Cargando marcas de defectos…</string>
+    <string name="defects_none">Sin defectos registrados.</string>
+    <string name="defect_heavy_fc">FC alto</string>
+    <string name="defect_low_fc">FC bajo</string>
+    <string name="defect_light_cut">Corte claro</string>
+    <string name="defect_dark_cut">Corte oscuro</string>
+    <string name="defect_drops">Gotas</string>
+    <string name="defect_oily">Aceitoso</string>
+    <string name="defect_uneven">Desigual</string>
+    <string name="defect_tipping">Punta quemada</string>
+    <string name="defect_scorching">Quemadura</string>
+    <string name="defect_divots">Hendiduras</string>
+    <string name="cuppings_title">Sesiones de cata</string>
+    <string name="cuppings_empty_title">Sin datos sensoriales aún</string>
+    <string name="cuppings_empty_hint">Registra una cata para empezar a construir el perfil sensorial de este tueste.</string>
+    <string name="action_record_first_cupping">Registra tu primera cata</string>
+    <string name="cuppings_none">Sin catas aún. Toca el botón + para registrar una.</string>
+    <string name="cupping_day_format">Día %1$d</string>
+    <string name="cupping_total_format">Total: %1$s</string>
+    <string name="cupping_row_format">%1$s — total %2$s</string>
+    <string name="cd_edit_cupping">Editar cata</string>
+    <string name="cd_delete_cupping">Eliminar cata</string>
+    <string name="cd_remove_descriptor">Eliminar %1$s</string>
+
+    <!-- Cupping entry -->
+    <string name="cupping_new_title">Nueva cata</string>
+    <string name="cupping_edit_title">Editar cata</string>
+    <string name="msg_cupping_saved">Cata guardada</string>
+    <string name="error_date_required">La fecha es obligatoria</string>
+    <string name="error_date_format">Formato de fecha no válido (usa AAAA-MM-DD)</string>
+    <string name="cupping_date_label">Fecha de la cata</string>
+    <string name="cupping_date_hint">Fecha (AAAA-MM-DD)</string>
+    <string name="cd_pick_date">Elegir fecha</string>
+    <string name="rest_days_after">Día %1$d después del tueste</string>
+    <string name="rest_days_before">%1$d días antes del tueste</string>
+    <string name="rest_days_hint">Introduce una fecha válida para ver los días de reposo</string>
+    <string name="sca_scores_title">Puntuaciones SCA</string>
+    <string name="sca_fragrance_aroma">Fragancia / Aroma</string>
+    <string name="sca_flavor">Sabor</string>
+    <string name="sca_aftertaste">Postgusto</string>
+    <string name="sca_acidity">Acidez</string>
+    <string name="sca_body">Cuerpo</string>
+    <string name="sca_balance">Equilibrio</string>
+    <string name="sca_uniformity">Uniformidad</string>
+    <string name="sca_clean_cup">Taza limpia</string>
+    <string name="sca_sweetness">Dulzor</string>
+    <string name="sca_overall">General</string>
+    <string name="sca_short_aroma">Aroma</string>
+    <string name="sca_short_flavor">Sabor</string>
+    <string name="sca_short_aftertaste">Postg.</string>
+    <string name="sca_short_acidity">Acidez</string>
+    <string name="sca_short_body">Cuerpo</string>
+    <string name="sca_short_balance">Equil.</string>
+    <string name="sca_short_uniformity">Unif.</string>
+    <string name="sca_short_clean">Limpia</string>
+    <string name="sca_short_sweet">Dulce</string>
+    <string name="sca_short_overall">General</string>
+    <string name="defects_penalty_title">Penalización por defectos</string>
+    <string name="defects_penalty_label">Penalización (restada del total)</string>
+    <string name="total_score_label">Puntuación total</string>
+    <string name="radar_preview_title">Vista previa del radar</string>
+    <string name="descriptor_add_title">Añadir descriptor</string>
+    <string name="descriptor_free_text">Texto libre</string>
+    <string name="cd_add_descriptor">Añadir descriptor</string>
+    <string name="descriptor_lexicon">Léxico</string>
+    <string name="descriptors_title">Descriptores</string>
+    <string name="descriptors_none">Sin descriptores aún. Toca Añadir para etiquetar los sabores.</string>
+    <string name="notes_label">Notas</string>
+    <string name="notes_hint">Notas de extracción, impresiones…</string>
+    <string name="action_save_cupping">Guardar cata</string>
+    <string name="action_update_cupping">Actualizar cata</string>
+
+    <!-- Descriptor lexicon -->
+    <string-array name="coffee_lexicon">
+        <item>albaricoque</item>
+        <item>té negro</item>
+        <item>bergamota</item>
+        <item>mora</item>
+        <item>arándano</item>
+        <item>azúcar moreno</item>
+        <item>caramelo</item>
+        <item>cereza</item>
+        <item>chocolate</item>
+        <item>cítricos</item>
+        <item>cacao</item>
+        <item>coco</item>
+        <item>grosella</item>
+        <item>floral</item>
+        <item>pomelo</item>
+        <item>manzana verde</item>
+        <item>avellana</item>
+        <item>miel</item>
+        <item>jazmín</item>
+        <item>limón</item>
+        <item>mango</item>
+        <item>melaza</item>
+        <item>avellanado</item>
+        <item>naranja</item>
+        <item>papaya</item>
+        <item>melocotón</item>
+        <item>pera</item>
+        <item>ciruela</item>
+        <item>frambuesa</item>
+        <item>especiado</item>
+        <item>fruta de hueso</item>
+        <item>fresa</item>
+        <item>tofe</item>
+        <item>tropical</item>
+        <item>vainilla</item>
+        <item>vinoso</item>
+        <item>amaderado</item>
+        <item>almendra</item>
+        <item>tabaco</item>
+        <item>terroso</item>
+        <item>herbáceo</item>
+        <item>pimienta</item>
+        <item>anís</item>
+        <item>rosa</item>
+        <item>manzana</item>
+        <item>melón</item>
+        <item>piña</item>
+        <item>té</item>
+        <item>maltoso</item>
+        <item>cereales</item>
+        <item>mantecoso</item>
+        <item>cremoso</item>
+        <item>redondo</item>
+        <item>brillante</item>
+        <item>limpio</item>
+        <item>complejo</item>
+        <item>dulce</item>
+        <item>jugoso</item>
+    </string-array>
+
+    <!-- Radar editor -->
+    <string name="msg_radar_saved">Radar guardado</string>
+    <string name="action_save_radar">Guardar radar</string>
+    <string name="radar_loading_labels">Cargando etiquetas…</string>
+
+    <!-- Legacy editor -->
+    <string name="editor_title">Editor sensorial</string>
+    <string name="action_save_defects">Guardar defectos</string>
+    <string name="cuppings_none_short">Sin catas aún.</string>
+    <string name="defects_penalty_hint">Defectos (penalización)</string>
+    <string name="descriptors_csv_hint">Descriptores (separados por comas)</string>
+    <string name="action_add_cupping">Añadir cata</string>
+    <string name="msg_defects_saved">Defectos guardados</string>
+    <string name="msg_cupping_added">Cata añadida</string>
+    <string name="msg_cupping_removed">Cata eliminada</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_section_storage">Almacenamiento</string>
+    <string name="settings_section_import">Importar</string>
+    <string name="settings_section_display">Pantalla</string>
+    <string name="settings_section_data">Datos</string>
+    <string name="settings_section_about">Acerca de</string>
+    <string name="settings_logs_folder">Carpeta de registros</string>
+    <string name="settings_sensory_folder">Carpeta sensorial</string>
+    <string name="settings_roast_count">Tuestes indexados: %1$d</string>
+    <string name="rebuild_index">Reconstruir índice de tuestes</string>
+    <string name="settings_theme_label">Tema</string>
+    <string name="theme_dark">Oscuro</string>
+    <string name="theme_light">Claro</string>
+    <string name="settings_export_sensory">Exportar almacén sensorial (zip)</string>
+    <string name="settings_index_rebuilt">Índice reconstruido: %1$d tuestes</string>
+    <string name="settings_imported">%1$d archivo(s) importado(s). %2$d tuestes indexados.</string>
+    <string name="msg_export_ok">Almacén sensorial exportado</string>
+    <string name="msg_export_failed">Error al exportar</string>
+    <string name="export_chooser_title">Compartir almacén sensorial</string>
+    <string name="about_version">Versión %1$s</string>
+    <string name="about_license">Licencia MIT</string>
+    <string name="about_license_text">Copyright (c) 2026 los colaboradores de Artisan Companion. Por la presente se concede permiso gratuito a cualquier persona que obtenga una copia de este software para usarlo, copiarlo, modificarlo, fusionarlo, publicarlo, distribuirlo, sublicenciarlo y/o venderlo, siempre que se incluya el aviso de copyright en todas las copias.</string>
+    <string name="about_disclaimer">No afiliado, respaldado ni patrocinado por el proyecto Artisan.</string>
+    <string name="about_repo">github.com/gpotdevin/artisan_companion_app</string>
+
+    <!-- Intro overlay -->
+    <string name="intro_welcome_title">Bienvenido a Artisan Companion</string>
+    <string name="intro_welcome_message">Revisa tus registros de tueste y crea un registro sensorial para cada lote.</string>
+</resources>

@@ -355,7 +355,9 @@ def test_update_radar_values_keeps_default_labels(store: SensoryStore):
 def test_update_radar_custom_labels(store: SensoryStore):
     store.create(UUID_A)
     record = store.update_radar(UUID_A, [1.0, 2.0], labels=["A", "B"])
-    assert record["radar"] == {"labels": ["A", "B"], "values": [1.0, 2.0]}
+    assert record["radar"]["labels"] == ["A", "B"]
+    assert record["radar"]["values"] == [1.0, 2.0]
+    assert record["radar"]["manual"] is True
 
 
 def test_set_native_sync_stamps_utc_iso8601(store: SensoryStore):
@@ -557,3 +559,203 @@ def test_index_database_is_valid_sqlite(store: SensoryStore, tmp_path: Path):
         assert {"roasts", "annotations", "descriptors"} <= tables
     finally:
         conn.close()
+
+
+# ---------------------------------------------------------------------------
+# Radar auto-update from cupping means (M9 Task 2)
+# ---------------------------------------------------------------------------
+
+# Expected radar values after one cupping with FULL_SCORES, mapped through
+# DEFAULT_RADAR_LABELS:
+#   Acidity→acidity=8.5, Aftertaste→aftertaste=7.5, Clean Cup→clean_cup=10.0,
+#   Head→overall=8.5, Fragrance→fragrance_aroma=8.0, Sweetness→sweetness=8.0,
+#   Aroma→fragrance_aroma=8.0, Balance→balance=8.0, Body→body=7.0
+RADAR_AFTER_ONE = [8.5, 7.5, 10.0, 8.5, 8.0, 8.0, 8.0, 8.0, 7.0]
+
+# Second cupping with different scores for mean tests.
+SCORES_2 = {
+    "fragrance_aroma": 7.0, "flavor": 7.0, "aftertaste": 9.0,
+    "acidity": 6.0, "body": 8.5, "balance": 7.5,
+    "uniformity": 10.0, "clean_cup": 8.0, "sweetness": 9.0,
+    "overall": 7.0, "defects": 0,
+}
+# Mean of FULL_SCORES and SCORES_2 per default radar label:
+#   Acidity=(8.5+6.0)/2=7.25, Aftertaste=(7.5+9.0)/2=8.25,
+#   Clean Cup=(10.0+8.0)/2=9.0, Head=(8.5+7.0)/2=7.75,
+#   Fragrance=(8.0+7.0)/2=7.5, Sweetness=(8.0+9.0)/2=8.5,
+#   Aroma=(8.0+7.0)/2=7.5, Balance=(8.0+7.5)/2=7.75, Body=(7.0+8.5)/2=7.75
+RADAR_AFTER_TWO = [7.25, 8.25, 9.0, 7.75, 7.5, 8.5, 7.5, 7.75, 7.75]
+
+
+def test_add_cupping_updates_radar_to_mean(store: SensoryStore):
+    """Adding a cupping sets radar values to that cupping's scores."""
+    store.create(UUID_A, ROAST_REF)
+    record = store.add_cupping(UUID_A, make_cupping())
+    assert record["radar"]["labels"] == list(DEFAULT_RADAR_LABELS)
+    assert record["radar"]["values"] == RADAR_AFTER_ONE
+
+
+def test_add_second_cupping_updates_radar_to_mean_of_both(store: SensoryStore):
+    """Adding a second cupping averages both sessions' scores."""
+    store.create(UUID_A, ROAST_REF)
+    store.add_cupping(UUID_A, make_cupping())
+    record = store.add_cupping(UUID_A, make_cupping(date="2024-08-10", scores=dict(SCORES_2)))
+    assert record["radar"]["values"] == RADAR_AFTER_TWO
+
+
+def test_preexisting_radar_counts_as_one_session(store: SensoryStore):
+    """A manually-set radar counts as one extra session in the mean."""
+    store.create(UUID_A, ROAST_REF)
+    # Manually set radar to all 5.0 — counts as one session.
+    store.update_radar(UUID_A, [5.0] * 9)
+    # Add one cupping with FULL_SCORES.
+    record = store.add_cupping(UUID_A, make_cupping())
+    # Mean of [5.0]*9 and FULL_SCORES per label:
+    #   Acidity=(5+8.5)/2=6.75, Aftertaste=(5+7.5)/2=6.25,
+    #   Clean Cup=(5+10)/2=7.5, Head=(5+8.5)/2=6.75,
+    #   Fragrance=(5+8)/2=6.5, Sweetness=(5+8)/2=6.5,
+    #   Aroma=(5+8)/2=6.5, Balance=(5+8)/2=6.5, Body=(5+7)/2=6.0
+    expected = [6.75, 6.25, 7.5, 6.75, 6.5, 6.5, 6.5, 6.5, 6.0]
+    assert record["radar"]["values"] == expected
+
+
+def test_remove_cupping_updates_radar(store: SensoryStore):
+    """Removing a cupping recomputes the radar from the remaining sessions."""
+    store.create(UUID_A, ROAST_REF)
+    store.add_cupping(UUID_A, make_cupping())
+    store.add_cupping(UUID_A, make_cupping(date="2024-08-10", scores=dict(SCORES_2)))
+    # Radar is the mean of both.
+    record = store.get(UUID_A)
+    assert record["radar"]["values"] == RADAR_AFTER_TWO
+    # Remove the first cupping — radar should reflect only the second.
+    record = store.remove_cupping(UUID_A, 0)
+    # SCORES_2 mapped through default labels:
+    #   Acidity=6.0, Aftertaste=9.0, Clean Cup=8.0, Head=7.0,
+    #   Fragrance=7.0, Sweetness=9.0, Aroma=7.0, Balance=7.5, Body=8.5
+    expected = [6.0, 9.0, 8.0, 7.0, 7.0, 9.0, 7.0, 7.5, 8.5]
+    assert record["radar"]["values"] == expected
+
+
+def test_edit_cupping_updates_radar(store: SensoryStore):
+    """Editing a cupping's scores recomputes the radar."""
+    store.create(UUID_A, ROAST_REF)
+    store.add_cupping(UUID_A, make_cupping())
+    record = store.get(UUID_A)
+    assert record["radar"]["values"] == RADAR_AFTER_ONE
+    # Edit acidity from 8.5 to 10.0.
+    record = store.edit_cupping(UUID_A, 0, {"scores": {"acidity": 10.0}})
+    # Only Acidity (index 0) changes; the rest stay the same.
+    expected = list(RADAR_AFTER_ONE)
+    expected[0] = 10.0
+    assert record["radar"]["values"] == expected
+
+
+def test_radar_unchanged_with_no_cuppings(store: SensoryStore):
+    """With no cuppings and no pre-existing radar, radar stays empty."""
+    record = store.create(UUID_A, ROAST_REF)
+    assert record["radar"]["values"] == []
+    # Labels are still the defaults.
+    assert record["radar"]["labels"] == list(DEFAULT_RADAR_LABELS)
+
+
+def test_radar_custom_labels(store: SensoryStore):
+    """Custom radar labels are mapped correctly when computing means."""
+    store.create(UUID_A, ROAST_REF)
+    # Set custom labels: only Acidity and Body.
+    store.update_radar(UUID_A, [0.0, 0.0], labels=["Acidity", "Body"])
+    record = store.add_cupping(UUID_A, make_cupping())
+    assert record["radar"]["labels"] == ["Acidity", "Body"]
+    # Acidity→acidity=8.5, Body→body=7.0
+    assert record["radar"]["values"] == [8.5, 7.0]
+
+
+def test_radar_custom_labels_unmapped_kept(store: SensoryStore):
+    """Labels with no SCA equivalent keep their value when computing means."""
+    store.create(UUID_A, ROAST_REF)
+    # "Flavor Notes" has no SCA equivalent; "Acidity" does.
+    # Manual radar [3.0, 5.0] counts as one session.
+    store.update_radar(UUID_A, [3.0, 5.0], labels=["Flavor Notes", "Acidity"])
+    record = store.add_cupping(UUID_A, make_cupping())
+    # "Flavor Notes" keeps its manual value (3.0); no SCA key to average.
+    # "Acidity" = mean(8.5 from cupping, 5.0 from manual radar) = 6.75
+    assert record["radar"]["labels"] == ["Flavor Notes", "Acidity"]
+    assert record["radar"]["values"] == [3.0, 6.75]
+
+
+def test_radar_partial_scores_skipped(store: SensoryStore):
+    """Cuppings missing a score key are skipped for that axis."""
+    store.create(UUID_A, ROAST_REF)
+    # First cupping: only acidity and body.
+    store.add_cupping(UUID_A, make_cupping(scores={"acidity": 8.0, "body": 6.0}))
+    # Second cupping: only acidity (different value) and body.
+    store.add_cupping(UUID_A, make_cupping(
+        date="2024-08-10",
+        scores={"acidity": 6.0, "body": 8.0},
+    ))
+    record = store.get(UUID_A)
+    labels = record["radar"]["labels"]
+    values = record["radar"]["values"]
+    # Acidity (index 0): mean of 8.0 and 6.0 = 7.0
+    assert values[labels.index("Acidity")] == 7.0
+    # Body (last index): mean of 6.0 and 8.0 = 7.0
+    assert values[labels.index("Body")] == 7.0
+    # Aftertaste (index 1): no cupping has it, no pre-existing radar → 0.0
+    assert values[labels.index("Aftertaste")] == 0.0
+
+
+def test_radar_case_insensitive_labels(store: SensoryStore):
+    """Radar label matching is case-insensitive."""
+    store.create(UUID_A, ROAST_REF)
+    store.update_radar(UUID_A, [0.0, 0.0], labels=["ACIDITY", "body"])
+    record = store.add_cupping(UUID_A, make_cupping())
+    assert record["radar"]["values"] == [8.5, 7.0]
+
+
+def test_radar_head_maps_to_overall(store: SensoryStore):
+    """The 'Head' label maps to the 'overall' SCA score key."""
+    store.create(UUID_A, ROAST_REF)
+    record = store.add_cupping(UUID_A, make_cupping())
+    labels = record["radar"]["labels"]
+    values = record["radar"]["values"]
+    # Head is at index 3 in DEFAULT_RADAR_LABELS; overall = 8.5
+    assert labels[3] == "Head"
+    assert values[3] == 8.5  # FULL_SCORES["overall"]
+
+
+def test_manual_radar_after_cuppings_counts_as_session(store: SensoryStore):
+    """Manual radar set after cuppings still counts when another cupping is added."""
+    store.create(UUID_A, ROAST_REF)
+    # Add first cupping — radar auto-computed.
+    store.add_cupping(UUID_A, make_cupping())
+    # User manually overrides the radar.
+    store.update_radar(UUID_A, [5.0] * 9)
+    # Add second cupping — manual radar should count as one session.
+    record = store.add_cupping(
+        UUID_A, make_cupping(date="2024-08-10", scores=dict(SCORES_2))
+    )
+    # Mean of: cupping1 (FULL_SCORES), cupping2 (SCORES_2), manual [5.0]*9
+    # Acidity: (8.5 + 6.0 + 5.0) / 3 = 6.5
+    # Aftertaste: (7.5 + 9.0 + 5.0) / 3 = 7.17
+    # Clean Cup: (10.0 + 8.0 + 5.0) / 3 = 7.67
+    # Head(overall): (8.5 + 7.0 + 5.0) / 3 = 6.83
+    # Fragrance: (8.0 + 7.0 + 5.0) / 3 = 6.67
+    # Sweetness: (8.0 + 9.0 + 5.0) / 3 = 7.33
+    # Aroma: (8.0 + 7.0 + 5.0) / 3 = 6.67
+    # Balance: (8.0 + 7.5 + 5.0) / 3 = 6.83
+    # Body: (7.0 + 8.5 + 5.0) / 3 = 6.83
+    expected = [6.5, 7.17, 7.67, 6.83, 6.67, 7.33, 6.67, 6.83, 6.83]
+    assert record["radar"]["values"] == expected
+
+
+def test_radar_manual_flag_cleared_after_auto_compute(store: SensoryStore):
+    """After auto-computation, the manual flag is cleared (idempotent)."""
+    store.create(UUID_A, ROAST_REF)
+    store.update_radar(UUID_A, [5.0] * 9)
+    record = store.add_cupping(UUID_A, make_cupping())
+    assert record["radar"]["manual"] is False
+    # Adding a second cupping should NOT count the previous radar as a session.
+    record = store.add_cupping(
+        UUID_A, make_cupping(date="2024-08-10", scores=dict(SCORES_2))
+    )
+    assert record["radar"]["values"] == RADAR_AFTER_TWO
+    assert record["radar"]["manual"] is False
