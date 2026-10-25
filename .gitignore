@@ -42,6 +42,15 @@ mobile/android/tools/
 mobile/android/artisan-release.keystore
 *.iml
 
+# internal doc
+docs/implementation-plan.md
+docs/feasibility-evaluation.md
+docs/mobile-port.md
+docs/sample-gallery.md
+docs/sdk-alignment-plan.md
+docs/ui-spec.md
+docs/reviews/**
+
 # Keystores (stored outside the repo at ../)
 *.keystore
 *.jks
