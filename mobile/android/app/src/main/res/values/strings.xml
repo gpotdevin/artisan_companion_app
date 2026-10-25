@@ -45,6 +45,7 @@
     <string name="library_detail_roasted">%1$dg roasted</string>
     <string name="library_detail_drop">Drop %1$d°C</string>
     <string name="cd_unparsable">Unparsable</string>
+    <string name="cd_source_file">Source file</string>
 
     <!-- Viewer -->
     <string name="viewer_default_title">Roast</string>

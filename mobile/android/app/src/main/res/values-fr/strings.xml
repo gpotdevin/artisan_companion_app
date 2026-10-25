@@ -45,6 +45,7 @@
     <string name="library_detail_roasted">%1$dg torréfié</string>
     <string name="library_detail_drop">Drop %1$d°C</string>
     <string name="cd_unparsable">Illisible</string>
+    <string name="cd_source_file">Fichier source</string>
 
     <!-- Viewer -->
     <string name="viewer_default_title">Torréfaction</string>

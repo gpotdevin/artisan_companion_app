@@ -46,6 +46,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -116,7 +117,20 @@ fun ViewerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(state.profile?.title ?: stringResource(R.string.viewer_default_title)) },
+                title = {
+                    Column {
+                        Text(state.profile?.title ?: stringResource(R.string.viewer_default_title))
+                        state.profile?.source_file?.let { file ->
+                            Text(
+                                file,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.common_back))

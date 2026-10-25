@@ -521,6 +521,17 @@ private fun RoastCard(roast: RoastSummary, onClick: () -> Unit) {
                 StatusChip(roast)
             }
 
+            // Source filename
+            if (!roast.source_file.isNullOrBlank()) {
+                Text(
+                    roast.source_file,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
             // Beans
             if (roast.beans != null) {
                 Text(
