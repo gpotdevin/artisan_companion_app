@@ -105,31 +105,24 @@ test suite (298 tests).
 
 | Document | Content |
 |---|---|
-| [docs/mobile-port.md](docs/mobile-port.md) | Android port architecture, storage model, milestones, risks |
 | [mobile/README.md](mobile/README.md) | Build instructions, release signing, version numbering |
 | [docs/ci-setup.md](docs/ci-setup.md) | CI/CD setup: GitHub Secrets, keystore, release flow |
-| [docs/implementation-plan.md](docs/implementation-plan.md) | Architecture, data model, tech stack, milestones |
-| [docs/feasibility-evaluation.md](docs/feasibility-evaluation.md) | `.alog` format analysis and round-trip findings |
-| [docs/ui-spec.md](docs/ui-spec.md) | UI specification: screens, wireframes, acceptance criteria |
-| [docs/sample-gallery.md](docs/sample-gallery.md) | Gallery of 7 fixture roasts (Artisan 2.4.6-4.2.0) |
-| [docs/reviews/m7-review-summary.md](docs/reviews/m7-review-summary.md) | M7 code review summary (10 findings, all resolved) |
-| [docs/sdk-alignment-plan.md](docs/sdk-alignment-plan.md) | SDK alignment plan (runBeat parity) |
-| [research/upstream-findings.md](research/upstream-findings.md) | Evidence from Artisan source and 230-file log corpus |
-| [research/m0-roundtrip.md](research/m0-roundtrip.md) | Artisan 4.2 integrity findings and native sync design |
 
 ## Scope
 
 The app works **offline on existing `.alog` files**, long after the roast
 happened — sensory impressions arrive days or weeks later, once beans are
-rested and cupped. It deliberately does **not**:
+rested and cupped. 
+
+It deliberately does **not**:
 
 - interface with Artisan while it runs (no live telemetry, no recording,
   no daemon, no plugin or messaging connection);
 - replace any part of Artisan's logging workflow.
 
-Artisan only re-encounters the data indirectly: when the user opens an
-annotated log in Artisan, the sensory summary written to the native fields
-is visible there like any data entered in Artisan itself.
+Modified alog files can be re-open by Artisan. Artisan will notice this and ask 
+for confirmation (expected and wanted). 
+It is strongly suggested to keep the original artisan alog files. 
 
 ## Context
 
